@@ -12,7 +12,6 @@ public class THC1_ctrl : MonoBehaviour {
 	public float turnSpeed = 60.0f;
 	public float gravity = 20.0f;
 	private Vector3 moveDirection = Vector3.zero;
-	private float w_sp = 0.0f;
 	private float r_sp = 0.0f;
 
 	
