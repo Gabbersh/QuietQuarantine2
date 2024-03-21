@@ -24,7 +24,7 @@ public class ChaseState : StateMachineBehaviour
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent.SetDestination(player.position);
-        agent.speed = 7.56f;
+        agent.speed = 10.56f;
 
         var dir = (agent.steeringTarget - agent.transform.position).normalized;
         float distance = Vector3.Distance(player.position, animator.transform.position);
@@ -45,7 +45,7 @@ public class ChaseState : StateMachineBehaviour
             animator.SetBool("isChasing", false);
         }
 
-        if (distance < 2.5f)
+        if (distance < 4.5f)
         {
             if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
             {
@@ -58,7 +58,7 @@ public class ChaseState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
