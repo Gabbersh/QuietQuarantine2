@@ -71,6 +71,11 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
-#probuilder
+# Probuilder
 ProjectSettings/Packages/com.unity.probuilder/Settings.json
 
+# Intellij files
+.idea/*
+
+# Vscode files
+.vscode/*
