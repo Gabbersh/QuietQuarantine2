@@ -77,3 +77,5 @@ ProjectSettings/Packages/com.unity.probuilder/Settings.json
 .idea/*
 
 .vscode/*
+
+.vsconfig
