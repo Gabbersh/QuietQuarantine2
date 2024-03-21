@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1a69f38a-56f7-47d3-9c98-4dc89f621c96" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Networking/Server Auth Movement/ServerPlayerMovement.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Networking/Server Auth Movement/ServerPlayerMovement.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.QuietQuarantine2/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.vsconfig" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AssetPacks/StarterAssets/FirstPersonController/Prefabs/MainCamera.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AssetPacks/StarterAssets/FirstPersonController/Prefabs/MainCamera.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/AssetPacks/StarterAssets/FirstPersonController/Prefabs/PlayerCapsule.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/AssetPacks/StarterAssets/FirstPersonController/Prefabs/PlayerCapsule.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Lan-Network.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Lan-Network.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.QuietQuarantine2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.QuietQuarantine2/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Networking-Player/Server Player With Cam.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Networking-Player/Server Player With Cam.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/Packages/com.unity.probuilder/Settings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,8 +39,12 @@
     "ASKED_ADD_EXTERNAL_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Lan-Network-Test",
+    "git-widget-placeholder": "Cinemamachine-Cam-Network",
     "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
@@ -54,6 +58,14 @@
   }
 }]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
+    <configuration name="Standalone Player" type="RunUnityExe" factoryName="Unity Executable">
+      <option name="EXE_PATH" value="$PROJECT_DIR$/BuildVersions/0.04 - Server Auth Cam\QuietQuarantine2.exe" />
+      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\Oswald\Documents\GitHub\Quiet-Quarantine-2\QuietQuarantine2\BuildVersions\0.04 - Server Auth Cam" />
+      <option name="PASS_PARENT_ENVS" value="1" />
+      <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <method v="2" />
+    </configuration>
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\2022.3.19f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath C:\Users\Oswald\Documents\GitHub\Quiet-Quarantine-2\QuietQuarantine2 -debugCodeOptimization" />
@@ -101,6 +113,7 @@
       <updated>1707912707238</updated>
       <workItem from="1707912708317" duration="234000" />
       <workItem from="1707912953729" duration="244000" />
+      <workItem from="1707999045258" duration="479000" />
     </task>
     <servers />
   </component>
