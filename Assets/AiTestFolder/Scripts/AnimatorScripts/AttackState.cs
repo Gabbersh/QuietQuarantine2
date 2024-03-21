@@ -15,6 +15,9 @@ public class AttackState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
 
         agent.speed = 0f;
+        agent.isStopped = true;
+
+        player.transform.LookAt(agent.transform.position);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -24,7 +27,7 @@ public class AttackState : StateMachineBehaviour
 
         float distance = Vector3.Distance(player.position, animator.transform.position);
 
-        if (distance > 3.5)
+        if (distance > 4.5)
         {
             animator.SetBool("isAttacking", false);
         }
@@ -33,7 +36,7 @@ public class AttackState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        agent.isStopped = false;
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
