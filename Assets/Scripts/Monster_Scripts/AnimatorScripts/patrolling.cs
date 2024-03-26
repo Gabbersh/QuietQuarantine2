@@ -9,12 +9,12 @@ public class patrolling : StateMachineBehaviour
     private Transform player, objectToFollow;
 
     float timer;
-    float chaseRange = 8;
+    float chaseRange = 15;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        chaseRange = 8;
+        chaseRange = 15;
         timer = 0;
 
         agent = animator.GetComponent<NavMeshAgent>();

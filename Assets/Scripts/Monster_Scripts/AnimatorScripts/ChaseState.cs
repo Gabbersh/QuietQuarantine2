@@ -9,7 +9,6 @@ public class ChaseState : StateMachineBehaviour
     private Transform player, objectToFollow;
     float chaseTimer;
 
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
@@ -20,7 +19,6 @@ public class ChaseState : StateMachineBehaviour
         chaseTimer = 10;
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent.SetDestination(player.position);
@@ -55,7 +53,7 @@ public class ChaseState : StateMachineBehaviour
         }
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
+
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         
