@@ -49,13 +49,13 @@ public class GameManager : MonoBehaviour
             {
                 foreach (var uId in NetworkManager.Singleton.ConnectedClientsIds)
                 {
-                    NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uId).GetComponent<Player>().Move();
+                    NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uId).GetComponent<RpcPlayer>().Move();
                 }
             }
             else
             {
                 var playerObject = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject();
-                var player = playerObject.GetComponent<Player>();
+                var player = playerObject.GetComponent<RpcPlayer>();
                 player.Move();
             }
         }
