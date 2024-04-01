@@ -7,6 +7,24 @@ public class Hearing : MonoBehaviour
     [SerializeField] GameObject player;
     private Collider hearingCollider;
     private Animator animator;
+    private bool playerInTrigger;
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInTrigger = true;
+            CheckSight();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            playerInTrigger = false;
+        }
+    }
 
     void Start()
     {
@@ -26,7 +44,7 @@ public class Hearing : MonoBehaviour
         }
 
         Vector3 centerOfHearing = hearingCollider.bounds.center;
-        Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+        Vector3 centerOfPlayer = player.transform.position;
 
         Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
@@ -35,7 +53,7 @@ public class Hearing : MonoBehaviour
         {
             Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
 
-            if (rayHit.collider.gameObject.name == "Player")
+            if (rayHit.collider.gameObject.name == "FirstPersonController")
             {
                 Debug.Log("Player spotted!");
                 animator.SetBool("isCrawling", false);
@@ -53,12 +71,16 @@ public class Hearing : MonoBehaviour
             return;
         }
 
-        Vector3 centerOfHearing = hearingCollider.bounds.center;
-        Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+        if (playerInTrigger)
+        {
+            CheckSight();
+        }
 
-        Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+        //Vector3 centerOfHearing = hearingCollider.bounds.center;
+        //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
 
-        // Draw the line from the center of both objects
-        Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
+        //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+        //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
     }
 }

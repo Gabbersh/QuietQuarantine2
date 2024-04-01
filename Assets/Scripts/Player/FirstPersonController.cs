@@ -128,7 +128,7 @@ public class FirstPersonController : MonoBehaviour
     }
 
     private Camera playerCamera;
-    private CharacterController characterController;
+    public CharacterController characterController;
 
     private Vector3 moveDirection;
     private Vector2 currentInput;

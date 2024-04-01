@@ -16,12 +16,12 @@ public class AttackState : StateMachineBehaviour
         agent.speed = 0f;
         agent.isStopped = true;
 
-        player.transform.LookAt(agent.transform.position);
+        //player.transform.LookAt(agent.transform.position);
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.transform.LookAt(player);
+        //animator.transform.LookAt(player);
 
         float distance = Vector3.Distance(player.position, animator.transform.position);
 
