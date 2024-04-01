@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Hearing : MonoBehaviour
 {
@@ -8,6 +10,10 @@ public class Hearing : MonoBehaviour
     private Collider hearingCollider;
     private Animator animator;
     private bool playerInTrigger;
+
+    [SerializeField] GameObject deathCam;
+    [SerializeField] Transform camPos;
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -63,6 +69,19 @@ public class Hearing : MonoBehaviour
         }
     }
 
+    public void KillPlayer()
+    {
+        if (animator.GetBool("isAttacking"))
+        {
+            player.GetComponent<FirstPersonController>().enabled = false;
+            deathCam.SetActive(true);
+            Camera.main.gameObject.SetActive(false);
+            Invoke("ResetScene", 3f);
+;
+        }
+
+    }
+
     void Update()
     {
         if (hearingCollider == null)
@@ -76,6 +95,9 @@ public class Hearing : MonoBehaviour
             CheckSight();
         }
 
+        KillPlayer();
+
+
         //Vector3 centerOfHearing = hearingCollider.bounds.center;
         //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
 
@@ -83,4 +105,10 @@ public class Hearing : MonoBehaviour
 
         //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
     }
+
+    private void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
+    }
+
 }
