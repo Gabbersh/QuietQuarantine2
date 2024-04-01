@@ -19,16 +19,27 @@ public class patrolling : StateMachineBehaviour
 
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        objectToFollow = FindObjectOfType<SplineObject>().transform;
 
-        agent.speed = 1.58f;
+        agent.speed = 1.7f;
+
+        Vector3 randomPos = Random.insideUnitSphere * 20f;
+        NavMeshHit navHit;
+        NavMesh.SamplePosition(agent.transform.position + randomPos, out navHit, 20f, NavMesh.AllAreas);
+        agent.SetDestination(navHit.position);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        agent.SetDestination(objectToFollow.position);
-        agent.speed = 1.58f;
+    {        
+        if(agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+        {
+            Vector3 randomPos = Random.insideUnitSphere * 20f;
+            NavMeshHit navHit;
+            NavMesh.SamplePosition(agent.transform.position + randomPos, out navHit, 20f, NavMesh.AllAreas);
+            agent.SetDestination(navHit.position);
+        }
+        
+        agent.speed = 1.7f;
 
         float distance = Vector3.Distance(player.position, animator.transform.position);
 
@@ -40,7 +51,7 @@ public class patrolling : StateMachineBehaviour
         timer += Time.deltaTime;
         if (timer > 14)
         {
-            animator.SetBool("isCrawling", true);
+            animator.SetBool("isCrawling", true); 
             animator.SetBool("toCrawl", true);
         }
     }

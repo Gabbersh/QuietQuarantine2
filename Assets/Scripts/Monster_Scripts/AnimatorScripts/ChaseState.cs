@@ -5,42 +5,88 @@ using UnityEngine.AI;
 
 public class ChaseState : StateMachineBehaviour
 {
-    NavMeshAgent agent;
-    private Transform player, objectToFollow;
-    float chaseTimer;
+    private NavMeshAgent agent;
+    private Sound sound;
+    private Collider hearingCollider;
+    private Transform player;
+    private float chaseTimer, reachDistance;
+    private bool hunt;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        objectToFollow = FindObjectOfType<SplineObject>().transform;
+        sound = GameObject.FindGameObjectWithTag("Player").GetComponent<Sound>();
+        hearingCollider = animator.transform.Find("HearingRadius").GetComponent<Collider>();
+        hunt = false;
 
         agent.speed = 7.56f;
         chaseTimer = 10;
+        reachDistance = 14f;
+
+        agent.ResetPath();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.SetDestination(player.position);
         agent.speed = 10.56f;
 
-        var dir = (agent.steeringTarget - agent.transform.position).normalized;
-        float distance = Vector3.Distance(player.position, animator.transform.position);
+        float distance = Vector3.Distance(agent.transform.position, player.position);
 
-        if (chaseTimer > 0 && distance > 15)
+        if (chaseTimer > 0 && distance > reachDistance)
         {
             chaseTimer -= Time.deltaTime;
         }
 
-        if (distance < 15)
-        {
-            chaseTimer = 10;
-        }
-
         if (distance > 15 && chaseTimer <= 0)
         {
-            chaseTimer = 10;
             animator.SetBool("isChasing", false);
+        }
+        else if (distance < reachDistance)
+        {
+            chaseTimer = 10;
+            hunt = false;
+        }
+
+        if (!hunt)
+        {
+            agent.SetDestination(player.position);
+
+            if (distance > reachDistance)
+            {
+                hunt = true;
+            }
+        }
+        else
+        {
+            if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+            {
+                //Random plats runt spelaren när ej i sikte.
+                Vector3 randomPos = Random.insideUnitSphere * 15f;
+                NavMeshHit navHit;
+                NavMesh.SamplePosition(player.position + randomPos, out navHit, 10f, NavMesh.AllAreas);
+                agent.SetDestination(navHit.position);
+
+
+                if (hearingCollider != null)
+                {
+                    Vector3 centerOfHearing = hearingCollider.bounds.center;
+                    Vector3 centerOfPlayer = player.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+
+                    Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+                    RaycastHit rayHit;
+                    if (Physics.Raycast(centerOfHearing, directionToPlayer, out rayHit))
+                    {
+                        Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
+
+                        if (rayHit.collider.gameObject.name == "Player")
+                        {
+                            hunt = false;
+                        }
+                    }
+                }
+            }
         }
 
         if (distance < 4.5f)
@@ -53,21 +99,8 @@ public class ChaseState : StateMachineBehaviour
         }
     }
 
-
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        
+
     }
-
-    // OnStateMove is called right after Animator.OnAnimatorMove()
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that processes and affects root motion
-    //}
-
-    // OnStateIK is called right after Animator.OnAnimatorIK()
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that sets up animation IK (inverse kinematics)
-    //}
 }
