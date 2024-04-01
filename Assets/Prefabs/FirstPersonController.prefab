@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 3963934256344450639}
   - component: {fileID: 8643092617271328985}
   - component: {fileID: 6551648185259443647}
-  - component: {fileID: 8720583829555538694}
   m_Layer: 0
   m_Name: FirstPersonController
   m_TagString: Player
@@ -94,73 +93,6 @@ CharacterController:
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &6551648185259443647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8482955890711509516}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d30f118c51e070d40a01b46aca29ceee, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canSprint: 1
-  canJump: 1
-  canCrouch: 1
-  canUseHeadBob: 1
-  willSlideOnSlopes: 1
-  canZoom: 1
-  canInteract: 1
-  useFootsteps: 1
-  useStamina: 1
-  sprintKey: 304
-  jumpKey: 32
-  crouchKey: 306
-  InteractKey: 101
-  zoomKey: 324
-  walkSpeed: 3
-  sprintSpeed: 6
-  crouchSpeed: 1.5
-  slopeSpeed: 6
-  jumpForce: 8
-  gravity: 30
-  crouchHeight: 0.5
-  standingHeight: 2
-  timeToCrouch: 0.25
-  crouchingCenter: {x: 0, y: 0.5, z: 0}
-  standingCenter: {x: 0, y: 0, z: 0}
-  maxHealth: 100
-  timeBeforeRegenStarts: 3
-  healthValueIncrement: 1
-  healthTimeIncrement: 0.1
-  maxStamina: 100
-  staminaUseMultiplier: 10
-  timeBeforeStaminaRegenStarts: 5
-  staminaValueIncrement: 2
-  staminaTimeIncrement: 0.1
-  lookSpeedX: 2
-  lookSpeedY: 2
-  upperLookLimit: 80
-  lowerLookLimit: 80
-  walkBobSpeed: 14
-  walkBobAmount: 0.02
-  sprintBobSpeed: 18
-  sprintBobAmount: 0.05
-  crouchBobSpeed: 8
-  crouchBobAmount: 0.01
-  timeToZoom: 0.3
-  zoomFOV: 30
-  baseStepSpeed: 0.5
-  crouchStepMultiplier: 1.5
-  sprintStepMultiplier: 0.6
-  footstepAudioSource: {fileID: 0}
-  woodClips: []
-  metalClips: []
-  grassClips: []
-  interactionRayPoint: {x: 0.5, y: 0.5, z: 0}
-  interactionDistance: 2
---- !u!114 &8720583829555538694
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
