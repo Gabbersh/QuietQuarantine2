@@ -21,10 +21,10 @@ public class TestRelay : MonoBehaviour
     {
         Instance = this;
     }
-    private async void Start()
-    {
+    //private async void Start()
+    //{
         
-    }
+    //}
 
     [Command]
     public async Task<string> CreateRelay()

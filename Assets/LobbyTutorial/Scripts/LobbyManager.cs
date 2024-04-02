@@ -16,7 +16,6 @@ public class LobbyManager : MonoBehaviour {
 
     public const string KEY_PLAYER_NAME = "PlayerName";
     public const string KEY_PLAYER_CHARACTER = "Character";
-    public const string KEY_GAME_MODE = "GameMode";
     public const string KEY_START_GAME = "StartGame_RelayCode";
 
 
@@ -26,7 +25,6 @@ public class LobbyManager : MonoBehaviour {
     public event EventHandler<LobbyEventArgs> OnJoinedLobby;
     public event EventHandler<LobbyEventArgs> OnJoinedLobbyUpdate;
     public event EventHandler<LobbyEventArgs> OnKickedFromLobby;
-    public event EventHandler<LobbyEventArgs> OnLobbyGameModeChanged;
     public event EventHandler<EventArgs> OnGameStarted;
     public class LobbyEventArgs : EventArgs {
         public Lobby lobby;
@@ -38,11 +36,6 @@ public class LobbyManager : MonoBehaviour {
     }
 
 
-    public enum GameMode {
-        CaptureTheFlag,
-        Conquest
-    }
-
     public enum PlayerCharacter {
         Marine,
         Ninja,
@@ -53,7 +46,6 @@ public class LobbyManager : MonoBehaviour {
 
     private float heartbeatTimer;
     private float lobbyPollTimer;
-    private float refreshLobbyListTimer = 5f;
     private Lobby joinedLobby;
     private string playerName;
 
@@ -63,7 +55,6 @@ public class LobbyManager : MonoBehaviour {
     }
 
     private void Update() {
-        //HandleRefreshLobbyList(); // Disabled Auto Refresh for testing with multiple builds
         HandleLobbyHeartbeat();
         HandleLobbyPolling();
     }
@@ -83,18 +74,6 @@ public class LobbyManager : MonoBehaviour {
         };
 
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
-    }
-
-    private void HandleRefreshLobbyList() {
-        if (UnityServices.State == ServicesInitializationState.Initialized && AuthenticationService.Instance.IsSignedIn) {
-            refreshLobbyListTimer -= Time.deltaTime;
-            if (refreshLobbyListTimer < 0f) {
-                float refreshLobbyListTimerMax = 5f;
-                refreshLobbyListTimer = refreshLobbyListTimerMax;
-
-                RefreshLobbyList();
-            }
-        }
     }
 
     private async void HandleLobbyHeartbeat() {
@@ -171,33 +150,13 @@ public class LobbyManager : MonoBehaviour {
         });
     }
 
-    public void ChangeGameMode() {
-        if (IsLobbyHost()) {
-            GameMode gameMode =
-                Enum.Parse<GameMode>(joinedLobby.Data[KEY_GAME_MODE].Value);
-
-            switch (gameMode) {
-                default:
-                case GameMode.CaptureTheFlag:
-                    gameMode = GameMode.Conquest;
-                    break;
-                case GameMode.Conquest:
-                    gameMode = GameMode.CaptureTheFlag;
-                    break;
-            }
-
-            UpdateLobbyGameMode(gameMode);
-        }
-    }
-
-    public async void CreateLobby(string lobbyName, int maxPlayers, bool isPrivate, GameMode gameMode) {
+    public async void CreateLobby(string lobbyName, int maxPlayers, bool isPrivate) {
         Player player = GetPlayer();
 
         CreateLobbyOptions options = new CreateLobbyOptions {
             Player = player,
             IsPrivate = isPrivate,
             Data = new Dictionary<string, DataObject> {
-                { KEY_GAME_MODE, new DataObject(DataObject.VisibilityOptions.Public, gameMode.ToString()) },
                 { KEY_START_GAME, new DataObject(DataObject.VisibilityOptions.Member, "0") }
             }
         };
@@ -313,19 +272,6 @@ public class LobbyManager : MonoBehaviour {
         }
     }
 
-    public async void QuickJoinLobby() {
-        try {
-            QuickJoinLobbyOptions options = new QuickJoinLobbyOptions();
-
-            Lobby lobby = await LobbyService.Instance.QuickJoinLobbyAsync(options);
-            joinedLobby = lobby;
-
-            OnJoinedLobby?.Invoke(this, new LobbyEventArgs { lobby = lobby });
-        } catch (LobbyServiceException e) {
-            Debug.Log(e);
-        }
-    }
-
     public async void LeaveLobby() {
         if (joinedLobby != null) {
             try {
@@ -347,24 +293,6 @@ public class LobbyManager : MonoBehaviour {
             } catch (LobbyServiceException e) {
                 Debug.Log(e);
             }
-        }
-    }
-
-    public async void UpdateLobbyGameMode(GameMode gameMode) {
-        try {
-            Debug.Log("UpdateLobbyGameMode " + gameMode);
-            
-            Lobby lobby = await Lobbies.Instance.UpdateLobbyAsync(joinedLobby.Id, new UpdateLobbyOptions {
-                Data = new Dictionary<string, DataObject> {
-                    { KEY_GAME_MODE, new DataObject(DataObject.VisibilityOptions.Public, gameMode.ToString()) }
-                }
-            });
-
-            joinedLobby = lobby;
-
-            OnLobbyGameModeChanged?.Invoke(this, new LobbyEventArgs { lobby = joinedLobby });
-        } catch (LobbyServiceException e) {
-            Debug.Log(e);
         }
     }
 
