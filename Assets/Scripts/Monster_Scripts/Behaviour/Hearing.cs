@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hearing : MonoBehaviour
+public class Hearing : MonoBehaviour, IHear
 {
     [SerializeField] GameObject player;
     private Collider hearingCollider;
@@ -82,5 +82,10 @@ public class Hearing : MonoBehaviour
         //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
         //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
+    }
+
+    public void RespondToSound(Sound sound)
+    {
+        print(name + " responding to sound at " + sound.pos);
     }
 }
