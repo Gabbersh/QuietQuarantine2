@@ -130,6 +130,8 @@ public class FirstPersonController : MonoBehaviour
     private Camera playerCamera;
     public CharacterController characterController;
 
+    private Inventory inventory;
+
     private Vector3 moveDirection;
     private Vector2 currentInput;
 
