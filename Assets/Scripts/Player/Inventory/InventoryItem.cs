@@ -6,6 +6,7 @@ using UnityEngine;
 public class InventoryItem : InteractableObject
 {
     [SerializeField] private InventoryItemType itemType;
+
     public InventoryItemType ItemType { get { return itemType; } }
     public enum InventoryItemType
     {
@@ -15,7 +16,7 @@ public class InventoryItem : InteractableObject
     }
     public override void OnFocus()
     {
-       // throw new System.NotImplementedException();
+       gameObject.GetComponent<OnFocusHighlight>().ToggleHighlight(true);
     }
 
     public override void OnInteract()
@@ -26,6 +27,6 @@ public class InventoryItem : InteractableObject
 
     public override void OnLoseFocus()
     {
-       // throw new System.NotImplementedException();
+        gameObject.GetComponent<OnFocusHighlight>().ToggleHighlight(false);
     }
 }

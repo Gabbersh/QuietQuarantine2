@@ -97,6 +97,7 @@ GameObject:
   - component: {fileID: 6759942997721104270}
   - component: {fileID: 465329786335180482}
   - component: {fileID: 7127379549843080188}
+  - component: {fileID: 4065656418329052195}
   m_Layer: 7
   m_Name: Resource_Water
   m_TagString: Untagged
@@ -235,6 +236,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4065656418329052195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8089705204225741438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9518b85a187d1448304c492ea388f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 1214548582427650391}
+  - {fileID: 1884367945606268567}
+  - {fileID: 715753585791635439}
+  - {fileID: 4930415643723549665}
 --- !u!1 &8610694521621962940
 GameObject:
   m_ObjectHideFlags: 0

@@ -106,6 +106,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private Vector3 interactionRayPoint = new Vector3 (0.5f, 0.5f, 0);
     [SerializeField] private float interactionDistance = 2;
     private LayerMask interactionLayer = default;
+    private LayerMask interactionIgnoreLayer = 0 | 1 << 7;
     private InteractableObject currentInteractable;
 
     [Header("PickUp")]
@@ -338,7 +339,7 @@ public class FirstPersonController : MonoBehaviour
     private void HandleInteractionCheck()
     {
         if (Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
-            out RaycastHit hit, interactionDistance))
+            out RaycastHit hit, interactionDistance, interactionIgnoreLayer))
         {
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
@@ -361,7 +362,7 @@ public class FirstPersonController : MonoBehaviour
     {
         if (Input.GetKeyDown(InteractKey) && currentInteractable != null 
             && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), 
-            out RaycastHit hit, interactionDistance, interactionLayer)) 
+            out RaycastHit hit, interactionDistance, interactionIgnoreLayer)) 
         {
             currentInteractable.OnInteract();
         }
