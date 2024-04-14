@@ -55,7 +55,7 @@ public class Hearing : MonoBehaviour, IHear
         {
             Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
 
-            if (rayHit.collider.gameObject.name == "FirstPersonController")
+            if (rayHit.collider.gameObject.CompareTag("Player"))
             {
                 //Måste kontrolleras om fungerar.
                 if(Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)
