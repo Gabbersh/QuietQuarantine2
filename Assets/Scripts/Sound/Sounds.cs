@@ -13,5 +13,4 @@ public static class Sounds
             if (col[i].TryGetComponent(out IHear hearer))
                 hearer.RespondToSound(sound);
     }
-
 }

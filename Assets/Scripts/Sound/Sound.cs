@@ -1,12 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Sound
+public class Sound : ScriptableObject
 {
-    public readonly Vector3 pos;
-    public readonly float range;
-    public Sound(Vector3 _pos, float _range)
+    public Vector3 pos;
+    public float range;
+
+    public enum SoundType { Default = -1, Intresting, Danger}
+
+    public SoundType soundType;
+
+    public void Initialize(Vector3 _pos, float _range)
     {
         pos = _pos;
         range = _range;

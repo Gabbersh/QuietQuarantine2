@@ -74,7 +74,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 127060, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_Name
-      value: Monster
+      value: Updated_Monster
       objectReference: {fileID: 0}
     - target: {fileID: 400458, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1571,7 +1571,7 @@ PrefabInstance:
     - target: {fileID: 9547856, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 69823d5786115ea489da69d5012ea52f, type: 2}
+      objectReference: {fileID: 9100000, guid: c4478a434b8ff74419b158bd0260ab66, type: 2}
     - target: {fileID: 9547856, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_ApplyRootMotion
       value: 0
@@ -1606,6 +1606,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7001459036907513365}
+    - targetCorrespondingSourceObject: {fileID: 127060, guid: 95ff2b139e7da8a43baedd7f27edf718,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -337131438776176294}
   m_SourcePrefab: {fileID: 100100000, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
 --- !u!4 &7524093659146996712 stripped
 Transform:
@@ -1681,3 +1685,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+--- !u!136 &-337131438776176294
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7524093659147350576}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.23
+  m_Height: 0.98
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.8, z: 0}

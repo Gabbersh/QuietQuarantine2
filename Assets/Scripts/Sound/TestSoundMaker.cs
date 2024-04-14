@@ -5,7 +5,7 @@ using UnityEngine;
 public class TestSoundMaker : MonoBehaviour
 {
     [SerializeField] private AudioSource source = null;
-    [SerializeField] private float soundRange = 45f;
+    [SerializeField] private float soundRange;
 
     private void OnMouseDown()
     {
@@ -13,8 +13,11 @@ public class TestSoundMaker : MonoBehaviour
             return;
        
         source.Play();
-        var sound = new Sound(transform.position, soundRange);
+        Sound sound = ScriptableObject.CreateInstance<Sound>();
+        sound.Initialize(transform.position, soundRange);
 
         Sounds.MakeSound(sound);
+
+        print($"Sound: with pos {sound.pos} and range {sound.range} created!");
     }
 }
