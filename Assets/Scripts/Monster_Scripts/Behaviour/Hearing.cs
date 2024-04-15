@@ -80,7 +80,6 @@ public class Hearing : MonoBehaviour
             Invoke("ResetScene", 3f);
 
         }
-
     }
 
     void Update()
