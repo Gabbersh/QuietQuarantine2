@@ -9,12 +9,16 @@ public class IdleState : StateMachineBehaviour
 
     //float chaseRange = 15;
 
-    private Transform player;
+    //private Transform player;
+    private GameObject player;
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
         Debug.Log(player);
 
         //player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -26,11 +30,6 @@ public class IdleState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if (player == null)
-            return;
-
-        Debug.Log(player);
-
         timer -= Time.deltaTime;
         if (timer <= 0)
         {

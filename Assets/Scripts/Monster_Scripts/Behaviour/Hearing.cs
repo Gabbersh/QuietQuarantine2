@@ -6,12 +6,17 @@ using UnityEngine;
 
 public class Hearing : NetworkBehaviour, IHear
 {
-    private GameObject player;
+    public GameObject player;
     private Collider hearingCollider;
     private Animator animator;
     private bool playerInTrigger, hearingSound;
 
     private float attackDistance = 4.5f;
+
+    public List<GameObject> players = new List<GameObject>();
+
+    private int connectedClientsCount;
+    private int lastClientsCount;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -30,6 +35,8 @@ public class Hearing : NetworkBehaviour, IHear
         }
     }
 
+    // tror inte kommer användas
+
     //void Start()
     //{
     //    Transform hearingRadius = transform.Find("HearingRadius");
@@ -41,17 +48,32 @@ public class Hearing : NetworkBehaviour, IHear
     //    player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
     //}
 
+    // called when monster is spawned in by server
     public override void OnNetworkSpawn()
     {
-        Transform hearingRadius = transform.Find("HearingRadius");
+        if(NetworkManager.Singleton.IsServer )
+        {
+            Transform hearingRadius = transform.Find("HearingRadius");
 
-        transform.position = new Vector3(145f, 2f, 160f);
+            //gameObject.GetComponent<Rigidbody>().position = new Vector3(145f, 1.5f, 160f);
+            //transform.position = gameObject.GetComponent<Rigidbody>().position;
+            
+            Debug.Log("Position set to: " + transform.position);
+            //Physics.SyncTransforms();
 
-        hearingCollider = hearingRadius.GetComponent<Collider>();
+            hearingCollider = hearingRadius.GetComponent<Collider>();
 
-        animator = transform.GetComponent<Animator>();
+            animator = transform.GetComponent<Animator>();
 
-        player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
+            foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+                players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
+            }
+
+            connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+            lastClientsCount = connectedClientsCount;
+        }
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
     }
 
     public void CheckSight()
@@ -95,6 +117,34 @@ public class Hearing : NetworkBehaviour, IHear
     {
         if (NetworkManager.Singleton.IsServer)
         {
+            // update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
+            if (connectedClientsCount != lastClientsCount)
+            {
+                lastClientsCount = connectedClientsCount;
+
+                players.Clear();
+
+                foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+                {
+                    players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
+                }
+            }
+
+            double distance = Mathf.Infinity;
+
+            // best most awesomest way to get nearest player to monster (not costly at all)
+            foreach(var player in players)
+            {
+                float currentDistance = (transform.position - player.transform.position).sqrMagnitude;
+
+                if(currentDistance < distance)
+                {
+                    this.player = player;
+                    Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
+                    distance = currentDistance;
+                }
+            }
+
             if (hearingCollider == null)
             {
                 Debug.LogError("Hearing collider not found!");

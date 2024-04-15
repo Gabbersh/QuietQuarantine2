@@ -7,7 +7,8 @@ using UnityEngine.AI;
 public class CrawlState : StateMachineBehaviour
 {
     NavMeshAgent agent;
-    private Transform player, objectToFollow;
+    //private Transform player, objectToFollow;
+    private GameObject player;
 
     //float timer;
     //float chaseRange = 8;
@@ -20,7 +21,9 @@ public class CrawlState : StateMachineBehaviour
 
         agent = animator.GetComponent<NavMeshAgent>();
 
-        player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
         Debug.Log(player);
 
         //player = GameObject.FindGameObjectWithTag("Player").transform;

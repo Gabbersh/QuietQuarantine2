@@ -1150,15 +1150,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 461196, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -40.362213
+      value: 145
       objectReference: {fileID: 0}
     - target: {fileID: 461196, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -205.89346
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 461196, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 57.558617
+      value: 140
       objectReference: {fileID: 0}
     - target: {fileID: 461196, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1720,6 +1720,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44265219bc930a748baa71cb4fe98286, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!136 &873560837649072402
 CapsuleCollider:
   m_ObjectHideFlags: 0

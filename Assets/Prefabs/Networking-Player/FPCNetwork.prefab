@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 4192576265
+  GlobalObjectIdHash: 765909698
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -645,7 +645,7 @@ MonoBehaviour:
   InteractKey: 101
   zoomKey: 324
   walkSpeed: 3
-  sprintSpeed: 6
+  sprintSpeed: 20
   crouchSpeed: 1.5
   slopeSpeed: 6
   jumpForce: 8

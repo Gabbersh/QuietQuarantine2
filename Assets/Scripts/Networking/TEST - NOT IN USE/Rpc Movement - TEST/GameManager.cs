@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
         GUILayout.EndArea();
     }
 
+
+    // Ahhhh cursed goofy ass cursed spawning
     private void StartButtons()
     {
         if(GUILayout.Button("Host"))
