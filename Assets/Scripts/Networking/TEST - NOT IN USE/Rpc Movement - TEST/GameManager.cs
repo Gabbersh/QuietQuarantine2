@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject jeff;
     private void OnGUI()
     {
         GUILayout.BeginArea(new Rect(10,10,300,300));
@@ -17,11 +18,17 @@ public class GameManager : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    private static void StartButtons()
+    private void StartButtons()
     {
         if(GUILayout.Button("Host"))
         {
             NetworkManager.Singleton.StartHost();
+            if(NetworkManager.Singleton.IsServer)
+            {
+                var instance = Instantiate(jeff);
+                var instanceNetworkObject = instance.GetComponent<NetworkObject>();
+                instanceNetworkObject.Spawn();
+            }
         }
         else if(GUILayout.Button("Client"))
         {
@@ -31,12 +38,14 @@ public class GameManager : MonoBehaviour
         {
             NetworkManager.Singleton.StartServer();
         }
-        
+
     }
     
-    private static void StatusLabels()
+    private void StatusLabels()
     {
         var mode = NetworkManager.Singleton.IsHost ? "Host" : NetworkManager.Singleton.IsServer ? "Server" : "Client";
         GUILayout.Label("Mode: " + mode);
     }
+
+
 }

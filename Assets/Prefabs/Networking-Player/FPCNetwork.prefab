@@ -217,7 +217,7 @@ GameObject:
   - component: {fileID: 2787557913118641072}
   - component: {fileID: 9077170574436295314}
   - component: {fileID: 4304514581917020280}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -634,7 +634,7 @@ MonoBehaviour:
   canJump: 1
   canCrouch: 1
   canUseHeadBob: 1
-  willSlideOnSlopes: 1
+  willSlideOnSlopes: 0
   canZoom: 1
   canInteract: 1
   useFootsteps: 1

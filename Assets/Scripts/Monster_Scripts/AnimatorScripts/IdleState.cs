@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class IdleState : StateMachineBehaviour
@@ -13,7 +14,10 @@ public class IdleState : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        Debug.Log(player);
+
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
         animator.SetBool("isPatrolling", false);
 
         timer = 2;
@@ -22,6 +26,11 @@ public class IdleState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (player == null)
+            return;
+
+        Debug.Log(player);
+
         timer -= Time.deltaTime;
         if (timer <= 0)
         {

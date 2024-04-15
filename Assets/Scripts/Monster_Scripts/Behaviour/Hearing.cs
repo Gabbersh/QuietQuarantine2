@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Hearing : MonoBehaviour, IHear
+public class Hearing : NetworkBehaviour, IHear
 {
-    [SerializeField] GameObject player;
+    private GameObject player;
     private Collider hearingCollider;
     private Animator animator;
     private bool playerInTrigger, hearingSound;
@@ -28,13 +30,28 @@ public class Hearing : MonoBehaviour, IHear
         }
     }
 
-    void Start()
+    //void Start()
+    //{
+    //    Transform hearingRadius = transform.Find("HearingRadius");
+
+    //    hearingCollider = hearingRadius.GetComponent<Collider>();
+        
+    //    animator = transform.GetComponent<Animator>();
+
+    //    player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
+    //}
+
+    public override void OnNetworkSpawn()
     {
         Transform hearingRadius = transform.Find("HearingRadius");
 
+        transform.position = new Vector3(145f, 2f, 160f);
+
         hearingCollider = hearingRadius.GetComponent<Collider>();
-        
+
         animator = transform.GetComponent<Animator>();
+
+        player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
     }
 
     public void CheckSight()
@@ -76,28 +93,31 @@ public class Hearing : MonoBehaviour, IHear
 
     void Update()
     {
-        if (hearingCollider == null)
+        if (NetworkManager.Singleton.IsServer)
         {
-            Debug.LogError("Hearing collider not found!");
-            return;
+            if (hearingCollider == null)
+            {
+                Debug.LogError("Hearing collider not found!");
+                return;
+            }
+
+            if (playerInTrigger)
+            {
+                CheckSight();
+            }
+
+            if (hearingSound)
+            {
+                animator.SetBool("isHearing", true);
+            }
+
+            Vector3 centerOfHearing = hearingCollider.bounds.center;
+            Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+            Debug.Log(player.transform.position);
+            Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+            Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
         }
-
-        if (playerInTrigger)
-        {
-            CheckSight();
-        }
-
-        if (hearingSound)
-        {
-            animator.SetBool("isHearing", true);
-        }
-
-        //Vector3 centerOfHearing = hearingCollider.bounds.center;
-        //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
-
-        //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
-
-        //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
     }
 
     public void RespondToSound(Sound sound)

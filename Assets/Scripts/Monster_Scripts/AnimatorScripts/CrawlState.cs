@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,7 +19,11 @@ public class CrawlState : StateMachineBehaviour
         //timer = 25;
 
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        Debug.Log(player);
+
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
 
         agent.speed = 1.7f;
 

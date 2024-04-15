@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.Netcode.Components;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FPCNetwork : NetworkBehaviour
 {
@@ -163,6 +164,10 @@ public class FPCNetwork : NetworkBehaviour
         {
             instance = this;
 
+            transform.position = new Vector3(150, 2, 150);
+            Debug.Log("Position set to: " + transform.position);
+            Physics.SyncTransforms();
+
             listener.enabled = true;
             vc.Priority = 1;
 
@@ -179,7 +184,6 @@ public class FPCNetwork : NetworkBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            transform.position = new Vector3(145.2200f, 2f, 149.320007f);
         }
         else
         {
@@ -190,13 +194,14 @@ public class FPCNetwork : NetworkBehaviour
     private void Start()
     {
         interactionLayer = LayerMask.NameToLayer("Interactable");
-        if (IsOwner)
-        {
-        }
     }
 
     void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    transform.position = new Vector3(145.2200f, 2f, 149.320007f);
+        //}
         if (IsOwner)
         {
             if (CanMove)

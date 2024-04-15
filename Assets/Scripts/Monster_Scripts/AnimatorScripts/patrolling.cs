@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -17,7 +19,13 @@ public class patrolling : StateMachineBehaviour
         timer = 0;
 
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        if (NetworkManager.Singleton.IsServer)
+        {
+            player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        }
+
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
 
         agent.speed = 1.7f;
 
@@ -28,8 +36,11 @@ public class patrolling : StateMachineBehaviour
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {        
-        if(agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+    {
+        if (player == null)
+            return;
+
+        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {
             Vector3 randomPos = Random.insideUnitSphere * 20f;
             NavMeshHit navHit;
