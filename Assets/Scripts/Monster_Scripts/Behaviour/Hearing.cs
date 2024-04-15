@@ -13,6 +13,7 @@ public class Hearing : MonoBehaviour
 
     [SerializeField] GameObject deathCam;
     [SerializeField] Transform camPos;
+    
 
 
     private void OnTriggerEnter(Collider other)
@@ -77,7 +78,7 @@ public class Hearing : MonoBehaviour
             deathCam.SetActive(true);
             Camera.main.gameObject.SetActive(false);
             Invoke("ResetScene", 3f);
-;
+
         }
 
     }
