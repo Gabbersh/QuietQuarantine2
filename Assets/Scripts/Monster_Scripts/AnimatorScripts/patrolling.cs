@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class patrolling : StateMachineBehaviour
 {
     NavMeshAgent agent;
-    private Transform player, objectToFollow;
+    private Transform player;
+    private MonsterSpeed monsterSpeed;
 
     float timer;
     float chaseRange = 15;
@@ -19,7 +20,12 @@ public class patrolling : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        agent.speed = 1.7f;
+        GameObject monster = animator.gameObject;
+        monsterSpeed = monster.GetComponent<MonsterSpeed>();
+
+        agent.speed = monsterSpeed.PatrollSpeed;
+
+        
 
         Vector3 randomPos = Random.insideUnitSphere * 20f;
         NavMeshHit navHit;
@@ -37,7 +43,7 @@ public class patrolling : StateMachineBehaviour
             agent.SetDestination(navHit.position);
         }
         
-        agent.speed = 1.7f;
+        //agent.speed = 1.7f;
 
         float distance = Vector3.Distance(player.position, animator.transform.position);
 

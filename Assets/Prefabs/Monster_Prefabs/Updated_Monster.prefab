@@ -1610,6 +1610,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -337131438776176294}
+    - targetCorrespondingSourceObject: {fileID: 127060, guid: 95ff2b139e7da8a43baedd7f27edf718,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5083670480278107685}
   m_SourcePrefab: {fileID: 100100000, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
 --- !u!4 &7524093659146996712 stripped
 Transform:
@@ -1708,3 +1712,17 @@ CapsuleCollider:
   m_Height: 0.98
   m_Direction: 1
   m_Center: {x: 0, y: 0.8, z: 0}
+--- !u!114 &5083670480278107685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7524093659147350576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4256fd95d4a82147b8a4988b7a878bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeed: 7.56
+  patrollSpeed: 1.7

@@ -7,6 +7,7 @@ public class ChaseState : StateMachineBehaviour
 {
     private NavMeshAgent agent;
     private Collider hearingCollider;
+    private MonsterSpeed monsterSpeed;
     private Transform player;
     private float chaseTimer, reachDistance;
     private bool hunt;
@@ -16,9 +17,14 @@ public class ChaseState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
         hearingCollider = animator.transform.Find("HearingRadius").GetComponent<Collider>();
+
+        GameObject monster = animator.gameObject;
+        monsterSpeed = monster.GetComponent<MonsterSpeed>();
+
         hunt = false;
 
-        agent.speed = 7.56f;
+        agent.speed = monsterSpeed.ChaseSpeed;
+
         chaseTimer = 10;
         reachDistance = 14f;
 
@@ -27,7 +33,7 @@ public class ChaseState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.speed = 10.56f;
+        //agent.speed = 10.56f;
 
         float distance = Vector3.Distance(agent.transform.position, player.position);
 

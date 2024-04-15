@@ -33,6 +33,8 @@ public class AttackState : StateMachineBehaviour
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        agent.isStopped = false;
+        agent.isStopped = true;
+        animator.SetBool("isAttacking", false);
+        animator.SetBool("isChasing", false);
     }
 }
