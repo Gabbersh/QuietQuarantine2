@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &821019248455933726
+--- !u!1 &3631856706976053507
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,7 +8,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1467112955573299731}
+  - component: {fileID: 6898803383913704930}
   m_Layer: 0
   m_Name: PickUpPoint
   m_TagString: Untagged
@@ -16,21 +16,65 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1467112955573299731
+--- !u!4 &6898803383913704930
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 821019248455933726}
+  m_GameObject: {fileID: 3631856706976053507}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.298, y: -0.36, z: 1.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1673137996059014568}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4659917874378033682
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 21115026597514204}
+  - component: {fileID: 5364494043152497656}
+  m_Layer: 0
+  m_Name: Inventory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &21115026597514204
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4659917874378033682}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.298, y: 0.091, z: 1.105}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3963934256344450639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5364494043152497656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4659917874378033682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75597353f1e2f3a4eb6e66d9db1d0266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8482955890711509516
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,7 +107,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1673137996059014568}
-  - {fileID: 1467112955573299731}
+  - {fileID: 21115026597514204}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &8643092617271328985
@@ -111,12 +155,14 @@ MonoBehaviour:
   willSlideOnSlopes: 1
   canZoom: 1
   canInteract: 1
+  canPickUpObjects: 1
   useFootsteps: 1
   useStamina: 1
   sprintKey: 304
   jumpKey: 32
   crouchKey: 306
   InteractKey: 101
+  PickUpKey: 323
   zoomKey: 324
   walkSpeed: 3
   sprintSpeed: 6
@@ -159,6 +205,7 @@ MonoBehaviour:
   grassClips: []
   interactionRayPoint: {x: 0.5, y: 0.5, z: 0}
   interactionDistance: 2
+  characterController: {fileID: 0}
 --- !u!1 &8867890793616691330
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,7 +237,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.606, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6898803383913704930}
   m_Father: {fileID: 3963934256344450639}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8660831015764050607
