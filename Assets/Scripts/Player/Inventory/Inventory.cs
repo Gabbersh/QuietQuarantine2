@@ -33,6 +33,7 @@ public class Inventory : MonoBehaviour
                 break;
         }
 
+        InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, coinAmount });
         Debug.Log("Water: " + waterAmount + ", " + "Medicine: " +  medicineAmount + ", " + "Coins: " + coinAmount);
     }
 

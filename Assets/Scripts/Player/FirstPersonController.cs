@@ -9,6 +9,7 @@ public class FirstPersonController : MonoBehaviour
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
+    private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -26,6 +27,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
+    [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
     //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
 
@@ -197,6 +199,9 @@ public class FirstPersonController : MonoBehaviour
             if (useFootsteps)
                 //HandleFootsteps();
 
+            if (toggleInventory) 
+                HandleInventoryToggle();
+
             if (canInteract)
             {
                 HandleInteractionCheck();
@@ -241,6 +246,11 @@ public class FirstPersonController : MonoBehaviour
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
+    }
+
+    private void HandleInventoryToggle()
+    {
+        InventoryActions.OnInventoryToggle();
     }
 
     private void ApplyDamage(float dmg)
