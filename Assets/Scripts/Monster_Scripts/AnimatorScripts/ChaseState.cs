@@ -26,7 +26,7 @@ public class ChaseState : StateMachineBehaviour
         agent.speed = monsterSpeed.ChaseSpeed;
 
         chaseTimer = 10;
-        reachDistance = 14f;
+        reachDistance = 10f;
 
         agent.ResetPath();
     }

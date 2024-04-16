@@ -11,12 +11,10 @@ public class Hearing : MonoBehaviour, IHear
     private Animator animator;
     private bool playerInTrigger, hearingSound;
 
-    private float attackDistance = 4.5f;
+    private float attackDistance = 2.5f;
+    // Tidigare 4.5 men allt för lång reach
 
     [SerializeField] GameObject deathCam;
-    //[SerializeField] Transform camPos;
-    
-
 
     private void OnTriggerEnter(Collider other)
     {
