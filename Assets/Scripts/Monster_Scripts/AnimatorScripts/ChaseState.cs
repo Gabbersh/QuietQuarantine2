@@ -32,6 +32,8 @@ public class ChaseState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
         agent.speed = 10.56f;
 
         float distance = Vector3.Distance(agent.transform.position, player.transform.position);

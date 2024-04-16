@@ -18,6 +18,8 @@ public class Hearing : NetworkBehaviour, IHear
     private int connectedClientsCount;
     private int lastClientsCount;
 
+    private Vector3 centerOfHearing;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -42,7 +44,7 @@ public class Hearing : NetworkBehaviour, IHear
     //    Transform hearingRadius = transform.Find("HearingRadius");
 
     //    hearingCollider = hearingRadius.GetComponent<Collider>();
-        
+
     //    animator = transform.GetComponent<Animator>();
 
     //    player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
@@ -84,7 +86,7 @@ public class Hearing : NetworkBehaviour, IHear
             return;
         }
 
-        Vector3 centerOfHearing = hearingCollider.bounds.center;
+        centerOfHearing = hearingCollider.bounds.center;
         Vector3 centerOfPlayer = player.transform.position;
 
         Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
@@ -112,11 +114,20 @@ public class Hearing : NetworkBehaviour, IHear
             }
         }
     }
+    //private Vector3 GetCenterOfHearing()
+    //{
+    //    Transform hearingRadius = transform.Find("HearingRadius");
+    //    hearingCollider = hearingRadius.GetComponent<Collider>();
+
+    //    return centerOfHearing = hearingCollider.bounds.center;
+    //}
 
     void Update()
     {
         if (NetworkManager.Singleton.IsServer)
         {
+            connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+
             // update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
             if (connectedClientsCount != lastClientsCount)
             {
@@ -129,6 +140,7 @@ public class Hearing : NetworkBehaviour, IHear
                     players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
                 }
             }
+            
 
             double distance = Mathf.Infinity;
 
@@ -137,7 +149,11 @@ public class Hearing : NetworkBehaviour, IHear
             {
                 float currentDistance = (transform.position - player.transform.position).sqrMagnitude;
 
-                if(currentDistance < distance)
+                //Vector3 centerOfMonsterCollider = GetCenterOfHearing();
+
+                //float hearingDistance
+
+                if (currentDistance < 4.5f)
                 {
                     this.player = player;
                     Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
@@ -173,7 +189,7 @@ public class Hearing : NetworkBehaviour, IHear
     public void RespondToSound(Sound sound)
     {
         print(name + " responding to sound at " + sound.pos);
-
+        
         animator.SetBool("isHearing", true);
 
         var heardNoiseState = animator.GetBehaviour<HeardNoiceState>();
