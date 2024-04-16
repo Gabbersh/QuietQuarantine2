@@ -14,7 +14,7 @@ public class Hearing : MonoBehaviour, IHear
     private float attackDistance = 4.5f;
 
     [SerializeField] GameObject deathCam;
-    [SerializeField] Transform camPos;
+    //[SerializeField] Transform camPos;
     
 
 
@@ -87,8 +87,9 @@ public class Hearing : MonoBehaviour, IHear
         {
             player.GetComponent<FirstPersonController>().enabled = false;
             deathCam.SetActive(true);
-            Camera.main.gameObject.SetActive(false);
-            Invoke("ResetScene", 3f);
+            FirstPersonController.instance.playerCamera.gameObject.SetActive(false);
+            //Camera.main.gameObject.SetActive(false);
+            Invoke("ResetScene", 1.5f);
 
         }
     }

@@ -134,7 +134,7 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private Camera playerCamera;
+    public Camera playerCamera;
     public CharacterController characterController;
 
     private Inventory inventory;
