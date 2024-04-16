@@ -356,7 +356,10 @@ public class FirstPersonController : MonoBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
-
+                if (currentInteractable != null)
+                {
+                    currentInteractable.OnLoseFocus();
+                }
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -389,6 +392,10 @@ public class FirstPersonController : MonoBehaviour
             if (hit.collider.gameObject.layer == pickUpLayer &&
                 (currentPickUpObject == null || hit.collider.gameObject.GetInstanceID() != currentPickUpObject.GetInstanceID()))
             {
+                if (currentPickUpObject != null)
+                {
+                    currentPickUpObject.OnLoseFocus();
+                }
                 hit.collider.TryGetComponent(out currentPickUpObject);
 
                 if (currentPickUpObject)
