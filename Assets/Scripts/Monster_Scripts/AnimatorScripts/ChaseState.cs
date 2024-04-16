@@ -6,7 +6,6 @@ using UnityEngine.AI;
 public class ChaseState : StateMachineBehaviour
 {
     private NavMeshAgent agent;
-    private Sound sound;
     private Collider hearingCollider;
     private Transform player;
     private float chaseTimer, reachDistance;
@@ -16,7 +15,6 @@ public class ChaseState : StateMachineBehaviour
     {
         agent = animator.GetComponent<NavMeshAgent>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        sound = GameObject.FindGameObjectWithTag("Player").GetComponent<Sound>();
         hearingCollider = animator.transform.Find("HearingRadius").GetComponent<Collider>();
         hunt = false;
 
@@ -89,14 +87,14 @@ public class ChaseState : StateMachineBehaviour
             }
         }
 
-        if (distance < 4.5f)
-        {
-            if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
-            {
-                agent.ResetPath();
-            }
-            animator.SetBool("isAttacking", true);
-        }
+        //if (distance < 4.5f)
+        //{
+        //    if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
+        //    {
+        //        agent.ResetPath();
+        //    }
+        //    animator.SetBool("isAttacking", true);
+        //}
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

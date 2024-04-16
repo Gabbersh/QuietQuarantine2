@@ -19,6 +19,7 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool willSlideOnSlopes = true;
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canInteract = true;
+    [SerializeField] private bool canPickUpObjects = true;
     [SerializeField] private bool useFootsteps = true;
     [SerializeField] private bool useStamina = true;
 
@@ -28,7 +29,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
     [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
-    //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
 
     [Header("Movement Parameters")]
@@ -114,6 +116,10 @@ public class FirstPersonController : MonoBehaviour
     [Header("PickUp")]
     private Transform pickUpPoint;
     public Transform PickUpPoint { get { return pickUpPoint; } }
+    private LayerMask pickUpLayer = default;
+    private LayerMask pickUpIgnoreLayer = 0 | 1 << 6;
+    private PickUpObject currentPickUpObject;
+    private bool objectInHand = false;
 
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
@@ -164,9 +170,8 @@ public class FirstPersonController : MonoBehaviour
 
         currentHealth = maxHealth;
         currentStamina = maxStamina;
-
         
-        pickUpPoint = transform.Find("PickUpPoint");
+        pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -175,6 +180,7 @@ public class FirstPersonController : MonoBehaviour
     private void Start()
     {
         interactionLayer = LayerMask.NameToLayer("Interactable");
+        pickUpLayer = LayerMask.NameToLayer("PickUp");
     }
 
     void Update()
@@ -206,6 +212,12 @@ public class FirstPersonController : MonoBehaviour
             {
                 HandleInteractionCheck();
                 HandleInteractionInput();
+            }
+
+            if (canPickUpObjects)
+            {
+                HandlePickUpsCheck();
+                HandlePickUpsInput();
             }
 
             if (useStamina)
@@ -354,6 +366,7 @@ public class FirstPersonController : MonoBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
+
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -375,6 +388,50 @@ public class FirstPersonController : MonoBehaviour
             out RaycastHit hit, interactionDistance, interactionIgnoreLayer)) 
         {
             currentInteractable.OnInteract();
+        }
+    }
+
+    private void HandlePickUpsCheck()
+    {
+        if (Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
+            out RaycastHit hit, interactionDistance, pickUpIgnoreLayer) && !objectInHand)
+        {
+            if (hit.collider.gameObject.layer == pickUpLayer &&
+                (currentPickUpObject == null || hit.collider.gameObject.GetInstanceID() != currentPickUpObject.GetInstanceID()))
+            {
+                hit.collider.TryGetComponent(out currentPickUpObject);
+
+                if (currentPickUpObject)
+                    currentPickUpObject.OnFocus();
+
+            }
+        }
+        else if (currentPickUpObject && !objectInHand)
+        {
+            currentPickUpObject.OnLoseFocus();
+            currentPickUpObject = null;
+        }
+    }
+
+    private void HandlePickUpsInput()
+    {
+        if (Input.GetKeyDown(PickUpKey) && currentPickUpObject != null
+            && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
+            out RaycastHit hit, interactionDistance, pickUpIgnoreLayer) && !objectInHand)
+        {
+            currentPickUpObject.OnInteract();
+            currentPickUpObject.OnLoseFocus();
+            objectInHand = true;
+        }
+        else if (Input.GetKeyDown(PickUpKey) && objectInHand)
+        {
+            currentPickUpObject.Throw();
+            objectInHand = false;
+        }
+        else if (Input.GetKeyDown(DropKey) && objectInHand)
+        {
+            currentPickUpObject.Drop();
+            objectInHand = false;
         }
     }
 
