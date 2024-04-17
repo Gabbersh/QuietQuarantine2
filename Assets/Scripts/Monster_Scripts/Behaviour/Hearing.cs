@@ -153,7 +153,7 @@ public class Hearing : NetworkBehaviour, IHear
 
                 //float hearingDistance
 
-                if (currentDistance < 4.5f)
+                if (currentDistance < distance)
                 {
                     this.player = player;
                     Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
