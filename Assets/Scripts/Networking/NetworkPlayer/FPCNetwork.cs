@@ -198,10 +198,6 @@ public class FPCNetwork : NetworkBehaviour
 
     void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.Z))
-        //{
-        //    transform.position = new Vector3(145.2200f, 2f, 149.320007f);
-        //}
         if (IsOwner)
         {
             if (CanMove)
@@ -215,11 +211,11 @@ public class FPCNetwork : NetworkBehaviour
                 if (canCrouch)
                     HandleCrouch();
 
-                //if (canUseHeadBob)
-                //    HandleHeadBob();
+                if (canUseHeadBob)
+                    HandleHeadBob();
 
-                //if (canZoom)
-                //    HandleZoom();
+                if (canZoom)
+                    HandleZoom();
 
                 //if (useFootsteps)
                 //    //HandleFootsteps();
@@ -283,7 +279,6 @@ public class FPCNetwork : NetworkBehaviour
             StopCoroutine(regeneratingHealth);
 
         regeneratingHealth = StartCoroutine(RegenerateHealth());
-
     }
 
     private void KillPlayer()
@@ -330,10 +325,14 @@ public class FPCNetwork : NetworkBehaviour
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
         {
             bobTimer += Time.deltaTime * (isCrouching ? crouchBobSpeed : isSprinting ? sprintBobSpeed : walkBobSpeed);
-            playerCamera.transform.localPosition = new Vector3(
-                playerCamera.transform.localPosition.x,
+            //playerCamera.transform.localPosition = new Vector3(
+            //    playerCamera.transform.localPosition.x,
+            //    defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
+            //    playerCamera.transform.localPosition.z);
+            vc.transform.localPosition = new Vector3(
+                vc.transform.localPosition.x,
                 defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
-                playerCamera.transform.localPosition.z);
+                vc.transform.localPosition.z);
         }
     }
 
@@ -520,17 +519,17 @@ public class FPCNetwork : NetworkBehaviour
     private IEnumerator ToggleZoom(bool isEnter)
     {
         float targetFOV = isEnter ? zoomFOV : defaultFOV;
-        float startingFOV = playerCamera.fieldOfView;
+        float startingFOV = vc.m_Lens.FieldOfView;
         float timeElapsed = 0;
 
         while (timeElapsed < timeToZoom)
         {
-            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed/timeToZoom);
+            vc.m_Lens.FieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed/timeToZoom);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
 
-        playerCamera.fieldOfView = targetFOV;
+        vc.m_Lens.FieldOfView = targetFOV;
         zoomRoutine = null;
     }
 }

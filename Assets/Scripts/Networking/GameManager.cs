@@ -14,16 +14,26 @@ public class GameManager : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    // constantly check for player count and spawn monster
     void FixedUpdate()
     {
-        if (NetworkManager.Singleton.IsServer && NetworkManager.Singleton.ConnectedClientsList.Count > 0)
+        if (HasPlayerJoined())
         {
-            // Spawn logic
-            var playerInstance = Instantiate(myNemmaJeff); // Use a more descriptive name
-            var networkObject = playerInstance.GetComponent<NetworkObject>();
-            networkObject.Spawn();
+            SpawnMonster();
             gameObject.SetActive(false);
         }
+    }
+
+    private void SpawnMonster()
+    {
+        var localMonsterInstance = Instantiate(myNemmaJeff);
+        var networkInstance = localMonsterInstance.GetComponent<NetworkObject>();
+        networkInstance.Spawn();
+    }
+
+
+    private bool HasPlayerJoined()
+    {
+        return NetworkManager.Singleton.IsServer && NetworkManager.Singleton.ConnectedClientsList.Count > 0;
     }
 }
