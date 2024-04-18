@@ -24,8 +24,6 @@ public class Hearing : NetworkBehaviour, IHear
 
     [SerializeField] GameObject deathCam;
     [SerializeField] Transform camPos;
-    
-
 
     private void OnTriggerEnter(Collider other)
     {
@@ -44,19 +42,6 @@ public class Hearing : NetworkBehaviour, IHear
         }
     }
 
-    // tror inte kommer användas
-
-    //void Start()
-    //{
-    //    Transform hearingRadius = transform.Find("HearingRadius");
-
-    //    hearingCollider = hearingRadius.GetComponent<Collider>();
-
-    //    animator = transform.GetComponent<Animator>();
-
-    //    player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
-    //}
-
     // called when monster is spawned in by server
     public override void OnNetworkSpawn()
     {
@@ -67,7 +52,7 @@ public class Hearing : NetworkBehaviour, IHear
             //gameObject.GetComponent<Rigidbody>().position = new Vector3(145f, 1.5f, 160f);
             //transform.position = gameObject.GetComponent<Rigidbody>().position;
             
-            Debug.Log("Position set to: " + transform.position);
+            //Debug.Log("Position set to: " + transform.position);
             //Physics.SyncTransforms();
 
             hearingCollider = hearingRadius.GetComponent<Collider>();
@@ -161,14 +146,10 @@ public class Hearing : NetworkBehaviour, IHear
             {
                 float currentDistance = (transform.position - player.transform.position).sqrMagnitude;
 
-                //Vector3 centerOfMonsterCollider = GetCenterOfHearing();
-
-                //float hearingDistance
-
                 if (currentDistance < distance)
                 {
                     this.player = player;
-                    Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
+                    //Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
                     distance = currentDistance;
                 }
             }
@@ -194,7 +175,6 @@ public class Hearing : NetworkBehaviour, IHear
 
             //Vector3 centerOfHearing = hearingCollider.bounds.center;
             //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
-
             //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
             //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
