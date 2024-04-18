@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using Unity.VisualScripting;
+using System.Threading;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Hearing : NetworkBehaviour, IHear
 {
@@ -19,6 +21,11 @@ public class Hearing : NetworkBehaviour, IHear
     private int lastClientsCount;
 
     private Vector3 centerOfHearing;
+
+    [SerializeField] GameObject deathCam;
+    [SerializeField] Transform camPos;
+    
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -114,13 +121,18 @@ public class Hearing : NetworkBehaviour, IHear
             }
         }
     }
-    //private Vector3 GetCenterOfHearing()
-    //{
-    //    Transform hearingRadius = transform.Find("HearingRadius");
-    //    hearingCollider = hearingRadius.GetComponent<Collider>();
 
-    //    return centerOfHearing = hearingCollider.bounds.center;
-    //}
+    public void KillPlayer()
+    {
+        if (animator.GetBool("isAttacking"))
+        {
+            player.GetComponent<FirstPersonController>().enabled = false;
+            deathCam.SetActive(true);
+            Camera.main.gameObject.SetActive(false);
+            Invoke("ResetScene", 3f);
+
+        }
+    }
 
     void Update()
     {
@@ -177,13 +189,15 @@ public class Hearing : NetworkBehaviour, IHear
                 animator.SetBool("isHearing", true);
             }
 
-            Vector3 centerOfHearing = hearingCollider.bounds.center;
-            Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
-            Debug.Log(player.transform.position);
-            Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+        KillPlayer();
 
-            Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
-        }
+
+        //Vector3 centerOfHearing = hearingCollider.bounds.center;
+        //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+
+        //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+        //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
     }
 
     public void RespondToSound(Sound sound)
@@ -198,4 +212,10 @@ public class Hearing : NetworkBehaviour, IHear
             heardNoiseState.SetHeardSound(sound);
         }
     }
+
+    private void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
+    }
+
 }
