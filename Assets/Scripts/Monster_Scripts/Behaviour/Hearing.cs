@@ -152,12 +152,12 @@ public class Hearing : NetworkBehaviour, IHear
                     players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
                 }
             }
-            
+
 
             double distance = Mathf.Infinity;
 
             // best most awesomest way to get nearest player to monster (not costly at all)
-            foreach(var player in players)
+            foreach (var player in players)
             {
                 float currentDistance = (transform.position - player.transform.position).sqrMagnitude;
 
@@ -189,15 +189,16 @@ public class Hearing : NetworkBehaviour, IHear
                 animator.SetBool("isHearing", true);
             }
 
-        KillPlayer();
+            KillPlayer();
 
 
-        //Vector3 centerOfHearing = hearingCollider.bounds.center;
-        //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+            //Vector3 centerOfHearing = hearingCollider.bounds.center;
+            //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
 
-        //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+            //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
-        //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
+            //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
+        }
     }
 
     public void RespondToSound(Sound sound)
