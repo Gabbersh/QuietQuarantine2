@@ -8,10 +8,8 @@ public class ChaseState : StateMachineBehaviour
 {
     private NavMeshAgent agent;
     private Collider hearingCollider;
-    //private Transform player;
     private GameObject player;
     private MonsterSpeed monsterSpeed;
-    private Transform player;
     private float chaseTimer, reachDistance;
     private bool hunt;
 

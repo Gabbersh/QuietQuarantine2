@@ -8,7 +8,7 @@ public class CrawlState : StateMachineBehaviour
 {
     NavMeshAgent agent;
     private MonsterSpeed monsterSpeed;
-    //private Transform player, objectToFollow;
+    
     private GameObject player;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

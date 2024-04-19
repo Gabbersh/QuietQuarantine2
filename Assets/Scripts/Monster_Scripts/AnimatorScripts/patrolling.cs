@@ -9,9 +9,9 @@ using UnityEngine.AI;
 public class patrolling : StateMachineBehaviour
 {
     NavMeshAgent agent;
-    //private Transform player, objectToFollow;
+
     private GameObject player;
-    private Transform player;
+
     private MonsterSpeed monsterSpeed;
 
     float timer;

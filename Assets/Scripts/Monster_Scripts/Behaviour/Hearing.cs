@@ -23,7 +23,7 @@ public class Hearing : NetworkBehaviour, IHear
     private Vector3 centerOfHearing;
 
     [SerializeField] GameObject deathCam;
-    [SerializeField] Transform camPos;
+    //[SerializeField] Transform camPos;
 
     private void OnTriggerEnter(Collider other)
     {

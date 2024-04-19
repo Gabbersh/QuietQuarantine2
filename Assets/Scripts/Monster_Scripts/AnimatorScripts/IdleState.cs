@@ -10,9 +10,6 @@ public class IdleState : StateMachineBehaviour
 
     float timer;
 
-    //float chaseRange = 15;
-
-    //private Transform player;
     private GameObject player;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -24,7 +21,7 @@ public class IdleState : StateMachineBehaviour
         Debug.Log(player);
 
         //player = GameObject.FindGameObjectWithTag("Player").transform;
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
         agent = animator.GetComponent<NavMeshAgent>();
         animator.SetBool("isPatrolling", false);
 
