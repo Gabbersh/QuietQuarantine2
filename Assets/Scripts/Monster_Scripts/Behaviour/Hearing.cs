@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.VisualScripting;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Hearing : MonoBehaviour, IHear
+public class Hearing : NetworkBehaviour, IHear
 {
-    [SerializeField] GameObject player;
+    public GameObject player;
     private Collider hearingCollider;
     private Animator animator;
     private bool playerInTrigger, hearingSound;
@@ -14,7 +16,15 @@ public class Hearing : MonoBehaviour, IHear
     private float attackDistance = 2.5f;
     // Tidigare 4.5 men allt för lång reach
 
+    public List<GameObject> players = new List<GameObject>();
+
+    private int connectedClientsCount;
+    private int lastClientsCount;
+
+    private Vector3 centerOfHearing;
+
     [SerializeField] GameObject deathCam;
+    //[SerializeField] Transform camPos;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -33,13 +43,32 @@ public class Hearing : MonoBehaviour, IHear
         }
     }
 
-    void Start()
+    // called when monster is spawned in by server
+    public override void OnNetworkSpawn()
     {
-        Transform hearingRadius = transform.Find("HearingRadius");
+        if(NetworkManager.Singleton.IsServer )
+        {
+            Transform hearingRadius = transform.Find("HearingRadius");
 
-        hearingCollider = hearingRadius.GetComponent<Collider>();
-        
-        animator = transform.GetComponent<Animator>();
+            //gameObject.GetComponent<Rigidbody>().position = new Vector3(145f, 1.5f, 160f);
+            //transform.position = gameObject.GetComponent<Rigidbody>().position;
+            
+            //Debug.Log("Position set to: " + transform.position);
+            //Physics.SyncTransforms();
+
+            hearingCollider = hearingRadius.GetComponent<Collider>();
+
+            animator = transform.GetComponent<Animator>();
+
+            foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+                players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
+            }
+
+            connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+            lastClientsCount = connectedClientsCount;
+        }
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
     }
 
     public void CheckSight()
@@ -50,7 +79,7 @@ public class Hearing : MonoBehaviour, IHear
             return;
         }
 
-        Vector3 centerOfHearing = hearingCollider.bounds.center;
+        centerOfHearing = hearingCollider.bounds.center;
         Vector3 centerOfPlayer = player.transform.position;
 
         Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
@@ -60,7 +89,7 @@ public class Hearing : MonoBehaviour, IHear
         {
             Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
 
-            if (rayHit.collider.gameObject.name == "FirstPersonController")
+            if (rayHit.collider.gameObject.CompareTag("Player"))
             {
                 //Måste kontrolleras om fungerar.
                 if(Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)
@@ -94,37 +123,70 @@ public class Hearing : MonoBehaviour, IHear
 
     void Update()
     {
-        if (hearingCollider == null)
+        if (NetworkManager.Singleton.IsServer)
         {
-            Debug.LogError("Hearing collider not found!");
-            return;
+            connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+
+            // update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
+            if (connectedClientsCount != lastClientsCount)
+            {
+                lastClientsCount = connectedClientsCount;
+
+                players.Clear();
+
+                foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+                {
+                    players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
+                }
+            }
+
+
+            double distance = Mathf.Infinity;
+
+            // best most awesomest way to get nearest player to monster (not costly at all)
+            foreach (var player in players)
+            {
+                float currentDistance = (transform.position - player.transform.position).sqrMagnitude;
+
+                if (currentDistance < distance)
+                {
+                    this.player = player;
+                    //Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
+                    distance = currentDistance;
+                }
+            }
+
+            if (hearingCollider == null)
+            {
+                Debug.LogError("Hearing collider not found!");
+                return;
+            }
+
+            if (playerInTrigger)
+            {
+                CheckSight();
+            }
+
+            if (hearingSound)
+            {
+                animator.SetBool("isHearing", true);
+            }
+
+            KillPlayer();
+
+
+            //Vector3 centerOfHearing = hearingCollider.bounds.center;
+            //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+            //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+            //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
         }
-
-        if (playerInTrigger)
-        {
-            CheckSight();
-        }
-
-        if (hearingSound)
-        {
-            animator.SetBool("isHearing", true);
-        }
-
-        KillPlayer();
-
-
-        //Vector3 centerOfHearing = hearingCollider.bounds.center;
-        //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
-
-        //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
-
-        //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
     }
 
     public void RespondToSound(Sound sound)
     {
         print(name + " responding to sound at " + sound.pos);
-
+        
         animator.SetBool("isHearing", true);
 
         var heardNoiseState = animator.GetBehaviour<HeardNoiceState>();

@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class patrolling : StateMachineBehaviour
 {
     NavMeshAgent agent;
-    private Transform player;
+
+    private GameObject player;
+
     private MonsterSpeed monsterSpeed;
 
     float timer;
@@ -18,7 +23,8 @@ public class patrolling : StateMachineBehaviour
         timer = 0;
 
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
 
         GameObject monster = animator.gameObject;
         monsterSpeed = monster.GetComponent<MonsterSpeed>();
@@ -34,8 +40,8 @@ public class patrolling : StateMachineBehaviour
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {        
-        if(agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+    {
+        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {
             Vector3 randomPos = Random.insideUnitSphere * 20f;
             NavMeshHit navHit;
@@ -45,7 +51,7 @@ public class patrolling : StateMachineBehaviour
         
         //agent.speed = 1.7f;
 
-        float distance = Vector3.Distance(player.position, animator.transform.position);
+        float distance = Vector3.Distance(player.transform.position, animator.transform.position);
 
         if (distance < chaseRange)
         {
