@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class CrawlState : StateMachineBehaviour
 {
     NavMeshAgent agent;
-    private Transform player;
     private MonsterSpeed monsterSpeed;
+    //private Transform player, objectToFollow;
+    private GameObject player;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
+        Debug.Log(player);
+
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
 
 
         GameObject monster = animator.gameObject;
