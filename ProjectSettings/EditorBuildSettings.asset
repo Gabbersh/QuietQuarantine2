@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main-Dont-Touch-Unless-Done/Main.unity
     guid: 034691a278597304aac4412f73eacf81
+  - enabled: 1
+    path: Assets/Scenes/Lan-Network.unity
+    guid: 4495b859e6268df47a349468c0c8ce91
   m_configObjects: {}
