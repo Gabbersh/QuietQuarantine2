@@ -23,7 +23,7 @@ public class Hearing : NetworkBehaviour, IHear
     private Vector3 centerOfHearing;
 
     [SerializeField] GameObject deathCam;
-    [SerializeField] Transform camPos;
+    //[SerializeField] Transform camPos;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -113,8 +113,9 @@ public class Hearing : NetworkBehaviour, IHear
         {
             player.GetComponent<FirstPersonController>().enabled = false;
             deathCam.SetActive(true);
-            Camera.main.gameObject.SetActive(false);
-            Invoke("ResetScene", 3f);
+            FirstPersonController.instance.playerCamera.gameObject.SetActive(false);
+            //Camera.main.gameObject.SetActive(false);
+            Invoke("ResetScene", 1.5f);
 
         }
     }

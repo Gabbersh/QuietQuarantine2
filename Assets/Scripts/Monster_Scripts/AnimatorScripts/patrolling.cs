@@ -9,8 +9,10 @@ using UnityEngine.AI;
 public class patrolling : StateMachineBehaviour
 {
     NavMeshAgent agent;
-    //private Transform player, objectToFollow;
+
     private GameObject player;
+
+    private MonsterSpeed monsterSpeed;
 
     float timer;
     float chaseRange = 15;
@@ -24,7 +26,12 @@ public class patrolling : StateMachineBehaviour
         player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
         //player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        agent.speed = 1.7f;
+        GameObject monster = animator.gameObject;
+        monsterSpeed = monster.GetComponent<MonsterSpeed>();
+
+        agent.speed = monsterSpeed.PatrollSpeed;
+
+        
 
         Vector3 randomPos = Random.insideUnitSphere * 20f;
         NavMeshHit navHit;
@@ -42,7 +49,7 @@ public class patrolling : StateMachineBehaviour
             agent.SetDestination(navHit.position);
         }
         
-        agent.speed = 1.7f;
+        //agent.speed = 1.7f;
 
         float distance = Vector3.Distance(player.transform.position, animator.transform.position);
 

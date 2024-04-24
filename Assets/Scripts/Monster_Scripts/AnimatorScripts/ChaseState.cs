@@ -8,8 +8,8 @@ public class ChaseState : StateMachineBehaviour
 {
     private NavMeshAgent agent;
     private Collider hearingCollider;
-    //private Transform player;
     private GameObject player;
+    private MonsterSpeed monsterSpeed;
     private float chaseTimer, reachDistance;
     private bool hunt;
 
@@ -21,9 +21,14 @@ public class ChaseState : StateMachineBehaviour
         player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
 
         hearingCollider = animator.transform.Find("HearingRadius").GetComponent<Collider>();
+
+        GameObject monster = animator.gameObject;
+        monsterSpeed = monster.GetComponent<MonsterSpeed>();
+
         hunt = false;
 
-        agent.speed = 7.56f;
+        agent.speed = monsterSpeed.ChaseSpeed;
+
         chaseTimer = 10;
         reachDistance = 14f;
 
