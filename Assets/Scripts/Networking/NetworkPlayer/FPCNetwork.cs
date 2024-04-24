@@ -376,7 +376,6 @@ public class FPCNetwork : NetworkBehaviour
 
                 if(currentInteractable)
                     currentInteractable.OnFocus();
-                
             }
         }
         else if (currentInteractable)

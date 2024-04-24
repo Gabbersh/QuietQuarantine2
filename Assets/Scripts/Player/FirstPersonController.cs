@@ -1,9 +1,12 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using Unity.Netcode;
 using UnityEngine;
 
-public class FirstPersonController : MonoBehaviour
+public class FirstPersonController : NetworkBehaviour
 {
     public bool CanMove { get; private set; } = true;
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
@@ -121,6 +124,10 @@ public class FirstPersonController : MonoBehaviour
     private PickUpObject currentPickUpObject;
     private bool objectInHand = false;
 
+    [Header("Cinemachine")]
+    [SerializeField] private CinemachineVirtualCamera vc;
+    [SerializeField] private AudioListener listener;
+
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
     private bool IsSliding
@@ -158,23 +165,56 @@ public class FirstPersonController : MonoBehaviour
         OnTakeDamage -= ApplyDamage;
     }
 
-    void Awake()
-    {
-        instance = this;
+    //void Awake()
+    //{
+    //    instance = this;
 
-        playerCamera = GetComponentInChildren<Camera>();
-        characterController = GetComponent<CharacterController>();
+    //    playerCamera = GetComponentInChildren<Camera>();
+    //    characterController = GetComponent<CharacterController>();
 
-        defaultYPos = playerCamera.transform.localPosition.y;
-        defaultFOV = playerCamera.fieldOfView;
+    //    defaultYPos = playerCamera.transform.localPosition.y;
+    //    defaultFOV = playerCamera.fieldOfView;
 
-        currentHealth = maxHealth;
-        currentStamina = maxStamina;
+    //    currentHealth = maxHealth;
+    //    currentStamina = maxStamina;
         
-        pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
+    //    pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+    //    Cursor.lockState = CursorLockMode.Locked;
+    //    Cursor.visible = false;
+    //}
+
+    public override void OnNetworkSpawn()
+    {
+        if (IsOwner)
+        {
+            instance = this;
+
+            transform.position = new Vector3(150, 2, 150);
+            Debug.Log("Position set to: " + transform.position);
+            Physics.SyncTransforms();
+
+            listener.enabled = true;
+            vc.Priority = 1;
+
+            playerCamera = GetComponentInChildren<Camera>();
+            defaultYPos = playerCamera.transform.localPosition.y;
+            defaultFOV = playerCamera.fieldOfView;
+
+            characterController = GetComponent<CharacterController>();
+
+            currentHealth = maxHealth;
+            currentStamina = maxStamina;
+
+            pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            vc.Priority = 0;
+        }
     }
 
     private void Start()
@@ -185,44 +225,46 @@ public class FirstPersonController : MonoBehaviour
 
     void Update()
     {
-        if (CanMove)
+        if (IsOwner)
         {
-            HandleMovementInput();
-            HandleMouseLook();
-
-            if (canJump)
-                HandleJump();
-
-            if (canCrouch) 
-                HandleCrouch();
-
-            if (canUseHeadBob)
-                HandleHeadBob();
-
-            if (canZoom)
-                HandleZoom();
-
-            if (useFootsteps)
-                HandleFootsteps();
-
-            if (canInteract)
+            if (CanMove)
             {
-                HandleInteractionCheck();
-                HandleInteractionInput();
-            }
+                HandleMovementInput();
+                HandleMouseLook();
 
-            if (canPickUpObjects)
-            {
-                HandlePickUpsCheck();
-                HandlePickUpsInput();
-            }
+                if (canJump)
+                    HandleJump();
 
-            if (useStamina)
-            {
-                HandleStamina();
+                if (canCrouch)
+                    HandleCrouch();
+
+                if (canUseHeadBob)
+                    HandleHeadBob();
+
+                if (canZoom)
+                    HandleZoom();
+
+                if (useFootsteps)
+                    HandleFootsteps();
+
+                if (canInteract)
+                {
+                    HandleInteractionCheck();
+                    HandleInteractionInput();
+                }
+
+                if (canPickUpObjects)
+                {
+                    HandlePickUpsCheck();
+                    HandlePickUpsInput();
+                }
+
+                if (useStamina)
+                {
+                    HandleStamina();
+                }
+                ApplyFinalMovements();
             }
-            
-            ApplyFinalMovements();
         }
     }
 
@@ -253,7 +295,8 @@ public class FirstPersonController : MonoBehaviour
     {
         rotationX -= Input.GetAxis("Mouse Y") * lookSpeedY;
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        //playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        vc.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
     }
 
@@ -315,10 +358,14 @@ public class FirstPersonController : MonoBehaviour
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
         {
             bobTimer += Time.deltaTime * (isCrouching ? crouchBobSpeed : isSprinting ? sprintBobSpeed : walkBobSpeed);
-            playerCamera.transform.localPosition = new Vector3(
-                playerCamera.transform.localPosition.x,
+            //playerCamera.transform.localPosition = new Vector3(
+            //    playerCamera.transform.localPosition.x,
+            //    defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
+            //    playerCamera.transform.localPosition.z);
+            vc.transform.localPosition = new Vector3(
+                vc.transform.localPosition.x,
                 defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
-                playerCamera.transform.localPosition.z);
+                vc.transform.localPosition.z);
         }
     }
 
@@ -363,7 +410,6 @@ public class FirstPersonController : MonoBehaviour
 
                 if(currentInteractable)
                     currentInteractable.OnFocus();
-                
             }
         }
         else if (currentInteractable)
@@ -567,7 +613,7 @@ public class FirstPersonController : MonoBehaviour
     private IEnumerator ToggleZoom(bool isEnter)
     {
         float targetFOV = isEnter ? zoomFOV : defaultFOV;
-        float startingFOV = playerCamera.fieldOfView;
+        float startingFOV = vc.m_Lens.FieldOfView;
         float timeElapsed = 0;
 
         while (timeElapsed < timeToZoom)
@@ -577,7 +623,7 @@ public class FirstPersonController : MonoBehaviour
             yield return null;
         }
 
-        playerCamera.fieldOfView = targetFOV;
+        vc.m_Lens.FieldOfView = targetFOV;
         zoomRoutine = null;
     }
 }
