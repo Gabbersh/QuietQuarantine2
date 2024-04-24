@@ -1626,6 +1626,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: -7516494965862943901}
+    - targetCorrespondingSourceObject: {fileID: 127060, guid: 95ff2b139e7da8a43baedd7f27edf718,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3088001300496969830}
   m_SourcePrefab: {fileID: 100100000, guid: 95ff2b139e7da8a43baedd7f27edf718, type: 3}
 --- !u!4 &7207745834857958439 stripped
 Transform:
@@ -1700,7 +1704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2592387486
+  GlobalObjectIdHash: 3326555307
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -1723,7 +1727,6 @@ MonoBehaviour:
   player: {fileID: 0}
   players: []
   deathCam: {fileID: 0}
-  camPos: {fileID: 0}
 --- !u!136 &873560837649072402
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1791,6 +1794,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 7207745834867504635}
+--- !u!114 &3088001300496969830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207745834858083839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4256fd95d4a82147b8a4988b7a878bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeed: 7.56
+  patrollSpeed: 1.7
 --- !u!95 &7207745834867504635 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 9547856, guid: 95ff2b139e7da8a43baedd7f27edf718,
