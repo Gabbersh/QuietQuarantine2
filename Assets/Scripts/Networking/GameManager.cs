@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject myNemmaJeff;
-    private Spawns enemySpawns;
+    [SerializeField] private Spawns enemySpawns;
     [SerializeField] private List<GameObject> jeffs;
     [SerializeField] private int monstersToSpawn;
     private bool monstersSpawned;
@@ -16,7 +16,6 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemySpawns = GameObject.Find("SpawnPoints").GetComponent<Spawns>();
         jeffs = new();
     }
 
