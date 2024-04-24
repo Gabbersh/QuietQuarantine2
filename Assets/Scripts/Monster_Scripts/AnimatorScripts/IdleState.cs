@@ -37,13 +37,6 @@ public class IdleState : StateMachineBehaviour
             animator.SetBool("isCrawling", true);
             animator.SetBool("toCrawl", true);
         }
-
-        float distance = Vector3.Distance(player.transform.position, animator.transform.position);
-
-        //if (distance < chaseRange)
-        //{
-        //    animator.SetBool("isChasing", true);
-        //}
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

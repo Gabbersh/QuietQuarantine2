@@ -98,9 +98,11 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float crouchStepMultiplier = 1.5f;
     [SerializeField] private float sprintStepMultiplier = 0.6f;
     [SerializeField] private AudioSource footstepAudioSource = default;
-    [SerializeField] private AudioClip[] woodClips = default;
-    [SerializeField] private AudioClip[] metalClips = default;
-    [SerializeField] private AudioClip[] grassClips = default;
+    [SerializeField] private AudioClip[] defaultStep = default;
+
+    //[SerializeField] private AudioClip[] woodClips = default;
+    //[SerializeField] private AudioClip[] metalClips = default;
+    //[SerializeField] private AudioClip[] grassClips = default;
     private float footStepTimer = 0;
     private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : isSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
 
@@ -201,7 +203,7 @@ public class FirstPersonController : MonoBehaviour
                 HandleZoom();
 
             if (useFootsteps)
-                //HandleFootsteps();
+                HandleFootsteps();
 
             if (canInteract)
             {
@@ -331,7 +333,7 @@ public class FirstPersonController : MonoBehaviour
                 regeneratingStamina = null;
             }
 
-            currentStamina -= staminaUseMultiplier * Time.deltaTime;
+            currentStamina -= staminaUseMultiplier * Time.deltaTime; 
 
             if (currentStamina < 0)
                 currentStamina = 0;
@@ -434,27 +436,44 @@ public class FirstPersonController : MonoBehaviour
 
         if (footStepTimer <= 0)
         {
-            if(Physics.Raycast(playerCamera.transform.position, Vector3.down, out RaycastHit hit, 3))
+            //kollar från under spelaren, inte under kameran
+            if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
-                switch (hit.collider.tag)
-                {
-                    //Add different tags for different materials, these are examples:
-                    case "Footsteps/GRASS":
-                        footstepAudioSource.PlayOneShot(grassClips[UnityEngine.Random.Range(0, grassClips.Length - 1)]);
-                        break;
-                    case "Footsteps/WOOD":
-                        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
-                        break;
-                    case "Footsteps/METAL":
-                        footstepAudioSource.PlayOneShot(metalClips[UnityEngine.Random.Range(0, metalClips.Length - 1)]);
-                        break;
-                    default:
-                        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
-                        break;
-                }
+
+                footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length)]);
+
+                //switch (hit.collider.tag)
+                //{
+                //    //Add different tags for different materials, these are examples:
+                //    case "Footsteps/GRASS":
+                //        footstepAudioSource.PlayOneShot(grassClips[UnityEngine.Random.Range(0, grassClips.Length - 1)]);
+                //        break;
+                //    case "Footsteps/WOOD":
+                //        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
+                //        break;
+                //    case "Footsteps/METAL":
+                //        footstepAudioSource.PlayOneShot(metalClips[UnityEngine.Random.Range(0, metalClips.Length - 1)]);
+                //        break;
+                //    default:
+                //        footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length - 1)]);
+                //        break;
+                //}
             }
 
             footStepTimer = GetCurrentOffset;
+
+            if (isCrouching)
+            {
+                footstepAudioSource.volume = 0.25f;
+            }
+            else if (isSprinting)
+            {
+                footstepAudioSource.volume = 1f;
+            }
+            else
+            {
+                footstepAudioSource.volume = 0.5f;
+            }
 
         }
     }

@@ -15,7 +15,7 @@ public class patrolling : StateMachineBehaviour
     private MonsterSpeed monsterSpeed;
 
     float timer;
-    float chaseRange = 15;
+    float chaseRange;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
