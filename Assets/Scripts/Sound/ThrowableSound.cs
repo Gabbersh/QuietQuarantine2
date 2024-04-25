@@ -10,16 +10,6 @@ public class ThrowableSound : MonoBehaviour
 
     private bool canPlaySound = false;
 
-    private void Start()
-    {
-        Invoke(nameof(EnableSound), initialCooldown);
-    }
-
-    private void EnableSound()
-    {
-        canPlaySound = true;
-    }
-
     void OnCollisionEnter(Collision collision)
     {
         if (canPlaySound)
@@ -34,5 +24,13 @@ public class ThrowableSound : MonoBehaviour
 
             print($"Sound: with pos {sound.pos} and range {sound.range} created!");
         }
+        else
+        {
+            Invoke(nameof(EnableSound), initialCooldown);
+        }
+    }
+    private void EnableSound()
+    {
+        canPlaySound = true;
     }
 }
