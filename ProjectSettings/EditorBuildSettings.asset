@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Test/NoiseTest_ground_and_throwables.unity
-    guid: 0c55c44faaccaa144a62a3c2a8c93d39
+    path: Assets/Scenes/Test/UpdatingMonsters_and_Sound.unity
+    guid: 966b75055280a6c448dfc1e7f8a41dd8
   m_configObjects: {}
