@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < monstersToSpawn; i++)
         {
-            if(!(enemySpawns.EnemySpawns.Count > 0)) return;
+            if(enemySpawns.GetSpawnPoints().Count <= 0) return;
 
             jeffs.Add(Instantiate(myNemmaJeff, GetRandomSpawn(), Quaternion.identity));
         }
@@ -46,9 +46,9 @@ public class GameManager : MonoBehaviour
 
     private Vector3 GetRandomSpawn()
     {
-        var index = Random.Range(0, enemySpawns.EnemySpawns.Count);
-        var chosenSpawn = enemySpawns.EnemySpawns[index].position;
-        enemySpawns.EnemySpawns.RemoveAt(index);
+        var index = Random.Range(0, enemySpawns.GetSpawnPoints().Count);
+        var chosenSpawn = enemySpawns.GetSpawnPoints()[index].position;
+        enemySpawns.GetSpawnPoints().RemoveAt(index);
         return chosenSpawn;
     }
 

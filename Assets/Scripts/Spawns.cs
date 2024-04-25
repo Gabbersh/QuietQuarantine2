@@ -5,22 +5,12 @@ using UnityEngine;
 
 public class Spawns : MonoBehaviour
 {
-    public List<Transform> EnemySpawns;
+    private List<Transform> EnemySpawns;
 
     void Awake()
     {
         EnemySpawns = gameObject.GetComponentsInChildren<Transform>().Skip(1).ToList();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
+    public List<Transform> GetSpawnPoints() => EnemySpawns;
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

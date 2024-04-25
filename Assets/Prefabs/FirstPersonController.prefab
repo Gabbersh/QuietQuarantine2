@@ -537,6 +537,7 @@ MonoBehaviour:
   interactionDistance: 2
   vc: {fileID: 3705025116684070815}
   listener: {fileID: 7591570269575126959}
+  soundRange: 20
   playerCamera: {fileID: 4332063519478241494}
   characterController: {fileID: 8643092617271328985}
 --- !u!82 &6987455384644589047

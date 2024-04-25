@@ -128,6 +128,9 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private CinemachineVirtualCamera vc;
     [SerializeField] private AudioListener listener;
 
+    [Header("SoundRange")]
+    [SerializeField] private float soundRange;
+
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
     private bool IsSliding
@@ -475,6 +478,9 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleFootsteps()
     {
+        float SoundRange;
+        float rangefactor;
+        
         if (!characterController.isGrounded) return;
         if (currentInput == Vector2.zero) return;
 
@@ -511,16 +517,28 @@ public class FirstPersonController : NetworkBehaviour
             if (isCrouching)
             {
                 footstepAudioSource.volume = 0.25f;
+                rangefactor = 0.5f;
+                
             }
             else if (isSprinting)
             {
                 footstepAudioSource.volume = 1f;
+                rangefactor = 2f;
             }
             else
             {
                 footstepAudioSource.volume = 0.5f;
+                rangefactor = 1f;
             }
 
+            SoundRange = soundRange * rangefactor;
+
+            Sound sound = ScriptableObject.CreateInstance<Sound>();
+            sound.Initialize(transform.position, SoundRange); // Assuming hit.point is where the sound originates
+
+            // Pass the sound to the Sounds manager
+            Sounds.MakeSound(sound);
+            Debug.Log($"Sound: with pos {sound.pos} and range {sound.range} created!");
         }
     }
 
@@ -618,7 +636,7 @@ public class FirstPersonController : NetworkBehaviour
 
         while (timeElapsed < timeToZoom)
         {
-            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed/timeToZoom);
+            vc.m_Lens.FieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed/timeToZoom);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
