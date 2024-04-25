@@ -11,8 +11,9 @@ public class InventoryItem : InteractableObject
     public enum InventoryItemType
     {
         Water,
-        Coin,
-        Medicine
+        Food,
+        Medicine,
+        Key
     }
     public override void OnFocus()
     {
