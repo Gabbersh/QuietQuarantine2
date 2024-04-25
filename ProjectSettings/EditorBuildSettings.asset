@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Main-Dont-Touch-Unless-Done/Main.unity
-    guid: 034691a278597304aac4412f73eacf81
+    path: Assets/Scenes/Test/NoiseTest_ground_and_throwables.unity
+    guid: 0c55c44faaccaa144a62a3c2a8c93d39
   m_configObjects: {}
