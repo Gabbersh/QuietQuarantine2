@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cinemachine;
 
 public class Hearing : NetworkBehaviour, IHear
 {
@@ -23,8 +24,11 @@ public class Hearing : NetworkBehaviour, IHear
 
     private Vector3 centerOfHearing;
 
-    [SerializeField] GameObject deathCam;
+    [SerializeField] CinemachineVirtualCamera deathCam;
     //[SerializeField] Transform camPos;
+
+    [Header("RespawnPoint")]
+    [SerializeField] private Transform respawnPoint;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -49,6 +53,8 @@ public class Hearing : NetworkBehaviour, IHear
         if(NetworkManager.Singleton.IsServer )
         {
             Transform hearingRadius = transform.Find("HearingRadius");
+
+            deathCam.Priority = 0;
 
             //gameObject.GetComponent<Rigidbody>().position = new Vector3(145f, 1.5f, 160f);
             //transform.position = gameObject.GetComponent<Rigidbody>().position;
@@ -110,15 +116,25 @@ public class Hearing : NetworkBehaviour, IHear
 
     public void KillPlayer()
     {
-        if (animator.GetBool("isAttacking"))
+        if (NetworkManager.Singleton.IsServer)
         {
-            player.GetComponent<FirstPersonController>().enabled = false;
-            deathCam.SetActive(true);
-            FirstPersonController.instance.playerCamera.gameObject.SetActive(false);
-            //Camera.main.gameObject.SetActive(false);
-            Invoke("ResetScene", 1.5f);
-
+            if (animator.GetBool("isAttacking"))
+            {
+                player.GetComponent<FirstPersonController>().enabled = false;
+                deathCam.Priority = 10;
+                Invoke("RespawnPlayer", 1.5f); // Invoke the respawn function after 1.5 seconds
+            }
         }
+    }
+
+    private void RespawnPlayer()
+    {
+        // Set the player's position to the respawn point's position
+        player.transform.position = respawnPoint.position;
+        // Optionally, you can also reset any other necessary player attributes here
+
+        // After respawning, you might want to enable player controls again
+        player.GetComponent<FirstPersonController>().enabled = true;
     }
 
     void Update()
