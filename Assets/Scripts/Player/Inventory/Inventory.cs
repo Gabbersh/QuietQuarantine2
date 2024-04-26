@@ -42,7 +42,7 @@ public class Inventory : MonoBehaviour
                 break;
         }
 
-        InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, coinAmount });
+        InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, foodAmount, keyAmount });
         
         Debug.Log("Water: " + waterAmount + ", " + "Medicine: " +  medicineAmount + ", " + "Food: " + foodAmount + ", " + "Keys: " + keyAmount);
     }

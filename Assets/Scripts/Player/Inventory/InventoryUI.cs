@@ -28,6 +28,7 @@ public class InventoryUI : MonoBehaviour
         waterText.text = amounts[0].ToString();
         suppliesText.text = amounts[1].ToString();
         coinText.text = amounts[2].ToString();
+        keyText.text = amounts[3].ToString();
     }
 
     void ToggleUI() 

@@ -12,6 +12,7 @@ public class barterscript : InteractableObject
     private int waterAmount;
     private int medicineAmount;
     [SerializeField] private Inventory inventory;
+    private string focusText = "Press E to trade for key";
     
 
     void AttemptBarter()
@@ -49,11 +50,11 @@ public class barterscript : InteractableObject
 
     public override void OnFocus()
     {
-        
+        InventoryActions.OnInteractableFocus(focusText, true);
     }
 
     public override void OnLoseFocus()
     {
-        
+        InventoryActions.OnInteractableLostFocus(false);
     }
 }

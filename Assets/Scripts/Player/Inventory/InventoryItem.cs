@@ -7,6 +7,7 @@ public class InventoryItem : InteractableObject
 {
     [SerializeField] private InventoryItemType itemType;
     private string focusText = "Press 'E' to pick up "; 
+    
     public InventoryItemType ItemType { get { return itemType; } }
     public enum InventoryItemType
     {
