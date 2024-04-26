@@ -6,6 +6,8 @@ using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cinemachine;
+using Unity.Services.Lobbies.Models;
+using Unity.IO.LowLevel.Unsafe;
 
 public class Hearing : NetworkBehaviour, IHear
 {
@@ -15,7 +17,6 @@ public class Hearing : NetworkBehaviour, IHear
     private bool playerInTrigger, hearingSound;
 
     private float attackDistance = 2.5f;
-    // Tidigare 4.5 men allt för lång reach
 
     public List<GameObject> players = new List<GameObject>();
 
@@ -25,10 +26,21 @@ public class Hearing : NetworkBehaviour, IHear
     private Vector3 centerOfHearing;
 
     [SerializeField] CinemachineVirtualCamera deathCam;
-    //[SerializeField] Transform camPos;
 
-    [Header("RespawnPoint")]
-    [SerializeField] private Transform respawnPoint;
+    private Transform respawnPoint;
+    private Transform deathPoint; // Add this line to store reference to deathPoint
+
+    private void Start()
+    {
+        // Find the deathPoint object in the hierarchy
+        deathPoint = GameObject.Find("DeathPoint").transform;
+
+        // If deathPoint is not found, log an error
+        if (deathPoint == null)
+        {
+            Debug.LogError("Death Point object not found in the hierarchy!");
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -120,20 +132,27 @@ public class Hearing : NetworkBehaviour, IHear
         {
             if (animator.GetBool("isAttacking"))
             {
-                player.GetComponent<FirstPersonController>().enabled = false;
-                deathCam.Priority = 10;
-                Invoke("RespawnPlayer", 1.5f); // Invoke the respawn function after 1.5 seconds
+                player.GetComponent< FirstPersonController > ().enabled = false;
+                deathCam.enabled = true;
+                deathCam.Priority = 11;
+                StartCoroutine(RespawnAfterDelay(1f)); // Activate death cam for 1 second
             }
         }
     }
 
+    private IEnumerator RespawnAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        deathCam.enabled = false;
+        RespawnPlayer();
+    }
+
     private void RespawnPlayer()
     {
-        // Set the player's position to the respawn point's position
-        player.transform.position = respawnPoint.position;
-        // Optionally, you can also reset any other necessary player attributes here
-
-        // After respawning, you might want to enable player controls again
+        deathCam.enabled = false;
+        deathCam.Priority = 1;
+        player.transform.position = deathPoint.position;
         player.GetComponent<FirstPersonController>().enabled = true;
     }
 
@@ -216,5 +235,4 @@ public class Hearing : NetworkBehaviour, IHear
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 0);
     }
-
 }

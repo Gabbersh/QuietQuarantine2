@@ -198,7 +198,7 @@ public class FirstPersonController : NetworkBehaviour
             Physics.SyncTransforms();
 
             listener.enabled = true;
-            vc.Priority = 1;
+            vc.Priority = 10;
 
             playerCamera = GetComponentInChildren<Camera>();
             defaultYPos = playerCamera.transform.localPosition.y;
