@@ -7,11 +7,24 @@ using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("Monsters")]
     [SerializeField] private GameObject myNemmaJeff;
-    [SerializeField] private Spawns enemySpawns;
     [SerializeField] private List<GameObject> jeffs;
+
+    [Header("Throwables")]
+    [SerializeField] private GameObject throwable;
+    [SerializeField] private List<GameObject> spawnedThrowables;
+
+    [Header("Spawns")]
+    [SerializeField] private Spawns spawns;
+
+    [Header("Monster settings")]
     [SerializeField] private int monstersToSpawn;
-    private bool monstersSpawned;
+
+    [Header("Throwables settings")]
+    [SerializeField] private int throwablesToSpawn;
+
+    private bool spawnComplete;
 
     // Start is called before the first frame update
     void Start()
@@ -22,10 +35,11 @@ public class GameManager : MonoBehaviour
     // constantly check for player count and spawn monster
     void FixedUpdate()
     {
-        if (HasPlayerJoined() && !monstersSpawned)
+        if (HasPlayerJoined() && !spawnComplete)
         {
             SpawnMonsters();
-            monstersSpawned = true;
+            SpawnThrowables();
+            spawnComplete = true;
         }
     }
 
@@ -33,9 +47,9 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < monstersToSpawn; i++)
         {
-            if(enemySpawns.GetSpawnPoints().Count <= 0) return;
+            if(spawns.GetMonsterSpawnPoints().Count <= 0) return;
 
-            jeffs.Add(Instantiate(myNemmaJeff, GetRandomSpawn(), Quaternion.identity));
+            jeffs.Add(Instantiate(myNemmaJeff, GetRandomSpawn(spawns.GetMonsterSpawnPoints(), true), Quaternion.identity));
         }
 
         foreach (var networkInstance in jeffs)
@@ -44,14 +58,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private Vector3 GetRandomSpawn()
+    private void SpawnThrowables()
     {
-        var index = Random.Range(0, enemySpawns.GetSpawnPoints().Count);
-        var chosenSpawn = enemySpawns.GetSpawnPoints()[index].position;
-        enemySpawns.GetSpawnPoints().RemoveAt(index);
-        return chosenSpawn;
+        for (int i = 0; i < throwablesToSpawn; i++)
+        {
+            if (spawns.GetThrowableSpawnPoints().Count <= 0) return;
+
+            spawnedThrowables.Add(Instantiate(throwable, GetRandomSpawn(spawns.GetThrowableSpawnPoints(), true), Quaternion.identity));
+        }
+
+        foreach(var networkInstance in spawnedThrowables)
+        {
+            networkInstance.GetComponent<NetworkObject>().Spawn();
+        }
     }
 
+    private Vector3 GetRandomSpawn(List<Transform> spawns, bool removeOnSpawn)
+    {
+        var index = Random.Range(0, spawns.Count);
+        var chosenSpawn = spawns[index].position;
+
+        if (removeOnSpawn)
+        {
+            spawns.RemoveAt(index);
+        }
+
+        return chosenSpawn;
+    }
 
     private bool HasPlayerJoined()
     {

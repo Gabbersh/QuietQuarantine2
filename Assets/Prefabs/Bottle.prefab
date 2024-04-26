@@ -647,8 +647,8 @@ GameObject:
   - component: {fileID: 8373102308252635864}
   - component: {fileID: 5238208099716369820}
   - component: {fileID: 630481894144541616}
-  - component: {fileID: 4741936388884787338}
-  - component: {fileID: 1022215179361768274}
+  - component: {fileID: 228544399855445852}
+  - component: {fileID: 4238266967735905433}
   m_Layer: 0
   m_Name: Bottle
   m_TagString: Untagged
@@ -665,7 +665,7 @@ Transform:
   m_GameObject: {fileID: 9075309448354747913}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.407997, y: 36.26651, z: 53.665623}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.09697976, y: 0.2248864, z: 0.09697976}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1964,7 +1964,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 586093885
+  GlobalObjectIdHash: 979897412
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -2111,7 +2111,7 @@ MonoBehaviour:
   source: {fileID: 5238208099716369820}
   soundRange: 50
   initialCooldown: 2
---- !u!114 &4741936388884787338
+--- !u!114 &228544399855445852
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2120,7 +2120,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9075309448354747913}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: ec662ee9fe75fc040ab4b89ff46ac731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -2129,9 +2129,9 @@ MonoBehaviour:
   SyncRotAngleX: 1
   SyncRotAngleY: 1
   SyncRotAngleZ: 1
-  SyncScaleX: 1
-  SyncScaleY: 1
-  SyncScaleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
   PositionThreshold: 0.001
   RotAngleThreshold: 0.01
   ScaleThreshold: 0.01
@@ -2141,7 +2141,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &1022215179361768274
+--- !u!114 &4238266967735905433
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
