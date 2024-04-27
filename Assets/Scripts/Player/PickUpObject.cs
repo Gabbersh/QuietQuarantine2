@@ -19,10 +19,6 @@ public class PickUpObject : InteractableObject
         get { return isObjectAvailable.Value; }
         set
         {
-            if (isObjectAvailable.Value != value)
-            {
-                isObjectAvailable.Value = value;
-
                 if (IsServer)
                 {
                     isObjectAvailable.Value = value; // change value directly if isServer (host)
@@ -31,7 +27,6 @@ public class PickUpObject : InteractableObject
                 {
                     ChangeObjectAvailabilityServerRpc(); // request server to change value
                 }
-            }
         }
     }
 
@@ -50,7 +45,7 @@ public class PickUpObject : InteractableObject
 
     public override void OnInteract()
     {
-        if (playerPickUpPoint == null && isObjectAvailable.Value)
+        if (playerPickUpPoint == null && IsObjectAvailable)
         {
             playerPickUpPoint = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<FirstPersonController>().PickUpPoint; // get local players PickUpPoint
             objectRigidBody.useGravity = false;
@@ -60,10 +55,10 @@ public class PickUpObject : InteractableObject
         }
     }
 
-    [ServerRpc(RequireOwnership = true)]
+    [ServerRpc(RequireOwnership = false)]
     private void ChangeObjectAvailabilityServerRpc(ServerRpcParams serverRpcParams = default)
     {
-        isObjectAvailable.Value = !isObjectAvailable.Value;
+        IsObjectAvailable = !IsObjectAvailable;
     }
 
 
