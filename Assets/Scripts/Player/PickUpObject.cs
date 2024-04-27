@@ -12,6 +12,29 @@ public class PickUpObject : InteractableObject
     private float throwingForce = 15;
     private float maxRandomRotationAngle = 30f;
 
+    private NetworkVariable<bool> isObjectAvailable = new NetworkVariable<bool>(true); // syncs between all players
+
+    public bool IsObjectAvailable
+    {
+        get { return isObjectAvailable.Value; }
+        set
+        {
+            if (isObjectAvailable.Value != value)
+            {
+                isObjectAvailable.Value = value;
+
+                if (IsServer)
+                {
+                    isObjectAvailable.Value = value; // change value directly if isServer (host)
+                }
+                else if (!IsServer)
+                {
+                    ChangeObjectAvailabilityServerRpc(); // request server to change value
+                }
+            }
+        }
+    }
+
     private void Start()
     {
         objectRigidBody = GetComponent<Rigidbody>();
@@ -27,13 +50,22 @@ public class PickUpObject : InteractableObject
 
     public override void OnInteract()
     {
-        if (playerPickUpPoint == null)
+        if (playerPickUpPoint == null && isObjectAvailable.Value)
         {
-            this.playerPickUpPoint = FirstPersonController.instance.PickUpPoint;
+            playerPickUpPoint = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<FirstPersonController>().PickUpPoint; // get local players PickUpPoint
             objectRigidBody.useGravity = false;
             objectCollider.enabled = false;
+
+            IsObjectAvailable = false; // note property not directly setting network variable
         }
     }
+
+    [ServerRpc(RequireOwnership = true)]
+    private void ChangeObjectAvailabilityServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        isObjectAvailable.Value = !isObjectAvailable.Value;
+    }
+
 
     public void Throw()
     {
@@ -46,6 +78,8 @@ public class PickUpObject : InteractableObject
         objectRigidBody.angularVelocity = Random.insideUnitSphere * throwingForce;
 
         this.playerPickUpPoint = null;
+
+        IsObjectAvailable = true; // note property not directly setting network variable
     }
 
     public void Drop()
@@ -53,6 +87,8 @@ public class PickUpObject : InteractableObject
         objectRigidBody.useGravity = true;
         objectCollider.enabled = true;
         this.playerPickUpPoint = null;
+
+        IsObjectAvailable = true; // note property not directly setting network variable
     }
 
     public override void OnLoseFocus()

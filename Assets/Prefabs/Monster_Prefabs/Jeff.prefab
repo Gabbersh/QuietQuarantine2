@@ -1609,7 +1609,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 127060, guid: 95ff2b139e7da8a43baedd7f27edf718,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5592340790913714319}
+      addedObject: {fileID: -3847589084878065186}
     - targetCorrespondingSourceObject: {fileID: 127060, guid: 95ff2b139e7da8a43baedd7f27edf718,
         type: 3}
       insertIndex: -1
@@ -1692,7 +1692,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &5592340790913714319
+--- !u!114 &-3847589084878065186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1704,7 +1704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3326555307
+  GlobalObjectIdHash: 2178470635
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0

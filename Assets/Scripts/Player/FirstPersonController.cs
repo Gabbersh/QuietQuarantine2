@@ -408,7 +408,6 @@ public class FirstPersonController : NetworkBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
-
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -454,12 +453,25 @@ public class FirstPersonController : NetworkBehaviour
         }
     }
 
+
+    // changes owner of a given networkobjectid to local players id, sends command to server and forces server to change it
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestOwnershipServerRpc(ulong objectToChange,ServerRpcParams serverRpcParams = default)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[objectToChange].GetComponent<NetworkObject>().ChangeOwnership(serverRpcParams.Receive.SenderClientId);
+    }
+
+
     private void HandlePickUpsInput()
     {
         if (Input.GetKeyDown(PickUpKey) && currentPickUpObject != null
             && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
             out RaycastHit hit, interactionDistance, pickUpIgnoreLayer) && !objectInHand)
         {
+            if (!hit.collider.gameObject.GetComponent<PickUpObject>().IsObjectAvailable) return; // check if object is not picked up by another player
+
+            RequestOwnershipServerRpc(hit.collider.gameObject.GetComponent<NetworkObject>().NetworkObjectId); // makes new owner manage physics of object when picked up
+
             currentPickUpObject.OnInteract();
             currentPickUpObject.OnLoseFocus();
             objectInHand = true;
