@@ -68,12 +68,6 @@ public class Hearing : NetworkBehaviour, IHear
 
             deathCam.Priority = 0;
 
-            //gameObject.GetComponent<Rigidbody>().position = new Vector3(145f, 1.5f, 160f);
-            //transform.position = gameObject.GetComponent<Rigidbody>().position;
-            
-            //Debug.Log("Position set to: " + transform.position);
-            //Physics.SyncTransforms();
-
             hearingCollider = hearingRadius.GetComponent<Collider>();
 
             animator = transform.GetComponent<Animator>();
@@ -186,7 +180,6 @@ public class Hearing : NetworkBehaviour, IHear
                 if (currentDistance < distance)
                 {
                     this.player = player;
-                    //Debug.Log("CURRENT CHÒSEN PLAYER TRANSFORM" + this.player.transform.position);
                     distance = currentDistance;
                 }
             }
@@ -207,7 +200,7 @@ public class Hearing : NetworkBehaviour, IHear
                 animator.SetBool("isHearing", true);
             }
 
-            KillPlayer();
+            //KillPlayer();
 
 
             //Vector3 centerOfHearing = hearingCollider.bounds.center;

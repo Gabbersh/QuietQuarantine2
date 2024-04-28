@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -149,6 +150,18 @@ public class FirstPersonController : NetworkBehaviour
     public Camera playerCamera;
     public CharacterController characterController;
 
+    [Header("Character")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject playerCharacter;
+
+    // LOCAL Y of playerCharacter
+    // -0.4 y unCrouched
+    // 0.3 y crouched
+    // 0.55 y crouchedWalking
+    private Vector3 unCrouched = new(0, -0.4f, 0);
+    private Vector3 crouched = new(0, 0.3f, 0);
+    private Vector3 crouchedWalking = new(0, 0.55f, 0);
+
     private Inventory inventory;
 
     private Vector3 moveDirection;
@@ -168,25 +181,6 @@ public class FirstPersonController : NetworkBehaviour
         OnTakeDamage -= ApplyDamage;
     }
 
-    //void Awake()
-    //{
-    //    instance = this;
-
-    //    playerCamera = GetComponentInChildren<Camera>();
-    //    characterController = GetComponent<CharacterController>();
-
-    //    defaultYPos = playerCamera.transform.localPosition.y;
-    //    defaultFOV = playerCamera.fieldOfView;
-
-    //    currentHealth = maxHealth;
-    //    currentStamina = maxStamina;
-        
-    //    pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
-
-    //    Cursor.lockState = CursorLockMode.Locked;
-    //    Cursor.visible = false;
-    //}
-
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
@@ -194,7 +188,7 @@ public class FirstPersonController : NetworkBehaviour
             instance = this;
 
             transform.position = new Vector3(150, 2, 150);
-            Debug.Log("Position set to: " + transform.position);
+            //Debug.Log("Position set to: " + transform.position);
             Physics.SyncTransforms();
 
             listener.enabled = true;
@@ -213,6 +207,13 @@ public class FirstPersonController : NetworkBehaviour
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            // hide local players playercharacter, will still show from other players view
+            SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (var child in characterModel)
+            {
+                child.enabled = false;
+            }
         }
         else
         {
@@ -266,8 +267,28 @@ public class FirstPersonController : NetworkBehaviour
                 {
                     HandleStamina();
                 }
+
+                OffsetLocalPlayerModel();
+
                 ApplyFinalMovements();
             }
+        }
+    }
+
+    // offset player character based on state (Model is fucked)
+    private void OffsetLocalPlayerModel()
+    {
+        if (isCrouching && (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f))
+        {
+            playerCharacter.transform.localPosition = crouchedWalking;
+        }
+        else if (isCrouching)
+        {
+            playerCharacter.transform.localPosition = crouched;
+        }
+        else
+        {
+            playerCharacter.transform.localPosition = unCrouched;
         }
     }
 
@@ -275,6 +296,8 @@ public class FirstPersonController : NetworkBehaviour
     {
         currentInput = new Vector2((isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), 
             (isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
+
+        animator.SetBool("isRunning", isSprinting); // check if is sprinting and sending message to animator
 
         float moveDirectionY = moveDirection.y;
         moveDirection = (transform.TransformDirection(Vector3.forward) * currentInput.x) 
@@ -284,21 +307,32 @@ public class FirstPersonController : NetworkBehaviour
      
     private void HandleJump()
     {
+        // isJumping animation is played once, could be better to use trigger but im lazy
         if (shouldJump)
+        {
+            animator.SetBool("isJumping", true);
             moveDirection.y = jumpForce;
+        }
+        else
+        {
+            animator.SetBool("isJumping", false);
+        }
     }
 
     private void HandleCrouch()
     {
         if (shouldCrouch)
+        {
             StartCoroutine(CrouchStand());
+        }
+
+        animator.SetBool("isCrouched", isCrouching);
     }
 
     private void HandleMouseLook()
     {
         rotationX -= Input.GetAxis("Mouse Y") * lookSpeedY;
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
-        //playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         vc.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
     }
@@ -361,10 +395,6 @@ public class FirstPersonController : NetworkBehaviour
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
         {
             bobTimer += Time.deltaTime * (isCrouching ? crouchBobSpeed : isSprinting ? sprintBobSpeed : walkBobSpeed);
-            //playerCamera.transform.localPosition = new Vector3(
-            //    playerCamera.transform.localPosition.x,
-            //    defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
-            //    playerCamera.transform.localPosition.z);
             vc.transform.localPosition = new Vector3(
                 vc.transform.localPosition.x,
                 defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
@@ -408,7 +438,6 @@ public class FirstPersonController : NetworkBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
-
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -454,12 +483,25 @@ public class FirstPersonController : NetworkBehaviour
         }
     }
 
+
+    // changes owner of a given networkobjectid to local players id, sends command to server and forces server to change it
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestOwnershipServerRpc(ulong objectToChange,ServerRpcParams serverRpcParams = default)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[objectToChange].GetComponent<NetworkObject>().ChangeOwnership(serverRpcParams.Receive.SenderClientId);
+    }
+
+
     private void HandlePickUpsInput()
     {
         if (Input.GetKeyDown(PickUpKey) && currentPickUpObject != null
             && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
             out RaycastHit hit, interactionDistance, pickUpIgnoreLayer) && !objectInHand)
         {
+            if (!hit.collider.gameObject.GetComponent<PickUpObject>().IsObjectAvailable) return; // check if object is not picked up by another player
+
+            RequestOwnershipServerRpc(hit.collider.gameObject.GetComponent<NetworkObject>().NetworkObjectId); // makes new owner manage physics of object when picked up
+
             currentPickUpObject.OnInteract();
             currentPickUpObject.OnLoseFocus();
             objectInHand = true;
@@ -549,6 +591,16 @@ public class FirstPersonController : NetworkBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
+        // hella lit way to send movement state to animator
+        if(Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
+        }
+
         if (willSlideOnSlopes && IsSliding)
             moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
 
@@ -601,6 +653,8 @@ public class FirstPersonController : NetworkBehaviour
 
     private IEnumerator CrouchStand()
     {
+        animator.SetBool("isCrouched", isCrouching); // just setting isCrouched state to isCrouching, could also be a trigger but im still lazy
+
         if (isCrouching && Physics.Raycast(playerCamera.transform.position, Vector3.up, 1f))
             yield break;
 
