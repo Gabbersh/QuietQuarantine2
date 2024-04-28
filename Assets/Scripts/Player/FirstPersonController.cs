@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -24,6 +25,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool canPickUpObjects = true;
     [SerializeField] private bool useFootsteps = true;
     [SerializeField] private bool useStamina = true;
+    [SerializeField] private bool useFlashlight = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -33,6 +35,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
+    [SerializeField] private KeyCode flashlightKey = KeyCode.F;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -123,6 +126,10 @@ public class FirstPersonController : NetworkBehaviour
     private LayerMask pickUpIgnoreLayer = 0 | 1 << 6;
     private PickUpObject currentPickUpObject;
     private bool objectInHand = false;
+
+    [Header("Flashlight")]
+    [SerializeField] private GameObject Flashlight;
+    private bool flashOn = false;
 
     [Header("Cinemachine")]
     [SerializeField] private CinemachineVirtualCamera vc;
@@ -261,6 +268,9 @@ public class FirstPersonController : NetworkBehaviour
                     HandlePickUpsCheck();
                     HandlePickUpsInput();
                 }
+
+                if (useFlashlight)
+                    HandleFlashLight();
 
                 if (useStamina)
                 {
@@ -474,6 +484,17 @@ public class FirstPersonController : NetworkBehaviour
             currentPickUpObject.Drop();
             objectInHand = false;
         }
+    }
+
+    private void HandleFlashLight()
+    {
+        if (Input.GetKeyDown(flashlightKey))
+        {
+            flashOn = !flashOn;
+        }
+
+        Flashlight.GetComponent<Light>().enabled = flashOn;
+        
     }
 
     private void HandleFootsteps()
