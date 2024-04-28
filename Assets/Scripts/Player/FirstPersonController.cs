@@ -212,7 +212,7 @@ public class FirstPersonController : NetworkBehaviour
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
             foreach (var child in characterModel)
             {
-                //child.enabled = false;
+                child.enabled = false;
             }
         }
         else
