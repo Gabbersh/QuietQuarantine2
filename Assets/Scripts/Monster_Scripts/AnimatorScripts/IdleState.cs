@@ -1,25 +1,33 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class IdleState : StateMachineBehaviour
 {
+    private NavMeshAgent agent;
+
     float timer;
 
-    //float chaseRange = 15;
+    private GameObject player;
 
-    private Transform player;
-
-    // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().transform;
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
+        Debug.Log(player);
+
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
+        agent = animator.GetComponent<NavMeshAgent>();
         animator.SetBool("isPatrolling", false);
 
         timer = 2;
     }
 
-    // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         timer -= Time.deltaTime;
@@ -29,30 +37,10 @@ public class IdleState : StateMachineBehaviour
             animator.SetBool("isCrawling", true);
             animator.SetBool("toCrawl", true);
         }
-
-        float distance = Vector3.Distance(player.transform.position, animator.transform.position);
-
-        //if (distance < chaseRange)
-        //{
-        //    animator.SetBool("isChasing", true);
-        //}
     }
 
-    // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        agent.isStopped = false;
     }
-
-    // OnStateMove is called right after Animator.OnAnimatorMove()
-    //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that processes and affects root motion
-    //}
-
-    // OnStateIK is called right after Animator.OnAnimatorIK()
-    //override public void OnStateIK(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    // Implement code that sets up animation IK (inverse kinematics)
-    //}
 }

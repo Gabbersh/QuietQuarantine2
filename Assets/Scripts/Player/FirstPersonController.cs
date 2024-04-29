@@ -1,9 +1,14 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
-public class FirstPersonController : MonoBehaviour
+public class FirstPersonController : NetworkBehaviour
 {
     public bool CanMove { get; private set; } = true;
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
@@ -19,8 +24,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private bool willSlideOnSlopes = true;
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canInteract = true;
+    [SerializeField] private bool canPickUpObjects = true;
     [SerializeField] private bool useFootsteps = true;
     [SerializeField] private bool useStamina = true;
+    [SerializeField] private bool useFlashlight = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -29,7 +36,10 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
     [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
     //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
+    [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
+    [SerializeField] private KeyCode flashlightKey = KeyCode.F;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -101,9 +111,11 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float crouchStepMultiplier = 1.5f;
     [SerializeField] private float sprintStepMultiplier = 0.6f;
     [SerializeField] private AudioSource footstepAudioSource = default;
-    [SerializeField] private AudioClip[] woodClips = default;
-    [SerializeField] private AudioClip[] metalClips = default;
-    [SerializeField] private AudioClip[] grassClips = default;
+    [SerializeField] private AudioClip[] defaultStep = default;
+
+    //[SerializeField] private AudioClip[] woodClips = default;
+    //[SerializeField] private AudioClip[] metalClips = default;
+    //[SerializeField] private AudioClip[] grassClips = default;
     private float footStepTimer = 0;
     private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : isSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
 
@@ -117,6 +129,22 @@ public class FirstPersonController : MonoBehaviour
     [Header("PickUp")]
     private Transform pickUpPoint;
     public Transform PickUpPoint { get { return pickUpPoint; } }
+    private LayerMask pickUpLayer = default;
+    private LayerMask pickUpIgnoreLayer = 0 | 1 << 6;
+    private PickUpObject currentPickUpObject;
+    private bool objectInHand = false;
+
+    [Header("Flashlight")]
+    [SerializeField] private GameObject Flashlight;
+    private bool flashOn = false;
+    private float maxIntensity = 100;
+
+    [Header("Cinemachine")]
+    [SerializeField] private CinemachineVirtualCamera vc;
+    [SerializeField] private AudioListener listener;
+
+    [Header("SoundRange")]
+    [SerializeField] private float soundRange;
 
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
@@ -133,8 +161,20 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
-    private Camera playerCamera;
+    public Camera playerCamera;
     public CharacterController characterController;
+
+    [Header("Character")]
+    [SerializeField] private Animator animator;
+    [SerializeField] private GameObject playerCharacter;
+
+    // LOCAL Y of playerCharacter
+    // -0.4 y unCrouched
+    // 0.3 y crouched
+    // 0.55 y crouchedWalking
+    private Vector3 unCrouched = new(0, -0.4f, 0);
+    private Vector3 crouched = new(0, 0.3f, 0);
+    private Vector3 crouchedWalking = new(0, 0.55f, 0);
 
     private Inventory inventory;
 
@@ -155,52 +195,77 @@ public class FirstPersonController : MonoBehaviour
         OnTakeDamage -= ApplyDamage;
     }
 
-    void Awake()
+    public override void OnNetworkSpawn()
     {
-        instance = this;
+        if (IsOwner)
+        {
+            instance = this;
 
-        playerCamera = GetComponentInChildren<Camera>();
-        characterController = GetComponent<CharacterController>();
+            transform.position = new Vector3(150, 2, 150);
+            //Debug.Log("Position set to: " + transform.position);
+            Physics.SyncTransforms();
 
-        defaultYPos = playerCamera.transform.localPosition.y;
-        defaultFOV = playerCamera.fieldOfView;
+            listener.enabled = true;
+            vc.Priority = 10;
 
-        currentHealth = maxHealth;
-        currentStamina = maxStamina;
+            playerCamera = GetComponentInChildren<Camera>();
+            defaultYPos = playerCamera.transform.localPosition.y;
+            defaultFOV = playerCamera.fieldOfView;
 
-        
-        pickUpPoint = transform.Find("PickUpPoint");
+            characterController = GetComponent<CharacterController>();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+            currentHealth = maxHealth;
+            currentStamina = maxStamina;
+
+            pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
+
+            Flashlight.GetComponent<Light>().intensity = maxIntensity;
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            // hide local players playercharacter, will still show from other players view
+            SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
+            foreach (var child in characterModel)
+            {
+                child.enabled = false;
+            }
+        }
+        else
+        {
+            vc.Priority = 0;
+        }
     }
 
     private void Start()
     {
         interactionLayer = LayerMask.NameToLayer("Interactable");
+        pickUpLayer = LayerMask.NameToLayer("PickUp");
     }
 
     void Update()
     {
-        if (CanMove)
+        if (IsOwner)
         {
-            HandleMovementInput();
-            HandleMouseLook();
+            if (CanMove)
+            {
+                HandleMovementInput();
+                HandleMouseLook();
 
-            if (canJump)
-                HandleJump();
+                if (canJump)
+                    HandleJump();
 
-            if (canCrouch) 
-                HandleCrouch();
+                if (canCrouch)
+                    HandleCrouch();
 
-            if (canUseHeadBob)
-                HandleHeadBob();
+                if (canUseHeadBob)
+                    HandleHeadBob();
 
-            if (canZoom)
-                HandleZoom();
+                if (canZoom)
+                    HandleZoom();
 
-            if (useFootsteps)
-                //HandleFootsteps();
+                if (useFootsteps)
+                    HandleFootsteps();
 
             if (toggleInventory) 
                 HandleInventoryToggle();
@@ -211,12 +276,41 @@ public class FirstPersonController : MonoBehaviour
                 HandleInteractionInput();
             }
 
-            if (useStamina)
-            {
-                HandleStamina();
+                if (canPickUpObjects)
+                {
+                    HandlePickUpsCheck();
+                    HandlePickUpsInput();
+                }
+
+                if (useFlashlight)
+                    HandleFlashLight();
+
+                if (useStamina)
+                {
+                    HandleStamina();
+                }
+
+                OffsetLocalPlayerModel();
+
+                ApplyFinalMovements();
             }
-            
-            ApplyFinalMovements();
+        }
+    }
+
+    // offset player character based on state (Model is fucked)
+    private void OffsetLocalPlayerModel()
+    {
+        if (isCrouching && (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f))
+        {
+            playerCharacter.transform.localPosition = crouchedWalking;
+        }
+        else if (isCrouching)
+        {
+            playerCharacter.transform.localPosition = crouched;
+        }
+        else
+        {
+            playerCharacter.transform.localPosition = unCrouched;
         }
     }
 
@@ -224,6 +318,8 @@ public class FirstPersonController : MonoBehaviour
     {
         currentInput = new Vector2((isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), 
             (isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
+
+        animator.SetBool("isRunning", isSprinting); // check if is sprinting and sending message to animator
 
         float moveDirectionY = moveDirection.y;
         moveDirection = (transform.TransformDirection(Vector3.forward) * currentInput.x) 
@@ -233,21 +329,33 @@ public class FirstPersonController : MonoBehaviour
      
     private void HandleJump()
     {
+        // isJumping animation is played once, could be better to use trigger but im lazy
         if (shouldJump)
+        {
+            animator.SetBool("isJumping", true);
             moveDirection.y = jumpForce;
+        }
+        else
+        {
+            animator.SetBool("isJumping", false);
+        }
     }
 
     private void HandleCrouch()
     {
         if (shouldCrouch)
+        {
             StartCoroutine(CrouchStand());
+        }
+
+        animator.SetBool("isCrouched", isCrouching);
     }
 
     private void HandleMouseLook()
     {
         rotationX -= Input.GetAxis("Mouse Y") * lookSpeedY;
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
+        vc.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
     }
 
@@ -314,10 +422,10 @@ public class FirstPersonController : MonoBehaviour
         if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
         {
             bobTimer += Time.deltaTime * (isCrouching ? crouchBobSpeed : isSprinting ? sprintBobSpeed : walkBobSpeed);
-            playerCamera.transform.localPosition = new Vector3(
-                playerCamera.transform.localPosition.x,
+            vc.transform.localPosition = new Vector3(
+                vc.transform.localPosition.x,
                 defaultYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount),
-                playerCamera.transform.localPosition.z);
+                vc.transform.localPosition.z);
         }
     }
 
@@ -332,7 +440,7 @@ public class FirstPersonController : MonoBehaviour
                 regeneratingStamina = null;
             }
 
-            currentStamina -= staminaUseMultiplier * Time.deltaTime;
+            currentStamina -= staminaUseMultiplier * Time.deltaTime; 
 
             if (currentStamina < 0)
                 currentStamina = 0;
@@ -365,7 +473,6 @@ public class FirstPersonController : MonoBehaviour
 
                 if(currentInteractable)
                     currentInteractable.OnFocus();
-                
             }
         }
         else if (currentInteractable)
@@ -385,8 +492,98 @@ public class FirstPersonController : MonoBehaviour
         }
     }
 
+    private void HandlePickUpsCheck()
+    {
+        if (Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
+            out RaycastHit hit, interactionDistance, pickUpIgnoreLayer) && !objectInHand)
+        {
+            if (hit.collider.gameObject.layer == pickUpLayer &&
+                (currentPickUpObject == null || hit.collider.gameObject.GetInstanceID() != currentPickUpObject.GetInstanceID()))
+            {
+                hit.collider.TryGetComponent(out currentPickUpObject);
+
+                if (currentPickUpObject)
+                    currentPickUpObject.OnFocus();
+
+            }
+        }
+        else if (currentPickUpObject && !objectInHand)
+        {
+            currentPickUpObject.OnLoseFocus();
+            currentPickUpObject = null;
+        }
+    }
+
+
+    // changes owner of a given networkobjectid to local players id, sends command to server and forces server to change it
+    [ServerRpc(RequireOwnership = false)]
+    private void RequestOwnershipServerRpc(ulong objectToChange,ServerRpcParams serverRpcParams = default)
+    {
+        NetworkManager.Singleton.SpawnManager.SpawnedObjects[objectToChange].GetComponent<NetworkObject>().ChangeOwnership(serverRpcParams.Receive.SenderClientId);
+    }
+
+
+    private void HandlePickUpsInput()
+    {
+        if (Input.GetKeyDown(PickUpKey) && currentPickUpObject != null
+            && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
+            out RaycastHit hit, interactionDistance, pickUpIgnoreLayer) && !objectInHand)
+        {
+            if (!hit.collider.gameObject.GetComponent<PickUpObject>().IsObjectAvailable) return; // check if object is not picked up by another player
+
+            RequestOwnershipServerRpc(hit.collider.gameObject.GetComponent<NetworkObject>().NetworkObjectId); // makes new owner manage physics of object when picked up
+
+            currentPickUpObject.OnInteract();
+            currentPickUpObject.OnLoseFocus();
+            objectInHand = true;
+        }
+        else if (Input.GetKeyDown(PickUpKey) && objectInHand)
+        {
+            currentPickUpObject.Throw();
+            objectInHand = false;
+        }
+        else if (Input.GetKeyDown(DropKey) && objectInHand)
+        {
+            currentPickUpObject.Drop();
+            objectInHand = false;
+        }
+    }
+
+    private void HandleFlashLight()
+    {
+        if (Input.GetKeyDown(flashlightKey))
+        {
+            flashOn = !flashOn;
+        }
+
+        Flashlight.GetComponent<Light>().enabled = flashOn;
+
+        if (flashOn)
+        {
+            Flashlight.GetComponent<Light>().intensity -= Time.deltaTime * 3;
+        }
+        else
+        {
+            Flashlight.GetComponent<Light>().intensity += Time.deltaTime * 2;
+        }
+
+        if (Flashlight.GetComponent<Light>().intensity >= maxIntensity)
+        {
+            Flashlight.GetComponent<Light>().intensity = maxIntensity;
+        }
+
+        if (Flashlight.GetComponent<Light>().intensity <= 0)
+        {
+            flashOn = false;
+        }
+        
+    }
+
     private void HandleFootsteps()
     {
+        float SoundRange;
+        float rangefactor;
+        
         if (!characterController.isGrounded) return;
         if (currentInput == Vector2.zero) return;
 
@@ -394,28 +591,57 @@ public class FirstPersonController : MonoBehaviour
 
         if (footStepTimer <= 0)
         {
-            if(Physics.Raycast(playerCamera.transform.position, Vector3.down, out RaycastHit hit, 3))
+            //kollar från under spelaren, inte under kameran
+            if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
-                switch (hit.collider.tag)
-                {
-                    //Add different tags for different materials, these are examples:
-                    case "Footsteps/GRASS":
-                        footstepAudioSource.PlayOneShot(grassClips[UnityEngine.Random.Range(0, grassClips.Length - 1)]);
-                        break;
-                    case "Footsteps/WOOD":
-                        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
-                        break;
-                    case "Footsteps/METAL":
-                        footstepAudioSource.PlayOneShot(metalClips[UnityEngine.Random.Range(0, metalClips.Length - 1)]);
-                        break;
-                    default:
-                        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
-                        break;
-                }
+
+                footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length)]);
+
+                //switch (hit.collider.tag)
+                //{
+                //    //Add different tags for different materials, these are examples:
+                //    case "Footsteps/GRASS":
+                //        footstepAudioSource.PlayOneShot(grassClips[UnityEngine.Random.Range(0, grassClips.Length - 1)]);
+                //        break;
+                //    case "Footsteps/WOOD":
+                //        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
+                //        break;
+                //    case "Footsteps/METAL":
+                //        footstepAudioSource.PlayOneShot(metalClips[UnityEngine.Random.Range(0, metalClips.Length - 1)]);
+                //        break;
+                //    default:
+                //        footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length - 1)]);
+                //        break;
+                //}
             }
 
             footStepTimer = GetCurrentOffset;
 
+            if (isCrouching)
+            {
+                footstepAudioSource.volume = 0.25f;
+                rangefactor = 0.5f;
+                
+            }
+            else if (isSprinting)
+            {
+                footstepAudioSource.volume = 1f;
+                rangefactor = 2f;
+            }
+            else
+            {
+                footstepAudioSource.volume = 0.5f;
+                rangefactor = 1f;
+            }
+
+            SoundRange = soundRange * rangefactor;
+
+            Sound sound = ScriptableObject.CreateInstance<Sound>();
+            sound.Initialize(transform.position, SoundRange); // Assuming hit.point is where the sound originates
+
+            // Pass the sound to the Sounds manager
+            Sounds.MakeSound(sound);
+            Debug.Log($"Sound: with pos {sound.pos} and range {sound.range} created!");
         }
     }
 
@@ -424,6 +650,16 @@ public class FirstPersonController : MonoBehaviour
         if (!characterController.isGrounded)
         {
             moveDirection.y -= gravity * Time.deltaTime;
+        }
+
+        // hella lit way to send movement state to animator
+        if(Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
+        {
+            animator.SetBool("isMoving", true);
+        }
+        else
+        {
+            animator.SetBool("isMoving", false);
         }
 
         if (willSlideOnSlopes && IsSliding)
@@ -478,6 +714,8 @@ public class FirstPersonController : MonoBehaviour
 
     private IEnumerator CrouchStand()
     {
+        animator.SetBool("isCrouched", isCrouching); // just setting isCrouched state to isCrouching, could also be a trigger but im still lazy
+
         if (isCrouching && Physics.Raycast(playerCamera.transform.position, Vector3.up, 1f))
             yield break;
 
@@ -508,17 +746,17 @@ public class FirstPersonController : MonoBehaviour
     private IEnumerator ToggleZoom(bool isEnter)
     {
         float targetFOV = isEnter ? zoomFOV : defaultFOV;
-        float startingFOV = playerCamera.fieldOfView;
+        float startingFOV = vc.m_Lens.FieldOfView;
         float timeElapsed = 0;
 
         while (timeElapsed < timeToZoom)
         {
-            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed/timeToZoom);
+            vc.m_Lens.FieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed/timeToZoom);
             timeElapsed += Time.deltaTime;
             yield return null;
         }
 
-        playerCamera.fieldOfView = targetFOV;
+        vc.m_Lens.FieldOfView = targetFOV;
         zoomRoutine = null;
     }
 }
