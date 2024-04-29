@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -25,6 +26,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool canPickUpObjects = true;
     [SerializeField] private bool useFootsteps = true;
     [SerializeField] private bool useStamina = true;
+    [SerializeField] private bool useFlashlight = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -34,6 +36,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
+    [SerializeField] private KeyCode flashlightKey = KeyCode.F;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -125,6 +128,11 @@ public class FirstPersonController : NetworkBehaviour
     private PickUpObject currentPickUpObject;
     private bool objectInHand = false;
 
+    [Header("Flashlight")]
+    [SerializeField] private GameObject Flashlight;
+    private bool flashOn = false;
+    private float maxIntensity = 100;
+
     [Header("Cinemachine")]
     [SerializeField] private CinemachineVirtualCamera vc;
     [SerializeField] private AudioListener listener;
@@ -205,6 +213,8 @@ public class FirstPersonController : NetworkBehaviour
 
             pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
+            Flashlight.GetComponent<Light>().intensity = maxIntensity;
+
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
@@ -262,6 +272,9 @@ public class FirstPersonController : NetworkBehaviour
                     HandlePickUpsCheck();
                     HandlePickUpsInput();
                 }
+
+                if (useFlashlight)
+                    HandleFlashLight();
 
                 if (useStamina)
                 {
@@ -516,6 +529,36 @@ public class FirstPersonController : NetworkBehaviour
             currentPickUpObject.Drop();
             objectInHand = false;
         }
+    }
+
+    private void HandleFlashLight()
+    {
+        if (Input.GetKeyDown(flashlightKey))
+        {
+            flashOn = !flashOn;
+        }
+
+        Flashlight.GetComponent<Light>().enabled = flashOn;
+
+        if (flashOn)
+        {
+            Flashlight.GetComponent<Light>().intensity -= Time.deltaTime * 3;
+        }
+        else
+        {
+            Flashlight.GetComponent<Light>().intensity += Time.deltaTime * 2;
+        }
+
+        if (Flashlight.GetComponent<Light>().intensity >= maxIntensity)
+        {
+            Flashlight.GetComponent<Light>().intensity = maxIntensity;
+        }
+
+        if (Flashlight.GetComponent<Light>().intensity <= 0)
+        {
+            flashOn = false;
+        }
+        
     }
 
     private void HandleFootsteps()
