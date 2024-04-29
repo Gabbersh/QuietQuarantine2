@@ -1,37 +1,47 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class ChaseState : StateMachineBehaviour
 {
     private NavMeshAgent agent;
-    private Sound sound;
     private Collider hearingCollider;
-    private Transform player;
+    private GameObject player;
+    private MonsterSpeed monsterSpeed;
     private float chaseTimer, reachDistance;
     private bool hunt;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        sound = GameObject.FindGameObjectWithTag("Player").GetComponent<Sound>();
+        //player = GameObject.FindGameObjectWithTag("Player").transform;
+        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
         hearingCollider = animator.transform.Find("HearingRadius").GetComponent<Collider>();
+
+        GameObject monster = animator.gameObject;
+        monsterSpeed = monster.GetComponent<MonsterSpeed>();
+
         hunt = false;
 
-        agent.speed = 7.56f;
+        agent.speed = monsterSpeed.ChaseSpeed;
+
         chaseTimer = 10;
-        reachDistance = 14f;
+        reachDistance = 10f;
 
         agent.ResetPath();
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
         agent.speed = 10.56f;
 
-        float distance = Vector3.Distance(agent.transform.position, player.position);
+        float distance = Vector3.Distance(agent.transform.position, player.transform.position);
 
         if (chaseTimer > 0 && distance > reachDistance)
         {
@@ -50,7 +60,7 @@ public class ChaseState : StateMachineBehaviour
 
         if (!hunt)
         {
-            agent.SetDestination(player.position);
+            agent.SetDestination(player.transform.position);
 
             if (distance > reachDistance)
             {
@@ -64,14 +74,14 @@ public class ChaseState : StateMachineBehaviour
                 //Random plats runt spelaren när ej i sikte.
                 Vector3 randomPos = Random.insideUnitSphere * 15f;
                 NavMeshHit navHit;
-                NavMesh.SamplePosition(player.position + randomPos, out navHit, 10f, NavMesh.AllAreas);
+                NavMesh.SamplePosition(player.transform.position + randomPos, out navHit, 10f, NavMesh.AllAreas);
                 agent.SetDestination(navHit.position);
 
 
                 if (hearingCollider != null)
                 {
                     Vector3 centerOfHearing = hearingCollider.bounds.center;
-                    Vector3 centerOfPlayer = player.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+                    Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
 
                     Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
@@ -89,14 +99,14 @@ public class ChaseState : StateMachineBehaviour
             }
         }
 
-        if (distance < 4.5f)
-        {
-            if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
-            {
-                agent.ResetPath();
-            }
-            animator.SetBool("isAttacking", true);
-        }
+        //if (distance < 4.5f)
+        //{
+        //    if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
+        //    {
+        //        agent.ResetPath();
+        //    }
+        //    animator.SetBool("isAttacking", true);
+        //}
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

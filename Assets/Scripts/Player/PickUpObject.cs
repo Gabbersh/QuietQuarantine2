@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PickUpObject : InteractableObject
@@ -8,37 +9,87 @@ public class PickUpObject : InteractableObject
     private Collider objectCollider;
 
     private Transform playerPickUpPoint;
+    private float throwingForce = 15;
+    private float maxRandomRotationAngle = 30f;
+
+    private NetworkVariable<bool> isObjectAvailable = new NetworkVariable<bool>(true); // syncs between all players
+
+    public bool IsObjectAvailable
+    {
+        get { return isObjectAvailable.Value; }
+        set
+        {
+                if (IsServer)
+                {
+                    isObjectAvailable.Value = value; // change value directly if isServer (host)
+                }
+                else if (!IsServer)
+                {
+                    ChangeObjectAvailabilityServerRpc(); // request server to change value
+                }
+        }
+    }
 
     private void Start()
     {
         objectRigidBody = GetComponent<Rigidbody>();
         objectCollider = GetComponent<Collider>();
+        gameObject.layer = LayerMask.NameToLayer("PickUp");
     }
 
     public override void OnFocus()
     {
-        Debug.Log("Looking at brick");
+        Debug.Log("Looking at throwbject");
+        gameObject.GetComponent<OnFocusHighlight>().ToggleHighlight(true);
     }
 
     public override void OnInteract()
     {
-        if (playerPickUpPoint == null)
+        if (playerPickUpPoint == null && IsObjectAvailable)
         {
-            this.playerPickUpPoint = FirstPersonController.instance.PickUpPoint;
+            playerPickUpPoint = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<FirstPersonController>().PickUpPoint; // get local players PickUpPoint
             objectRigidBody.useGravity = false;
-            objectRigidBody.freezeRotation = true;
+            objectCollider.enabled = false;
+
+            IsObjectAvailable = false; // note property not directly setting network variable
         }
-        else
-        {
-            this.playerPickUpPoint = null;
-            objectRigidBody.useGravity = true;
-            objectRigidBody.freezeRotation = false;
-        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangeObjectAvailabilityServerRpc(ServerRpcParams serverRpcParams = default)
+    {
+        IsObjectAvailable = !IsObjectAvailable;
+    }
+
+
+    public void Throw()
+    {
+        objectRigidBody.useGravity = true;
+        objectCollider.enabled = true;
+
+        objectRigidBody.AddForce(playerPickUpPoint.transform.forward * throwingForce, ForceMode.Impulse);
+        objectRigidBody.rotation = Quaternion.Euler(0f, Random.Range(-maxRandomRotationAngle, maxRandomRotationAngle), 0f);
+
+        objectRigidBody.angularVelocity = Random.insideUnitSphere * throwingForce;
+
+        this.playerPickUpPoint = null;
+
+        IsObjectAvailable = true; // note property not directly setting network variable
+    }
+
+    public void Drop()
+    {
+        objectRigidBody.useGravity = true;
+        objectCollider.enabled = true;
+        this.playerPickUpPoint = null;
+
+        IsObjectAvailable = true; // note property not directly setting network variable
     }
 
     public override void OnLoseFocus()
     {
-        Debug.Log("Stopped Looking at brick");
+        Debug.Log("Stopped Looking at throwbject");
+        gameObject.GetComponent<OnFocusHighlight>().ToggleHighlight(false);
     }
 
     private void FixedUpdate()
