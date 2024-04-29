@@ -560,7 +560,7 @@ MonoBehaviour:
   UseQuaternionSynchronization: 0
   UseQuaternionCompression: 0
   UseHalfFloatPrecision: 0
-  InLocalSpace: 1
+  InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
 --- !u!1 &9186711582339342998
@@ -1065,7 +1065,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a6b256a01f9c7a449729d763518579f,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2817692732551150202}
+      addedObject: {fileID: 1246514561752427850}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 8a6b256a01f9c7a449729d763518579f,
         type: 3}
       insertIndex: -1
@@ -1098,7 +1098,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &2817692732551150202
+--- !u!114 &1246514561752427850
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1107,7 +1107,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7098004610546690412}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8d0727d5ae3244e3b569694d3912374, type: 3}
+  m_Script: {fileID: 11500000, guid: 4c590e03b694f5a49a2b338ad845dfbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []

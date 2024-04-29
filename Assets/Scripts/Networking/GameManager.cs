@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         {
             if(spawns.GetMonsterSpawnPoints().Count <= 0) return;
 
-            jeffs.Add(Instantiate(myNemmaJeff, GetRandomSpawn(spawns.GetMonsterSpawnPoints(), true), Quaternion.identity));
+            jeffs.Add(Instantiate(myNemmaJeff, GetRandomSpawn(spawns.GetMonsterSpawnPoints(), false), Quaternion.identity));
         }
 
         foreach (var networkInstance in jeffs)
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         {
             if (spawns.GetThrowableSpawnPoints().Count <= 0) return;
 
-            spawnedThrowables.Add(Instantiate(throwable, GetRandomSpawn(spawns.GetThrowableSpawnPoints(), true), Quaternion.identity));
+            spawnedThrowables.Add(Instantiate(throwable, GetRandomSpawn(spawns.GetThrowableSpawnPoints(), false), Quaternion.identity));
         }
 
         foreach(var networkInstance in spawnedThrowables)
