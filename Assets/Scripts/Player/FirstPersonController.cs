@@ -14,7 +14,7 @@ public class FirstPersonController : NetworkBehaviour
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
-    private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
+    private bool toggleInventory => currentInput.GetKeyDown(toggleInventoryKey);
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -34,12 +34,11 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
-    [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
-    //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
+    [SerializeField] private KeyCode toggleInventoryKey = KeyCode.Tab;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -80,9 +79,6 @@ public class FirstPersonController : NetworkBehaviour
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
-
-    public float GetmaxStamina { get { return maxStamina; }}
-    public float GetCurrentStamina { get { return currentStamina; }}
 
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2.0f;
@@ -267,14 +263,11 @@ public class FirstPersonController : NetworkBehaviour
                 if (useFootsteps)
                     HandleFootsteps();
 
-            if (toggleInventory) 
-                HandleInventoryToggle();
-
-            if (canInteract)
-            {
-                HandleInteractionCheck();
-                HandleInteractionInput();
-            }
+                if (canInteract)
+                {
+                    HandleInteractionCheck();
+                    HandleInteractionInput();
+                }
 
                 if (canPickUpObjects)
                 {
@@ -316,17 +309,17 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleMovementInput()
     {
-        currentInput = new Vector2((isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), 
+        currentInput = new Vector2((isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"),
             (isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Horizontal"));
 
         animator.SetBool("isRunning", isSprinting); // check if is sprinting and sending message to animator
 
         float moveDirectionY = moveDirection.y;
-        moveDirection = (transform.TransformDirection(Vector3.forward) * currentInput.x) 
+        moveDirection = (transform.TransformDirection(Vector3.forward) * currentInput.x)
             + (transform.TransformDirection(Vector3.right) * currentInput.y);
         moveDirection.y = moveDirectionY;
     }
-     
+
     private void HandleJump()
     {
         // isJumping animation is played once, could be better to use trigger but im lazy
@@ -357,11 +350,6 @@ public class FirstPersonController : NetworkBehaviour
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
         vc.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
-    }
-
-    private void HandleInventoryToggle()
-    {
-        InventoryActions.OnInventoryToggle();
     }
 
     private void ApplyDamage(float dmg)
@@ -440,7 +428,7 @@ public class FirstPersonController : NetworkBehaviour
                 regeneratingStamina = null;
             }
 
-            currentStamina -= staminaUseMultiplier * Time.deltaTime; 
+            currentStamina -= staminaUseMultiplier * Time.deltaTime;
 
             if (currentStamina < 0)
                 currentStamina = 0;
@@ -462,13 +450,9 @@ public class FirstPersonController : NetworkBehaviour
         if (Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
             out RaycastHit hit, interactionDistance, interactionIgnoreLayer))
         {
-            if (hit.collider.gameObject.layer == interactionLayer && 
+            if (hit.collider.gameObject.layer == interactionLayer &&
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
-                if (currentInteractable != null)
-                {
-                    currentInteractable.OnLoseFocus();
-                }
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -484,9 +468,9 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleInteractionInput()
     {
-        if (Input.GetKeyDown(InteractKey) && currentInteractable != null 
-            && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), 
-            out RaycastHit hit, interactionDistance, interactionIgnoreLayer)) 
+        if (Input.GetKeyDown(InteractKey) && currentInteractable != null
+            && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint),
+            out RaycastHit hit, interactionDistance, interactionIgnoreLayer))
         {
             currentInteractable.OnInteract();
         }
@@ -576,14 +560,14 @@ public class FirstPersonController : NetworkBehaviour
         {
             flashOn = false;
         }
-        
+
     }
 
     private void HandleFootsteps()
     {
         float SoundRange;
         float rangefactor;
-        
+
         if (!characterController.isGrounded) return;
         if (currentInput == Vector2.zero) return;
 
@@ -591,7 +575,7 @@ public class FirstPersonController : NetworkBehaviour
 
         if (footStepTimer <= 0)
         {
-            //kollar från under spelaren, inte under kameran
+            //kollar frï¿½n under spelaren, inte under kameran
             if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
 
@@ -621,7 +605,7 @@ public class FirstPersonController : NetworkBehaviour
             {
                 footstepAudioSource.volume = 0.25f;
                 rangefactor = 0.5f;
-                
+
             }
             else if (isSprinting)
             {
