@@ -14,6 +14,7 @@ public class FirstPersonController : NetworkBehaviour
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
+    private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -33,6 +34,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
+    [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
+    //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
@@ -77,6 +80,9 @@ public class FirstPersonController : NetworkBehaviour
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
+
+    public float GetmaxStamina { get { return maxStamina; }}
+    public float GetCurrentStamina { get { return currentStamina; }}
 
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2.0f;
@@ -258,6 +264,9 @@ public class FirstPersonController : NetworkBehaviour
                 if (canZoom)
                     HandleZoom();
 
+                if (toggleInventory) 
+                    HandleInventoryToggle();
+
                 if (useFootsteps)
                     HandleFootsteps();
 
@@ -348,6 +357,11 @@ public class FirstPersonController : NetworkBehaviour
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
         vc.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
+    }
+
+    private void HandleInventoryToggle()
+    {
+        InventoryActions.OnInventoryToggle();
     }
 
     private void ApplyDamage(float dmg)
@@ -451,6 +465,10 @@ public class FirstPersonController : NetworkBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
+                if (currentInteractable != null)
+                {
+                    currentInteractable.OnLoseFocus();
+                }
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -573,7 +591,7 @@ public class FirstPersonController : NetworkBehaviour
 
         if (footStepTimer <= 0)
         {
-            //kollar från under spelaren, inte under kameran
+            //kollar frï¿½n under spelaren, inte under kameran
             if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
 
