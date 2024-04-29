@@ -13,6 +13,8 @@ public class ChaseState : StateMachineBehaviour
     private float chaseTimer, reachDistance;
     private bool hunt;
 
+    // Dela upp i två states. Hunt och chase! Måste kunna höra spelaren i hunt.
+
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
@@ -30,7 +32,7 @@ public class ChaseState : StateMachineBehaviour
         agent.speed = monsterSpeed.ChaseSpeed;
 
         chaseTimer = 10;
-        reachDistance = 10f;
+        reachDistance = 5f;
 
         agent.ResetPath();
     }
@@ -39,8 +41,6 @@ public class ChaseState : StateMachineBehaviour
     {
         player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
 
-        agent.speed = 10.56f;
-
         float distance = Vector3.Distance(agent.transform.position, player.transform.position);
 
         if (chaseTimer > 0 && distance > reachDistance)
@@ -48,7 +48,7 @@ public class ChaseState : StateMachineBehaviour
             chaseTimer -= Time.deltaTime;
         }
 
-        if (distance > 15 && chaseTimer <= 0)
+        if (distance > reachDistance && chaseTimer <= 0)
         {
             animator.SetBool("isChasing", false);
         }

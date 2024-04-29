@@ -214,14 +214,17 @@ public class Hearing : NetworkBehaviour, IHear
 
     public void RespondToSound(Sound sound)
     {
-        print(name + " responding to sound at " + sound.pos);
-        
-        animator.SetBool("isHearing", true);
-
-        var heardNoiseState = animator.GetBehaviour<HeardNoiceState>();
-        if (heardNoiseState != null)
+        if(animator.GetBool("isChasing") == false)
         {
-            heardNoiseState.SetHeardSound(sound);
+            print(name + " responding to sound at " + sound.pos);
+
+            animator.SetBool("isHearing", true);
+
+            var heardNoiseState = animator.GetBehaviour<HeardNoiceState>();
+            if (heardNoiseState != null)
+            {
+                heardNoiseState.SetHeardSound(sound);
+            }
         }
     }
 

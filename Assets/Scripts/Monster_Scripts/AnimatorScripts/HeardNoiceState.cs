@@ -25,8 +25,6 @@ public class HeardNoiceState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        //agent.speed = 10.56f;
-
         float distance = Vector3.Distance(agent.transform.position, heardSound.pos);
 
         if (animator.GetBool("isHearing") && heardSound != null)
@@ -37,16 +35,6 @@ public class HeardNoiceState : StateMachineBehaviour
             {
                 animator.SetBool("isHearing", false);
             }
-        }
-    }
-
-    private void IfPlayerNear(Animator animator)
-    {
-        float distance = Vector3.Distance(agent.transform.position, player.position);
-
-        if (distance < 15)
-        {
-            animator.SetBool("isChasing", true);
         }
     }
 
