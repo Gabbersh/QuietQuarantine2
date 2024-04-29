@@ -130,6 +130,7 @@ public class FirstPersonController : NetworkBehaviour
     [Header("Flashlight")]
     [SerializeField] private GameObject Flashlight;
     private bool flashOn = false;
+    private float maxIntensity = 100;
 
     [Header("Cinemachine")]
     [SerializeField] private CinemachineVirtualCamera vc;
@@ -217,6 +218,8 @@ public class FirstPersonController : NetworkBehaviour
             currentStamina = maxStamina;
 
             pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
+
+            Flashlight.GetComponent<Light>().intensity = maxIntensity;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
@@ -494,6 +497,25 @@ public class FirstPersonController : NetworkBehaviour
         }
 
         Flashlight.GetComponent<Light>().enabled = flashOn;
+
+        if (flashOn)
+        {
+            Flashlight.GetComponent<Light>().intensity -= Time.deltaTime * 3;
+        }
+        else
+        {
+            Flashlight.GetComponent<Light>().intensity += Time.deltaTime * 2;
+        }
+
+        if (Flashlight.GetComponent<Light>().intensity >= maxIntensity)
+        {
+            Flashlight.GetComponent<Light>().intensity = maxIntensity;
+        }
+
+        if (Flashlight.GetComponent<Light>().intensity <= 0)
+        {
+            flashOn = false;
+        }
         
     }
 
