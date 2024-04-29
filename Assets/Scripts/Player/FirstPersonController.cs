@@ -71,6 +71,9 @@ public class FirstPersonController : MonoBehaviour
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
 
+    public float GetmaxStamina { get { return maxStamina; }}
+    public float GetCurrentStamina { get { return currentStamina; }}
+
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2.0f;
     [SerializeField, Range(1, 10)] private float lookSpeedY = 2.0f;
@@ -354,6 +357,10 @@ public class FirstPersonController : MonoBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
+                if (currentInteractable != null)
+                {
+                    currentInteractable.OnLoseFocus();
+                }
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
