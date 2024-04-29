@@ -33,7 +33,7 @@ public class Hearing : NetworkBehaviour, IHear
     private void Start()
     {
         // Find the deathPoint object in the hierarchy
-        deathPoint = GameObject.Find("DeathPoint").transform;
+        deathPoint = GameObject.Find("RespawnPoint").transform;
 
         // If deathPoint is not found, log an error
         if (deathPoint == null)
@@ -147,6 +147,7 @@ public class Hearing : NetworkBehaviour, IHear
         deathCam.enabled = false;
         deathCam.Priority = 1;
         player.transform.position = deathPoint.position;
+        Physics.SyncTransforms();
         player.GetComponent<FirstPersonController>().enabled = true;
     }
 
@@ -200,7 +201,7 @@ public class Hearing : NetworkBehaviour, IHear
                 animator.SetBool("isHearing", true);
             }
 
-            //KillPlayer();
+            KillPlayer();
 
 
             //Vector3 centerOfHearing = hearingCollider.bounds.center;
