@@ -146,6 +146,9 @@ public class FirstPersonController : NetworkBehaviour
     [Header("SoundRange")]
     [SerializeField] private float soundRange;
 
+    [Header("HUD")]
+    [SerializeField] private GameObject HUD;
+
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
     private bool IsSliding
@@ -230,10 +233,14 @@ public class FirstPersonController : NetworkBehaviour
             {
                 child.enabled = false;
             }
+
+            //Instantiate(HUD);
         }
         else
         {
+            Flashlight.GetComponent<Light>().intensity = 0;
             vc.Priority = 0;
+            HUD.SetActive(false);
         }
     }
 

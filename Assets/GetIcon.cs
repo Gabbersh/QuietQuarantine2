@@ -12,11 +12,11 @@ public class GetIcon : MonoBehaviour
 
     void Start()
     {
-        Texture2D icon = AssetPreview.GetMiniThumbnail(gameObject);
-        Rect rec = new Rect(0, 0 , icon.width, icon.height);    
-        Sprite sprite = Sprite.Create(icon, rec, new Vector2(0.5f,0.5f),1); 
-        image = GetComponent<Image>();
-        image.sprite = sprite;
+        //Texture2D icon = AssetPreview.GetMiniThumbnail(gameObject);
+        //Rect rec = new Rect(0, 0 , icon.width, icon.height);    
+        //Sprite sprite = Sprite.Create(icon, rec, new Vector2(0.5f,0.5f),1); 
+        //image = GetComponent<Image>();
+        //image.sprite = sprite;
        
     }
 

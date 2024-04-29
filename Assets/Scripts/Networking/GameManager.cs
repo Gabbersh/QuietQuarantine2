@@ -15,6 +15,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject throwable;
     [SerializeField] private List<GameObject> spawnedThrowables;
 
+    [Header("Collectables")]
+    [SerializeField] private GameObject Water;
+    [SerializeField] private GameObject Coin;
+    [SerializeField] private GameObject Medicine;
+    [SerializeField] private List<GameObject> spawnedCollectables;
+    private GameObject[] collectables; 
+
     [Header("Spawns")]
     [SerializeField] private Spawns spawns;
 
@@ -24,12 +31,19 @@ public class GameManager : MonoBehaviour
     [Header("Throwables settings")]
     [SerializeField] private int throwablesToSpawn;
 
+    [Header("Collectables settings")]
+    [SerializeField] private int collectablesToSpawn;
+
     private bool spawnComplete;
 
     // Start is called before the first frame update
     void Start()
     {
         jeffs = new();
+        collectables = new GameObject[3];
+        collectables[0] = Water;
+        collectables[1] = Coin;
+        collectables[2] = Medicine;
     }
 
     // constantly check for player count and spawn monster
@@ -39,6 +53,7 @@ public class GameManager : MonoBehaviour
         {
             SpawnMonsters();
             SpawnThrowables();
+            SpawnCollectables();
             spawnComplete = true;
         }
     }
@@ -47,7 +62,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < monstersToSpawn; i++)
         {
-            if(spawns.GetMonsterSpawnPoints().Count <= 0) return;
+            if(spawns.GetMonsterSpawnPoints().Count <= 0) break;
 
             jeffs.Add(Instantiate(myNemmaJeff, GetRandomSpawn(spawns.GetMonsterSpawnPoints(), true), Quaternion.identity));
         }
@@ -62,12 +77,27 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < throwablesToSpawn; i++)
         {
-            if (spawns.GetThrowableSpawnPoints().Count <= 0) return;
+            if (spawns.GetThrowableSpawnPoints().Count <= 0) break;
 
             spawnedThrowables.Add(Instantiate(throwable, GetRandomSpawn(spawns.GetThrowableSpawnPoints(), true), Quaternion.identity));
         }
 
         foreach(var networkInstance in spawnedThrowables)
+        {
+            networkInstance.GetComponent<NetworkObject>().Spawn();
+        }
+    }
+
+    private void SpawnCollectables()
+    {
+        for (int i = 0; i < collectablesToSpawn; i++)
+        {
+            if (spawns.GetCollectableSpawnPoints().Count <= 0) break;
+
+            spawnedCollectables.Add(Instantiate(collectables[Random.Range(0, collectables.Length)], GetRandomSpawn(spawns.GetCollectableSpawnPoints(), true), Quaternion.identity));
+        }
+
+        foreach (var networkInstance in spawnedCollectables)
         {
             networkInstance.GetComponent<NetworkObject>().Spawn();
         }
