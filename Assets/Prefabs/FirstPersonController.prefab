@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2606996586
+  GlobalObjectIdHash: 3714527307
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -467,7 +467,7 @@ MonoBehaviour:
   Flashlight: {fileID: 4628795769111411383}
   vc: {fileID: 3705025116684070815}
   listener: {fileID: 7591570269575126959}
-  soundRange: 20
+  soundRange: 10
   playerCamera: {fileID: 4332063519478241494}
   characterController: {fileID: 8643092617271328985}
   animator: {fileID: 8854502209808401353}

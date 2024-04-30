@@ -27,12 +27,9 @@ public class ChaseState : StateMachineBehaviour
         GameObject monster = animator.gameObject;
         monsterSpeed = monster.GetComponent<MonsterSpeed>();
 
-        hunt = false;
-
         agent.speed = monsterSpeed.ChaseSpeed;
 
-        chaseTimer = 10;
-        reachDistance = 5f;
+        reachDistance = 10f;
 
         agent.ResetPath();
     }
@@ -43,74 +40,88 @@ public class ChaseState : StateMachineBehaviour
 
         float distance = Vector3.Distance(agent.transform.position, player.transform.position);
 
-        if (chaseTimer > 0 && distance > reachDistance)
-        {
-            chaseTimer -= Time.deltaTime;
-        }
+        agent.SetDestination(player.transform.position);
 
-        if (distance > reachDistance && chaseTimer <= 0)
+        if (distance > reachDistance)
         {
+            animator.SetBool("isHunting", true);
             animator.SetBool("isChasing", false);
         }
-        else if (distance < reachDistance)
-        {
-            chaseTimer = 10;
-            hunt = false;
-        }
-
-        if (!hunt)
-        {
-            agent.SetDestination(player.transform.position);
-
-            if (distance > reachDistance)
-            {
-                hunt = true;
-            }
-        }
-        else
-        {
-            if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
-            {
-                //Random plats runt spelaren när ej i sikte.
-                Vector3 randomPos = Random.insideUnitSphere * 15f;
-                NavMeshHit navHit;
-                NavMesh.SamplePosition(player.transform.position + randomPos, out navHit, 10f, NavMesh.AllAreas);
-                agent.SetDestination(navHit.position);
-
-
-                if (hearingCollider != null)
-                {
-                    Vector3 centerOfHearing = hearingCollider.bounds.center;
-                    Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
-
-                    Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
-
-                    RaycastHit rayHit;
-                    if (Physics.Raycast(centerOfHearing, directionToPlayer, out rayHit))
-                    {
-                        Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
-
-                        if (rayHit.collider.gameObject.name == "Player")
-                        {
-                            hunt = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        //if (distance < 4.5f)
-        //{
-        //    if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
-        //    {
-        //        agent.ResetPath();
-        //    }
-        //    animator.SetBool("isAttacking", true);
-        //}
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
 
     }
+
+    //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    //{
+    //    player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
+    //    float distance = Vector3.Distance(agent.transform.position, player.transform.position);
+
+    //    //if (chaseTimer > 0 && distance > reachDistance)
+    //    //{
+    //    //    chaseTimer -= Time.deltaTime;
+    //    //}
+
+    //    //if (distance > reachDistance && chaseTimer <= 0)
+    //    //{
+    //    //    animator.SetBool("isChasing", false);
+    //    //}
+    //    //else if (distance < reachDistance)
+    //    //{
+    //    //    chaseTimer = 10;
+    //    //    hunt = false;
+    //    //}
+
+    //    agent.SetDestination(player.transform.position);
+
+    //    if (distance > reachDistance)
+    //    {
+    //        animator.SetBool("isHunting", true);
+    //        animator.SetBool("isChasing", false);
+    //    }
+
+    //    //else
+    //    //{
+    //    //    if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
+    //    //    {
+    //    //        //Random plats runt spelaren när ej i sikte.
+    //    //        Vector3 randomPos = Random.insideUnitSphere * 15f;
+    //    //        NavMeshHit navHit;
+    //    //        NavMesh.SamplePosition(player.transform.position + randomPos, out navHit, 10f, NavMesh.AllAreas);
+    //    //        agent.SetDestination(navHit.position);
+
+
+    //    //        if (hearingCollider != null)
+    //    //        {
+    //    //            Vector3 centerOfHearing = hearingCollider.bounds.center;
+    //    //            Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
+
+    //    //            Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+    //    //            RaycastHit rayHit;
+    //    //            if (Physics.Raycast(centerOfHearing, directionToPlayer, out rayHit))
+    //    //            {
+    //    //                Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
+
+    //    //                if (rayHit.collider.gameObject.name == "Player")
+    //    //                {
+    //    //                    hunt = false;
+    //    //                }
+    //    //            }
+    //    //        }
+    //    //    }
+    //    //}
+
+    //    //if (distance < 4.5f)
+    //    //{
+    //    //    if (Vector3.Distance(agent.transform.position, agent.destination) < agent.radius)
+    //    //    {
+    //    //        agent.ResetPath();
+    //    //    }
+    //    //    animator.SetBool("isAttacking", true);
+    //    //}
+    //}
 }

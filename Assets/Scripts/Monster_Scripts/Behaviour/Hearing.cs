@@ -196,7 +196,7 @@ public class Hearing : NetworkBehaviour, IHear
                 CheckSight();
             }
 
-            if (hearingSound)
+            if (hearingSound && animator.GetBool("isChasing") == false)
             {
                 animator.SetBool("isHearing", true);
             }

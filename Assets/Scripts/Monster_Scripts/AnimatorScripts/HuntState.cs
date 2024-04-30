@@ -12,9 +12,6 @@ public class HuntState : StateMachineBehaviour
     private GameObject player;
     private MonsterSpeed monsterSpeed;
     private float chaseTimer, reachDistance;
-    private bool hunt;
-
-    // Dela upp i två states. Hunt och chase! Måste kunna höra spelaren i hunt.
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -28,12 +25,10 @@ public class HuntState : StateMachineBehaviour
         GameObject monster = animator.gameObject;
         monsterSpeed = monster.GetComponent<MonsterSpeed>();
 
-        hunt = false;
-
         agent.speed = monsterSpeed.ChaseSpeed;
 
         chaseTimer = 10;
-        reachDistance = 5f;
+        reachDistance = 10f;
 
         agent.ResetPath();
     }
@@ -41,6 +36,25 @@ public class HuntState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+
+        float distance = Vector3.Distance(agent.transform.position, player.transform.position);
+
+        if (chaseTimer > 0 && distance > reachDistance)
+        {
+            chaseTimer -= Time.deltaTime;
+        }
+
+        if (distance > reachDistance && chaseTimer <= 0)
+        {
+            animator.SetBool("isRoaring", true);
+        }
+        
+        if (distance < reachDistance)
+        {
+            animator.SetBool("isHunting", false);
+        }
+
         if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {
             //Random plats runt spelaren när ej i sikte.
@@ -64,7 +78,7 @@ public class HuntState : StateMachineBehaviour
 
                     if (rayHit.collider.gameObject.name == "Player")
                     {
-                        hunt = false;
+                        animator.SetBool("isHunting", false);
                     }
                 }
             }
@@ -74,6 +88,7 @@ public class HuntState : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        animator.SetBool("isHunting", false);
+        animator.SetBool("isChasing", false);
     }
 }
