@@ -4,6 +4,7 @@ using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using QFSW.QC;
 
 public class GameManager : MonoBehaviour
 {

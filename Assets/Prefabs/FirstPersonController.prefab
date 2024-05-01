@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 6551648185259443647}
   - component: {fileID: 6987455384644589047}
   - component: {fileID: 3090704951996563358}
+  - component: {fileID: 3815487837390520626}
   m_Layer: 0
   m_Name: FirstPersonController
   m_TagString: Player
@@ -359,7 +360,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2606996586
+  GlobalObjectIdHash: 3714527307
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -601,6 +602,26 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
+--- !u!114 &3815487837390520626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8482955890711509516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38688f9bc0c0108429ff213345c5717d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  water: {fileID: 8089705204225741438, guid: d27af2baa2ab1ba46801fd5c579ad1aa, type: 3}
+  food: {fileID: 6261551779713065159, guid: 6608aa8538d35f449aafe9b24aaac11f, type: 3}
+  medicine: {fileID: 2708558435759575923, guid: 854180fd14a4a044cbdd6e47d6268683,
+    type: 3}
+  key: {fileID: 1302595326034253283, guid: f620fd7dbe311204e9477b357b65a31e, type: 3}
+  bottle: {fileID: 9075309448354747913, guid: 89b4c987e99a60c4f8a1f5b90d031ba6, type: 3}
+  jeff: {fileID: 7207745834858083839, guid: b5240734967efaa4abd321f372be40a1, type: 3}
+  playerCamera: {fileID: 4332063519478241494}
 --- !u!1 &9186711582339342998
 GameObject:
   m_ObjectHideFlags: 0

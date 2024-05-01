@@ -7,10 +7,12 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
+using QFSW.QC;
 
 public class FirstPersonController : NetworkBehaviour
 {
     public bool CanMove { get; private set; } = true;
+    private bool ConsoleOpened { get { return quantumConsole.IsFocused; } } // get console value
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
@@ -81,8 +83,8 @@ public class FirstPersonController : NetworkBehaviour
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
 
-    public float GetmaxStamina { get { return maxStamina; }}
-    public float GetCurrentStamina { get { return currentStamina; }}
+    public float GetmaxStamina { get { return maxStamina; } }
+    public float GetCurrentStamina { get { return currentStamina; } }
 
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2.0f;
@@ -120,7 +122,7 @@ public class FirstPersonController : NetworkBehaviour
     private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : isSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
 
     [Header("Interaction")]
-    [SerializeField] private Vector3 interactionRayPoint = new Vector3 (0.5f, 0.5f, 0);
+    [SerializeField] private Vector3 interactionRayPoint = new Vector3(0.5f, 0.5f, 0);
     [SerializeField] private float interactionDistance = 2;
     private LayerMask interactionLayer = default;
     private LayerMask interactionIgnoreLayer = 0 | 1 << 7;
@@ -188,6 +190,22 @@ public class FirstPersonController : NetworkBehaviour
 
     public static FirstPersonController instance;
 
+    [Header("Console")]
+    private QuantumConsole quantumConsole;
+
+    // Commands for console
+    [Command("qq-set-use-stamina", "Set if player should use stamina")]
+    private bool UseStamina { get { return useStamina; } set { if (!IsOwner) return; useStamina = value; } }
+
+    [Command("qq-set-walk-speed", "Set player's walk speed")]
+    private float WalkSpeed { get { return walkSpeed; } set { if (!IsOwner) return; walkSpeed = value; } }
+
+    [Command("qq-set-sprint-speed", "Set player's sprint speed")]
+    private float SprintSpeed { get { return sprintSpeed; } set { if (!IsOwner) return; sprintSpeed = value; } }
+
+    [Command("qq-set-crouch-speed", "Set player's crouch speed")]
+    private float CrouchSpeed { get { return crouchSpeed; } set { if (!IsOwner) return; crouchSpeed = value; } }
+
     private void OnEnable()
     {
         OnTakeDamage += ApplyDamage;
@@ -234,7 +252,8 @@ public class FirstPersonController : NetworkBehaviour
                 child.enabled = false;
             }
 
-            //Instantiate(HUD);
+            quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
+            
         }
         else
         {
@@ -254,6 +273,8 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+
             if (CanMove)
             {
                 HandleMovementInput();
