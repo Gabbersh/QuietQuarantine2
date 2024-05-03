@@ -7,13 +7,16 @@ using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
+using QFSW.QC;
 
 public class FirstPersonController : NetworkBehaviour
 {
     public bool CanMove { get; private set; } = true;
+    private bool ConsoleOpened { get { return quantumConsole.IsFocused; } } // get console value
     private bool isSprinting => canSprint && Input.GetKey(sprintKey);
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
+    private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -33,6 +36,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
+    [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
+    //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
@@ -78,6 +83,9 @@ public class FirstPersonController : NetworkBehaviour
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
 
+    public float GetmaxStamina { get { return maxStamina; } }
+    public float GetCurrentStamina { get { return currentStamina; } }
+
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2.0f;
     [SerializeField, Range(1, 10)] private float lookSpeedY = 2.0f;
@@ -114,7 +122,7 @@ public class FirstPersonController : NetworkBehaviour
     private float GetCurrentOffset => isCrouching ? baseStepSpeed * crouchStepMultiplier : isSprinting ? baseStepSpeed * sprintStepMultiplier : baseStepSpeed;
 
     [Header("Interaction")]
-    [SerializeField] private Vector3 interactionRayPoint = new Vector3 (0.5f, 0.5f, 0);
+    [SerializeField] private Vector3 interactionRayPoint = new Vector3(0.5f, 0.5f, 0);
     [SerializeField] private float interactionDistance = 2;
     private LayerMask interactionLayer = default;
     private LayerMask interactionIgnoreLayer = 0 | 1 << 7;
@@ -139,6 +147,9 @@ public class FirstPersonController : NetworkBehaviour
 
     [Header("SoundRange")]
     [SerializeField] private float soundRange;
+
+    [Header("HUD")]
+    [SerializeField] private GameObject HUD;
 
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
@@ -178,6 +189,17 @@ public class FirstPersonController : NetworkBehaviour
     private float rotationX = 0;
 
     public static FirstPersonController instance;
+
+    [Header("Console")]
+    private QuantumConsole quantumConsole;
+    private bool isFlying;
+    public bool IsFlying { get { return isFlying; } set { isFlying = value; } }
+    public float Gravity { get { return gravity; } set { gravity = value; } }
+    public bool UseStamina { get { return useStamina; } set {  useStamina = value; } }
+    public float WalkSpeed { get { return walkSpeed; } set {  walkSpeed = value; } }
+    public float SprintSpeed {  get { return sprintSpeed; } set {  sprintSpeed = value; } }
+    public float CrouchSpeed { get { return crouchSpeed; } set {  crouchSpeed = value; } }
+
 
     private void OnEnable()
     {
@@ -224,10 +246,15 @@ public class FirstPersonController : NetworkBehaviour
             {
                 child.enabled = false;
             }
+
+            quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
+            
         }
         else
         {
+            Flashlight.GetComponent<Light>().intensity = 0;
             vc.Priority = 0;
+            HUD.SetActive(false);
         }
     }
 
@@ -241,10 +268,15 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+
             if (CanMove)
             {
                 HandleMovementInput();
                 HandleMouseLook();
+
+                if (IsFlying)
+                    HandleFlying();
 
                 if (canJump)
                     HandleJump();
@@ -257,6 +289,9 @@ public class FirstPersonController : NetworkBehaviour
 
                 if (canZoom)
                     HandleZoom();
+
+                if (toggleInventory) 
+                    HandleInventoryToggle();
 
                 if (useFootsteps)
                     HandleFootsteps();
@@ -305,6 +340,22 @@ public class FirstPersonController : NetworkBehaviour
         }
     }
 
+    private void HandleFlying()
+    {
+        if (Input.GetKey(crouchKey))
+        {
+            moveDirection.y = -walkSpeed;
+        }
+        else if (Input.GetKey(jumpKey))
+        {
+            moveDirection.y = walkSpeed;
+        }
+        else
+        {
+            moveDirection.y = 0;
+        }
+    }
+
     private void HandleMovementInput()
     {
         currentInput = new Vector2((isCrouching ? crouchSpeed : isSprinting ? sprintSpeed : walkSpeed) * Input.GetAxis("Vertical"), 
@@ -348,6 +399,11 @@ public class FirstPersonController : NetworkBehaviour
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
         vc.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
+    }
+
+    private void HandleInventoryToggle()
+    {
+        InventoryActions.OnInventoryToggle();
     }
 
     private void ApplyDamage(float dmg)
@@ -451,6 +507,10 @@ public class FirstPersonController : NetworkBehaviour
             if (hit.collider.gameObject.layer == interactionLayer && 
                 (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.GetInstanceID()))
             {
+                if (currentInteractable != null)
+                {
+                    currentInteractable.OnLoseFocus();
+                }
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if(currentInteractable)
@@ -573,7 +633,7 @@ public class FirstPersonController : NetworkBehaviour
 
         if (footStepTimer <= 0)
         {
-            //kollar fr�n under spelaren, inte under kameran
+            //kollar fr�n under spelaren, inte under kameran
             if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
 

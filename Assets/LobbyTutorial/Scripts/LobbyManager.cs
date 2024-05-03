@@ -11,8 +11,8 @@ public class LobbyManager : MonoBehaviour {
 
 
     public static LobbyManager Instance { get; private set; }
-    
-    
+
+
 
     public const string KEY_PLAYER_NAME = "PlayerName";
     public const string KEY_PLAYER_CHARACTER = "Character";
@@ -48,7 +48,7 @@ public class LobbyManager : MonoBehaviour {
     private float lobbyPollTimer;
     private Lobby joinedLobby;
     private string playerName;
-
+    public string PlayerName { get { return playerName; } } // RÖR INTE OLLE DU VET VAD JAG GÖR, mr skelly man
 
     private void Awake() {
         Instance = this;

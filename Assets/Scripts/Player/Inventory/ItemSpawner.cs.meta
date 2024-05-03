@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: 38688f9bc0c0108429ff213345c5717d
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - water: {fileID: 8089705204225741438, guid: d27af2baa2ab1ba46801fd5c579ad1aa, type: 3}
+  - food: {fileID: 6261551779713065159, guid: 6608aa8538d35f449aafe9b24aaac11f, type: 3}
+  - medicine: {fileID: 2708558435759575923, guid: 854180fd14a4a044cbdd6e47d6268683,
+      type: 3}
+  - key: {fileID: 1302595326034253283, guid: f620fd7dbe311204e9477b357b65a31e, type: 3}
+  - bottle: {fileID: 9075309448354747913, guid: 89b4c987e99a60c4f8a1f5b90d031ba6,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
