@@ -6,8 +6,17 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using QFSW.QC;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
+    [SerializeField] private NetworkVariable<int> currentCheatState = new NetworkVariable<int>(0);
+
+    public int CurrentCheatState { get {  return currentCheatState.Value; } }
+
+    public static GameManager instance;
+
+    public delegate void CheatEventHandler();
+    public event CheatEventHandler OnCheatStateChange;
+
     [Header("Monsters")]
     [SerializeField] private GameObject myNemmaJeff;
     [SerializeField] private List<GameObject> jeffs;
@@ -45,6 +54,7 @@ public class GameManager : MonoBehaviour
         collectables[0] = Water;
         collectables[1] = Coin;
         collectables[2] = Medicine;
+        instance = this;
     }
 
     // constantly check for player count and spawn monster
@@ -120,5 +130,34 @@ public class GameManager : MonoBehaviour
     private bool HasPlayerJoined()
     {
         return NetworkManager.Singleton.IsServer && NetworkManager.Singleton.ConnectedClientsList.Count > 0;
+    }
+
+    [Command("qq-sv-cheats", "Set cheatstate. 0 = Off, 1 = On")] // Vet att man kan använda bool men vill ha sv_cheats 1
+    public void SetCheatState(int cheatState)
+    {
+        if(IsServer)
+        {
+            currentCheatState.Value = cheatState;
+            SendCheatStateClientRpc();
+        }
+        else
+        {
+            SetCheatStateServerRpc(cheatState);
+        }
+        Debug.Log(currentCheatState.Value);
+    }
+
+    // send command from client, force server to set it
+    [ServerRpc(RequireOwnership = false)]
+    private void SetCheatStateServerRpc(int cheatState)
+    {
+        currentCheatState.Value = cheatState;
+        SendCheatStateClientRpc();
+    }
+
+    [ClientRpc]
+    private void SendCheatStateClientRpc()
+    {
+        OnCheatStateChange();
     }
 }

@@ -2,7 +2,6 @@ using QFSW.QC;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ItemSpawner : NetworkBehaviour
@@ -14,12 +13,20 @@ public class ItemSpawner : NetworkBehaviour
     [SerializeField] private GameObject bottle;
     [SerializeField] private GameObject jeff;
 
-    [SerializeField] private Camera playerCamera;
+    private Camera playerCamera;
+
+    public void Start()
+    {
+        playerCamera = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponentInChildren<Camera>();
+    }
 
     [Command("qq-spawn-entity-at-crosshair", "Spawns entity at the point you're looking at")]
     private void SpawnEntityAtCrosshair(string entityName, int amount)
     {
-        SpawnOnNetworkServerRpc(entityName, amount);
+        if (GameManager.instance.CurrentCheatState > 0)
+        {
+            SpawnOnNetworkServerRpc(entityName, amount);
+        }
     }
 
     // Tell server to spawn objects at position the palyer is looking at (crosshair).

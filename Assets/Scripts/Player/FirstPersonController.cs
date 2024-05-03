@@ -192,19 +192,14 @@ public class FirstPersonController : NetworkBehaviour
 
     [Header("Console")]
     private QuantumConsole quantumConsole;
+    private bool isFlying;
+    public bool IsFlying { get { return isFlying; } set { isFlying = value; } }
+    public float Gravity { get { return gravity; } set { gravity = value; } }
+    public bool UseStamina { get { return useStamina; } set {  useStamina = value; } }
+    public float WalkSpeed { get { return walkSpeed; } set {  walkSpeed = value; } }
+    public float SprintSpeed {  get { return sprintSpeed; } set {  sprintSpeed = value; } }
+    public float CrouchSpeed { get { return crouchSpeed; } set {  crouchSpeed = value; } }
 
-    // Commands for console
-    [Command("qq-set-use-stamina", "Set if player should use stamina")]
-    private bool UseStamina { get { return useStamina; } set { if (!IsOwner) return; useStamina = value; } }
-
-    [Command("qq-set-walk-speed", "Set player's walk speed")]
-    private float WalkSpeed { get { return walkSpeed; } set { if (!IsOwner) return; walkSpeed = value; } }
-
-    [Command("qq-set-sprint-speed", "Set player's sprint speed")]
-    private float SprintSpeed { get { return sprintSpeed; } set { if (!IsOwner) return; sprintSpeed = value; } }
-
-    [Command("qq-set-crouch-speed", "Set player's crouch speed")]
-    private float CrouchSpeed { get { return crouchSpeed; } set { if (!IsOwner) return; crouchSpeed = value; } }
 
     private void OnEnable()
     {
@@ -280,6 +275,9 @@ public class FirstPersonController : NetworkBehaviour
                 HandleMovementInput();
                 HandleMouseLook();
 
+                if (IsFlying)
+                    HandleFlying();
+
                 if (canJump)
                     HandleJump();
 
@@ -339,6 +337,22 @@ public class FirstPersonController : NetworkBehaviour
         else
         {
             playerCharacter.transform.localPosition = unCrouched;
+        }
+    }
+
+    private void HandleFlying()
+    {
+        if (Input.GetKey(crouchKey))
+        {
+            moveDirection.y = -walkSpeed;
+        }
+        else if (Input.GetKey(jumpKey))
+        {
+            moveDirection.y = walkSpeed;
+        }
+        else
+        {
+            moveDirection.y = 0;
         }
     }
 

@@ -1,0 +1,99 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6382488698161432103
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7084244611846680949}
+  - component: {fileID: 501896473323330665}
+  - component: {fileID: 1050056269270026019}
+  - component: {fileID: 3606073669204958425}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7084244611846680949
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382488698161432103}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &501896473323330665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382488698161432103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1511093844
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
+--- !u!114 &1050056269270026019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382488698161432103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5f104e9763d3be45a33a0c175c06fea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentCheatState:
+    m_InternalValue: 0
+  myNemmaJeff: {fileID: 7207745834858083839, guid: b5240734967efaa4abd321f372be40a1,
+    type: 3}
+  jeffs: []
+  throwable: {fileID: 9075309448354747913, guid: 89b4c987e99a60c4f8a1f5b90d031ba6,
+    type: 3}
+  spawnedThrowables: []
+  Water: {fileID: 8089705204225741438, guid: d27af2baa2ab1ba46801fd5c579ad1aa, type: 3}
+  Coin: {fileID: 6261551779713065159, guid: 6608aa8538d35f449aafe9b24aaac11f, type: 3}
+  Medicine: {fileID: 2708558435759575923, guid: 854180fd14a4a044cbdd6e47d6268683,
+    type: 3}
+  spawnedCollectables: []
+  spawns: {fileID: 3606073669204958425}
+  monstersToSpawn: 0
+  throwablesToSpawn: 3
+  collectablesToSpawn: 100
+--- !u!114 &3606073669204958425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382488698161432103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3832162637f021d4885162cb551e9e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsterSpawnParent: {fileID: 0}
+  throwablesSpawnParent: {fileID: 0}
