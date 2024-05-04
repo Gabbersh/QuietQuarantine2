@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
-public class ThrowableSound : MonoBehaviour
+public class ThrowableSound : NetworkBehaviour
 {
     [SerializeField] private AudioSource source;
     [SerializeField] private float soundRange;
@@ -17,7 +18,10 @@ public class ThrowableSound : MonoBehaviour
             if (source.isPlaying)
                 return;
 
-            source.Play();
+            //source.Play();
+            
+            PlaySoundToAllClientRpc();
+
             Sound sound = ScriptableObject.CreateInstance<Sound>();
             sound.Initialize(transform.position, soundRange);
             Sounds.MakeSound(sound);
@@ -32,5 +36,11 @@ public class ThrowableSound : MonoBehaviour
     private void EnableSound()
     {
         canPlaySound = true;
+    }
+
+    [ClientRpc]
+    private void PlaySoundToAllClientRpc()
+    {
+        source.Play();
     }
 }

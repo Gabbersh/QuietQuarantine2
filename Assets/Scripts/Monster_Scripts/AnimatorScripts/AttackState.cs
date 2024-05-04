@@ -41,5 +41,6 @@ public class AttackState : StateMachineBehaviour
         agent.isStopped = true;
         animator.SetBool("isAttacking", false);
         animator.SetBool("isChasing", false);
+        animator.SetBool("isHunting", false);
     }
 }
