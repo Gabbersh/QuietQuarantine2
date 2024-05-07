@@ -237,8 +237,8 @@ public class FirstPersonController : NetworkBehaviour
 
             Flashlight.GetComponent<Light>().intensity = maxIntensity;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
 
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
