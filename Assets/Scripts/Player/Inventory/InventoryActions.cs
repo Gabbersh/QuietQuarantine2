@@ -9,5 +9,8 @@ public static class InventoryActions
     public static Action OnInventoryToggle;
     public static Action<string, bool> OnInteractableFocus;
     public static Action<bool> OnInteractableLostFocus;
-    public static Action<bool> OnStashInteraction;
+
+    public static Action<int[]> OnStashChange;
+    public static Action<int[]> OnDeposit;
+    public static Action<int[]> OnWithdraw;
 }

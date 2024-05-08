@@ -25,6 +25,9 @@ public class Inventory : NetworkBehaviour
         medicineAmount = 0;
         foodAmount = 0;
         keyAmount = 0;
+
+        InventoryActions.OnDeposit += DepositTransaction;
+        InventoryActions.OnWithdraw += WithdrawTransaction;
     }
 
     public void AddItem(InventoryItem.InventoryItemType item)
@@ -47,37 +50,33 @@ public class Inventory : NetworkBehaviour
                 break;
         }
 
-        InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, foodAmount, keyAmount });
-        
+        InventoryChanged();
+
         Debug.Log("Water: " + waterAmount + ", " + "Medicine: " +  medicineAmount + ", " + "Food: " + foodAmount + ", " + "Keys: " + keyAmount);
+    }
+
+    private void DepositTransaction(int[] resources)
+    {
+        waterAmount -= resources[0];
+        medicineAmount -= resources[1];
+        foodAmount -= resources[2];
+        keyAmount -= resources[3];
+
+        InventoryChanged();
+    }
+
+    private void WithdrawTransaction(int[] resources)
+    {
+        waterAmount += resources[0];
+        medicineAmount += resources[1];
+        foodAmount += resources[2];
+        keyAmount += resources[3];
+
+        InventoryChanged();
     }
 
     public void RemoveNeededResources(int foodRequired, int waterRequired, int medicineRequired)
     {
-        //switch(Inventory.itemType)
-        //{
-        //    case InventoryItem.InventoryItemType.Water:
-        //        if() 
-        //        {
-        //            waterAmount--;
-        //        }
-        //        break;
-        //    case InventoryItem.InventoryItemType.Medicine:
-        //        if(medicineAmount >= 3)
-        //        {
-        //            medicineAmount--;
-        //        }
-        //        break;
-        //    case InventoryItem.InventoryItemType.Food:
-        //        if(foodAmount >= 3)
-        //        {
-        //            foodAmount--;
-        //        }
-        //        break;
-        //    default:
-        //        break;
-        //}
-
         foodAmount -= foodRequired;
         waterAmount -= waterRequired;
         medicineAmount -= medicineRequired;
@@ -96,5 +95,10 @@ public class Inventory : NetworkBehaviour
 
     //    }
     //}
+
+    private void InventoryChanged()
+    {
+        InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, foodAmount, KeyAmount });
+    }
     
 }
