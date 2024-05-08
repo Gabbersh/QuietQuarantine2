@@ -17,7 +17,7 @@ public class ItemSpawner : NetworkBehaviour
 
     public void Start()
     {
-        playerCamera = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponentInChildren<Camera>();
+        //playerCamera = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponentInChildren<Camera>();
     }
 
     [Command("qq-spawn-entity-at-crosshair", "Spawns entity at the point you're looking at")]

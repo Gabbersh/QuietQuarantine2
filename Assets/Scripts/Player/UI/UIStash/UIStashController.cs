@@ -80,7 +80,7 @@ public class UIStashController : MonoBehaviour
         buttonDeposit.onClick.AddListener(Deposit);
 
         InventoryActions.OnInventoryChange += UpdateInventoryFields;
-        InventoryActions.OnStashChange += UpdateStashFields;
+        InventoryActions.OnStashChange += UpdateStashFields;;
     }
 
     private void AddSuppliesOnClick()
