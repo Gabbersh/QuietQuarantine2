@@ -467,7 +467,7 @@ MonoBehaviour:
   Flashlight: {fileID: 4628795769111411383}
   vc: {fileID: 3705025116684070815}
   listener: {fileID: 7591570269575126959}
-  soundRange: 10
+  soundRange: 15
   playerCamera: {fileID: 4332063519478241494}
   characterController: {fileID: 8643092617271328985}
   animator: {fileID: 8854502209808401353}

@@ -25,7 +25,7 @@ public class IdleState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         animator.SetBool("isPatrolling", false);
 
-        timer = 2;
+        timer = 6;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -42,5 +42,7 @@ public class IdleState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent.isStopped = false;
+        agent.ResetPath();
+        animator.SetBool("isIdle", false);
     }
 }

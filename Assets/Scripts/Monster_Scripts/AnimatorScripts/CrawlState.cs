@@ -46,7 +46,9 @@ public class CrawlState : StateMachineBehaviour
             agent.SetDestination(navHit.position);
         }
 
-        float distance = Vector3.Distance(player.transform.position, animator.transform.position);
+        //IsStationary(animator);
+
+        //float distance = Vector3.Distance(player.transform.position, animator.transform.position);
 
         //if (distance < chaseRange)
         //{
@@ -63,8 +65,23 @@ public class CrawlState : StateMachineBehaviour
         //}
     }
 
+    public void IsStationary(Animator animator)
+    {
+        //if (agent.velocity.magnitude < 0.1f)
+        //{
+        //    animator.SetBool("isIdle", true);
+        //    agent.isStopped = true;
+        //}
+
+        if (agent.pathStatus == NavMeshPathStatus.PathInvalid)
+        {
+            animator.SetBool("isIdle", true);
+            agent.isStopped = true;
+        }
+    }
+
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        animator.SetBool("isPatrolling", false);
     }
 }
