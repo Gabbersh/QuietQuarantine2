@@ -12,8 +12,13 @@ public class UIStashController : MonoBehaviour
     private Button buttonWaterAdd;
     private Button buttonSuppliesSub;
     private Button buttonSuppliesAdd;
+    private Button buttonKeysSub;
+    private Button buttonKeysAdd;
+    private Button buttonFoodSub;
+    private Button buttonFoodAdd;
 
     private Button buttonDeposit;
+    private Button buttonWithdraw;
 
     private TMP_Text inventoryWaterText;
     private TMP_Text inventorySuppliesText;
@@ -71,13 +76,26 @@ public class UIStashController : MonoBehaviour
         buttonWaterAdd = GameObject.Find("ButtonAddWater").GetComponent<Button>();
         buttonSuppliesSub = GameObject.Find("ButtonSubSupplies").GetComponent<Button>();
         buttonSuppliesAdd = GameObject.Find("ButtonAddSupplies").GetComponent<Button>();
+        buttonFoodSub = GameObject.Find("ButtonSubFood").GetComponent<Button>();
+        buttonFoodAdd = GameObject.Find("ButtonAddFood").GetComponent<Button>();
+        buttonKeysSub = GameObject.Find("ButtonSubKeys").GetComponent<Button>();
+        buttonKeysAdd = GameObject.Find("ButtonAddKeys").GetComponent<Button>();
+
         buttonDeposit = GameObject.Find("ButtonDeposit").GetComponent<Button>();
+        buttonWithdraw = GameObject.Find("ButtonWithdraw").GetComponent<Button>();
 
         buttonWaterSub.onClick.AddListener(SubWaterOnClick);
         buttonWaterAdd.onClick.AddListener(AddWaterOnClick);
         buttonSuppliesSub.onClick.AddListener(SubSuppliesOnClick);
         buttonSuppliesAdd.onClick.AddListener(AddSuppliesOnClick);
+        buttonFoodSub.onClick.AddListener(SubFoodOnClick);
+        buttonFoodAdd.onClick.AddListener(AddFoodOnClick);
+        buttonKeysSub.onClick.AddListener(SubKeyOnClick);
+        buttonKeysAdd.onClick.AddListener(AddKeyOnClick);
+
+
         buttonDeposit.onClick.AddListener(Deposit);
+        buttonWithdraw.onClick.AddListener(Withdraw);
 
         InventoryActions.OnInventoryChange += UpdateInventoryFields;
         InventoryActions.OnStashChange += UpdateStashFields;;
@@ -101,6 +119,26 @@ public class UIStashController : MonoBehaviour
     private void SubWaterOnClick()
     {
         SubTransaction(ref transactionWater, ref transactionWaterText);
+    }
+
+    private void AddFoodOnClick()
+    {
+        AddTransaction(ref transactionFood, ref transactionFoodText);
+    }
+
+    private void SubFoodOnClick()
+    {
+        SubTransaction(ref transactionFood, ref transactionFoodText);
+    }
+
+    private void AddKeyOnClick()
+    {
+        AddTransaction(ref transactionKey, ref transactionKeyText);
+    }
+
+    private void SubKeyOnClick()
+    {
+        SubTransaction(ref transactionKey, ref transactionKeyText);
     }
 
     private void SubTransaction(ref int transaction, ref TMP_Text transactionText)
@@ -160,5 +198,22 @@ public class UIStashController : MonoBehaviour
         else if(transactionKey <= 0) { transactionKey = 0; }
 
         InventoryActions.OnDeposit(new[] { transactionWater, transactionSupplies, transactionFood, transactionKey });
+    }
+
+    private void Withdraw()
+    {
+        if (transactionWater >= stashWater) { transactionWater =stashWater; }
+        else if (transactionWater <= 0) { transactionWater = 0; }
+
+        if (transactionSupplies >= stashSupplies) { transactionSupplies = stashSupplies; }
+        else if (transactionSupplies <= 0) { transactionSupplies = 0; }
+
+        if (transactionFood >= stashFood) { transactionFood = stashFood; }
+        else if (transactionFood <= 0) { transactionFood = 0; }
+
+        if (transactionKey >= stashKey) { transactionKey = stashKey; }
+        else if (transactionKey <= 0) { transactionKey = 0; }
+
+        InventoryActions.OnWithdraw(new[] { transactionWater, transactionSupplies, transactionFood, transactionKey });
     }
 }
