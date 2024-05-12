@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class GetIcon : MonoBehaviour
 {
-    [SerializeField] Object  gameObject;
+    [SerializeField] Object go;
     Image image;
 
     void Start()

@@ -8,6 +8,9 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using QFSW.QC;
+using TMPro;
+using Unity.Services.Authentication;
+using Unity.Collections;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -99,8 +102,10 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float sprintBobAmount = 0.05f;
     [SerializeField] private float crouchBobSpeed = 8f;
     [SerializeField] private float crouchBobAmount = 0.01f;
+    [SerializeField] private float helmetBobScale = 0.05f; // hur mycket ska hjälmen boba... bobba..?
     private float defaultYPos = 0;
     private float bobTimer;
+    private float defaultHelmetYPos;
 
     [Header("Zoom Parameters")]
     [SerializeField] private float timeToZoom = 0.3f;
@@ -172,6 +177,7 @@ public class FirstPersonController : NetworkBehaviour
     [Header("Character")]
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject playerCharacter;
+    [SerializeField] private GameObject characterHelmet;
 
     // LOCAL Y of playerCharacter
     // -0.4 y unCrouched
@@ -190,16 +196,17 @@ public class FirstPersonController : NetworkBehaviour
 
     public static FirstPersonController instance;
 
+    // förlåt gabbe att jag fuckat din fina fpc! </3
     [Header("Console")]
     private QuantumConsole quantumConsole;
     private bool isFlying;
+
     public bool IsFlying { get { return isFlying; } set { isFlying = value; } }
     public float Gravity { get { return gravity; } set { gravity = value; } }
     public bool UseStamina { get { return useStamina; } set {  useStamina = value; } }
     public float WalkSpeed { get { return walkSpeed; } set {  walkSpeed = value; } }
     public float SprintSpeed {  get { return sprintSpeed; } set {  sprintSpeed = value; } }
     public float CrouchSpeed { get { return crouchSpeed; } set {  crouchSpeed = value; } }
-
 
     private void OnEnable()
     {
@@ -242,19 +249,21 @@ public class FirstPersonController : NetworkBehaviour
 
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
+
             foreach (var child in characterModel)
             {
                 child.enabled = false;
             }
 
             quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
-            
+            defaultHelmetYPos = characterHelmet.transform.localPosition.y;
         }
         else
         {
             Flashlight.GetComponent<Light>().intensity = 0;
             vc.Priority = 0;
             HUD.SetActive(false);
+            characterHelmet.SetActive(false);
         }
     }
 
@@ -337,6 +346,15 @@ public class FirstPersonController : NetworkBehaviour
         else
         {
             playerCharacter.transform.localPosition = unCrouched;
+        }
+
+        // bob för hjälmen bara
+        if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
+        {
+            characterHelmet.transform.localPosition = new Vector3(
+                characterHelmet.transform.localPosition.x,
+                defaultHelmetYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount) * helmetBobScale,
+                characterHelmet.transform.localPosition.z);
         }
     }
 
