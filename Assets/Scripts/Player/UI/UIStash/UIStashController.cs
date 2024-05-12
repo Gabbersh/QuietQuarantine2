@@ -50,8 +50,13 @@ public class UIStashController : MonoBehaviour
     private int inventoryFood;
     private int inventoryKey;
 
-    void Awake()
+    private GameObject stashUI;
+
+    
+    void Start()
     {
+        stashUI = gameObject;
+
         transactionWater = 0;
         transactionSupplies = 0;
         transactionFood = 0;
@@ -78,8 +83,8 @@ public class UIStashController : MonoBehaviour
         buttonSuppliesAdd = GameObject.Find("ButtonAddSupplies").GetComponent<Button>();
         buttonFoodSub = GameObject.Find("ButtonSubFood").GetComponent<Button>();
         buttonFoodAdd = GameObject.Find("ButtonAddFood").GetComponent<Button>();
-        buttonKeysSub = GameObject.Find("ButtonSubKeys").GetComponent<Button>();
-        buttonKeysAdd = GameObject.Find("ButtonAddKeys").GetComponent<Button>();
+        buttonKeysSub = GameObject.Find("ButtonSubKey").GetComponent<Button>();
+        buttonKeysAdd = GameObject.Find("ButtonAddKey").GetComponent<Button>();
 
         buttonDeposit = GameObject.Find("ButtonDeposit").GetComponent<Button>();
         buttonWithdraw = GameObject.Find("ButtonWithdraw").GetComponent<Button>();
@@ -98,8 +103,14 @@ public class UIStashController : MonoBehaviour
         buttonWithdraw.onClick.AddListener(Withdraw);
 
         InventoryActions.OnInventoryChange += UpdateInventoryFields;
-        InventoryActions.OnStashChange += UpdateStashFields;;
+        InventoryActions.OnStashChange += UpdateStashFields;
+        InventoryActions.OnStashInteraction += OpenStash;
+        InventoryActions.OnStashExit += ExitStash;
+        stashUI.SetActive(false);
+
+
     }
+
 
     private void AddSuppliesOnClick()
     {
@@ -113,11 +124,13 @@ public class UIStashController : MonoBehaviour
 
     private void AddWaterOnClick()
     {
+        
         AddTransaction(ref transactionWater, ref transactionWaterText);
     }
 
     private void SubWaterOnClick()
     {
+        
         SubTransaction(ref transactionWater, ref transactionWaterText);
     }
 
@@ -216,4 +229,17 @@ public class UIStashController : MonoBehaviour
 
         InventoryActions.OnWithdraw(new[] { transactionWater, transactionSupplies, transactionFood, transactionKey });
     }
+
+    private void ExitStash()
+    {
+        stashUI.SetActive(false);
+    }
+
+    private void OpenStash()
+    {
+        stashUI.SetActive(true);
+
+    }
+
+
 }
