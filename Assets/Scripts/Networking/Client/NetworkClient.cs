@@ -19,7 +19,10 @@ public class NetworkClient : IDisposable
 
     private void OnClientDisconnect(ulong clientId)
     {
-        if(clientId != 0 && clientId != networkManager.LocalClientId)
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        if (clientId != 0 && clientId != networkManager.LocalClientId)
         {
             return;
         }
