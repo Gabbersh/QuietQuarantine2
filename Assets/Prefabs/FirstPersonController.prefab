@@ -789,7 +789,6 @@ MonoBehaviour:
   key: {fileID: 1302595326034253283, guid: f620fd7dbe311204e9477b357b65a31e, type: 3}
   bottle: {fileID: 9075309448354747913, guid: 89b4c987e99a60c4f8a1f5b90d031ba6, type: 3}
   jeff: {fileID: 7207745834858083839, guid: b5240734967efaa4abd321f372be40a1, type: 3}
-  playerCamera: {fileID: 4332063519478241494}
 --- !u!1 &9186711582339342998
 GameObject:
   m_ObjectHideFlags: 0

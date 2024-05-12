@@ -213,11 +213,13 @@ public class FirstPersonController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
+        //if(!IsOwner) return;
+
         if (IsOwner)
         {
             instance = this;
 
-            transform.position = new Vector3(150, 2, 150);
+            transform.position = new Vector3(150, 100, 150);
             //Debug.Log("Position set to: " + transform.position);
             Physics.SyncTransforms();
 
@@ -266,6 +268,8 @@ public class FirstPersonController : NetworkBehaviour
 
     void Update()
     {
+        //if(!IsOwner) return;
+
         if (IsOwner)
         {
             CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
