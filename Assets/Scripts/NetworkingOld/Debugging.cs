@@ -8,16 +8,16 @@ using UnityEngine.UI;
 public class Debugging : NetworkBehaviour
 {
     private Text cheatText;
-    private GameManager gameManager;
+    [SerializeField] private GameManager gameManager;
     private FirstPersonController localFPC;
     private Inventory localPlayerInventory;
 
     // Start is called before the first frame update
-    void Start()
+    public override void OnNetworkSpawn()
     {
         if (IsOwner)
         {
-            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            //gameManager = GameObject.Find("GameManager").gameObject.GetComponent<GameManager>();
             gameManager.OnCheatStateChange += HandleCheatStateChange;
             cheatText = gameObject.GetComponentInChildren<Text>();
             localFPC = NetworkManager.LocalClient.PlayerObject.gameObject.GetComponent<FirstPersonController>();
