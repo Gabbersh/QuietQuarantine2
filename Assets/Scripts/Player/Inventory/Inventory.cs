@@ -11,6 +11,12 @@ public class Inventory : NetworkBehaviour
     private int medicineAmount;
     private int foodAmount;
     private int keyAmount;
+
+    private int stashWater;
+    private int stashMedicine;
+    private int stashFood;
+    private int stashKey;
+
     public int WaterAmount {  get { return waterAmount; } set {  waterAmount = value; } }
     public int MedicineAmount { get { return medicineAmount; } set {  medicineAmount = value; } }
     public int FoodAmount { get { return foodAmount; } set {  foodAmount = value; } }
@@ -26,8 +32,13 @@ public class Inventory : NetworkBehaviour
         foodAmount = 0;
         keyAmount = 0;
 
-        InventoryActions.OnDeposit += DepositTransaction;
-        InventoryActions.OnWithdraw += WithdrawTransaction;
+        stashWater = 0;
+        stashMedicine = 0;
+        stashFood = 0;
+        stashKey = 0;
+
+        //InventoryActions.OnDeposit += DepositTransaction;
+        //InventoryActions.OnWithdraw += WithdrawTransaction;
     }
 
     public void AddItem(InventoryItem.InventoryItemType item)
@@ -55,22 +66,32 @@ public class Inventory : NetworkBehaviour
         Debug.Log("Water: " + waterAmount + ", " + "Medicine: " +  medicineAmount + ", " + "Food: " + foodAmount + ", " + "Keys: " + keyAmount);
     }
 
-    private void DepositTransaction(int[] resources)
+    public void Deposit(int[] resources)
     {
         waterAmount -= resources[0];
         medicineAmount -= resources[1];
         foodAmount -= resources[2];
         keyAmount -= resources[3];
 
+        stashWater += resources[0];
+        stashMedicine += resources[1];
+        stashFood += resources[2];
+        stashKey += resources[3];
+
         InventoryChanged();
     }
 
-    private void WithdrawTransaction(int[] resources)
+    public void Withdraw(int[] resources)
     {
         waterAmount += resources[0];
         medicineAmount += resources[1];
         foodAmount += resources[2];
         keyAmount += resources[3];
+
+        stashWater -= resources[0];
+        stashMedicine -= resources[1];
+        stashFood -= resources[2];
+        stashKey -= resources[3];
 
         InventoryChanged();
     }
@@ -88,6 +109,12 @@ public class Inventory : NetworkBehaviour
     {
         return new int[] { waterAmount, medicineAmount, foodAmount, keyAmount };
     }
+
+    public int[] GetStashAmounts()
+    {
+        return new int[] { stashWater, stashMedicine, stashFood, stashKey };
+    }
+
     //public void keyInInv()
     //{
     //    if (keyInInventory = true)
@@ -140,6 +167,8 @@ public class Inventory : NetworkBehaviour
             default : 
                 break;
         }
+
+        InventoryChanged();
     }
 
     private void InventoryChanged()

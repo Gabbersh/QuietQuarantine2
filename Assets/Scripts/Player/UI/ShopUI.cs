@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro;
+using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShopUI : MonoBehaviour
+public class ShopUI : NetworkBehaviour
 {
     private Inventory inventory;
-    private GameObject ui;
+    private GameObject uiShop;
+
+    private GameObject localPlayer;
 
     private TMP_Text inventoryWaterText;
     private TMP_Text inventorySuppliesText;
@@ -54,9 +57,105 @@ public class ShopUI : MonoBehaviour
 
     void Awake()
     {
-        ui = gameObject;
+        if (!IsOwner) return;
 
-        inventory = GameObject.Find("Inventory").GetComponent<Inventory>();
+        //uiShop = gameObject;
+
+        //inventory = FindInChildren(localPlayer, "Inventory").GetComponent<Inventory>();
+        ////inventory = GameObject.Find("Inventory").GetComponent<Inventory>();
+
+        //waterTrade = Resource.supplies;
+        //suppliesTrade = Resource.food;
+        //foodTrade = Resource.water;
+
+        //waterTradeIndex = 0;
+        //suppliesTradeIndex = 0;
+        //foodTradeIndex = 0;
+
+        ////inventoryWaterText = GameObject.Find("InventoryTextWater").GetComponent<TMP_Text>();
+        ////inventorySuppliesText = GameObject.Find("InventoryTextSupplies").GetComponent<TMP_Text>();
+        ////inventoryFoodText = GameObject.Find("InventoryTextFood").GetComponent<TMP_Text>();
+        ////inventoryKeyText = GameObject.Find("InventoryTextKey").GetComponent<TMP_Text>();
+
+        ////waterCostText = GameObject.Find("CostTextWater").GetComponent<TMP_Text>();
+        ////suppliesCostText = GameObject.Find("CostTextSupplies").GetComponent<TMP_Text>();
+        ////foodCostText = GameObject.Find("CostTextFood").GetComponent<TMP_Text>();
+        ////keyWaterCostText = GameObject.Find("CostTextKeyWater").GetComponent<TMP_Text>();
+        ////keySuppliesCostText = GameObject.Find("CostTextKeySupplies").GetComponent<TMP_Text>();
+        ////keyFoodCostText = GameObject.Find("CostTextKeyFood").GetComponent<TMP_Text>();
+
+        ////waterTradeImage = GameObject.Find("ImageWaterTrade").GetComponent<Image>();
+        ////suppliesTradeImage = GameObject.Find("ImageSuppliesTrade").GetComponent<Image>();
+        ////foodTradeImage = GameObject.Find("ImageFoodTrade").GetComponent<Image>();
+
+        ////waterToggleButton = GameObject.Find("ButtonToggleWater").GetComponent<Button>();
+        ////suppliesToggleButton = GameObject.Find("ButtonToggleSupplies").GetComponent<Button>();
+        ////foodToggleButton = GameObject.Find("ButtonToggleFood").GetComponent<Button>();
+        ////waterTradeButton = GameObject.Find("ButtonTradeWater").GetComponent<Button>();
+        ////suppliesTradeButton = GameObject.Find("ButtonTradeSupplies").GetComponent<Button>();
+        ////foodTradeButton = GameObject.Find("ButtonTradeFood").GetComponent<Button>();
+        ////keyTradeButton = GameObject.Find("ButtonTradeKey").GetComponent<Button>();
+
+        //inventoryWaterText = FindInChildren(localPlayer, "InventoryTextWater").GetComponent<TMP_Text>();
+        //inventorySuppliesText = FindInChildren(localPlayer, "InventoryTextSupplies").GetComponent<TMP_Text>();
+        //inventoryFoodText = FindInChildren(localPlayer, "InventoryTextFood").GetComponent<TMP_Text>();
+        //inventoryKeyText = FindInChildren(localPlayer, "InventoryTextKey").GetComponent<TMP_Text>();
+
+        //waterCostText = FindInChildren(localPlayer, "CostTextWater").GetComponent<TMP_Text>();
+        //suppliesCostText = FindInChildren(localPlayer, "CostTextSupplies").GetComponent<TMP_Text>();
+        //foodCostText = FindInChildren(localPlayer, "CostTextFood").GetComponent<TMP_Text>();
+        //keyWaterCostText = FindInChildren(localPlayer, "CostTextKeyWater").GetComponent<TMP_Text>();
+        //keySuppliesCostText = FindInChildren(localPlayer, "CostTextKeySupplies").GetComponent<TMP_Text>();
+        //keyFoodCostText = FindInChildren(localPlayer, "CostTextKeyFood").GetComponent<TMP_Text>();
+
+        //waterTradeImage = FindInChildren(localPlayer, "ImageWaterTrade").GetComponent<Image>();
+        //suppliesTradeImage = FindInChildren(localPlayer, "ImageSuppliesTrade").GetComponent<Image>();
+        //foodTradeImage = FindInChildren(localPlayer, "ImageFoodTrade").GetComponent<Image>();
+
+        //waterToggleButton = FindInChildren(localPlayer, "ButtonToggleWater").GetComponent<Button>();
+        //suppliesToggleButton = FindInChildren(localPlayer, "ButtonToggleSupplies").GetComponent<Button>();
+        //foodToggleButton = FindInChildren(localPlayer, "ButtonToggleFood").GetComponent<Button>();
+        //waterTradeButton = FindInChildren(localPlayer, "ButtonTradeWater").GetComponent<Button>();
+        //suppliesTradeButton = FindInChildren(localPlayer, "ButtonTradeSupplies").GetComponent<Button>();
+        //foodTradeButton = FindInChildren(localPlayer, "ButtonTradeFood").GetComponent<Button>();
+        //keyTradeButton = FindInChildren(localPlayer, "ButtonTradeKey").GetComponent<Button>();
+
+        //waterTradeImage.sprite = suppliesSprite;
+        //suppliesTradeImage.sprite = foodSprite;
+        //foodTradeImage.sprite = waterSprite;
+
+        //waterCostText.text = ShopPrices.waterPrice.ToString();
+        //suppliesCostText.text = ShopPrices.suppliesPrice.ToString();
+        //foodCostText.text = ShopPrices.foodPrice.ToString();
+        //keyWaterCostText.text = ShopPrices.keyPriceWater.ToString();
+        //keySuppliesCostText.text = ShopPrices.keyPriceSupplies.ToString();
+        //keyFoodCostText.text = ShopPrices.keyPriceFood.ToString();
+
+        //waterToggleButton.onClick.AddListener(WaterTradeToggle);
+        //suppliesToggleButton.onClick.AddListener(SuppliesTradeToggle);
+        //foodToggleButton.onClick.AddListener(FoodTradeToggle);
+
+        //waterTradeButton.onClick.AddListener(WaterTrade);
+        //suppliesTradeButton.onClick.AddListener(SuppliesTrade);
+        //foodTradeButton.onClick.AddListener(FoodTrade);
+        //keyTradeButton.onClick.AddListener(KeyTrade);
+
+        //InventoryActions.OnShopInteract += OnShopOpen;
+        //InventoryActions.OnShopClose += OnShopClose;
+
+        //uiShop.SetActive(false);
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        if (!IsOwner) return;
+
+        localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject;
+
+        uiShop = gameObject;
+
+        inventory = FindInChildren(localPlayer, "Inventory").GetComponent<Inventory>();
+        //inventory = GameObject.Find("Inventory").GetComponent<Inventory>();
 
         waterTrade = Resource.supplies;
         suppliesTrade = Resource.food;
@@ -66,29 +165,53 @@ public class ShopUI : MonoBehaviour
         suppliesTradeIndex = 0;
         foodTradeIndex = 0;
 
-        inventoryWaterText = GameObject.Find("InventoryTextWater").GetComponent<TMP_Text>();
-        inventorySuppliesText = GameObject.Find("InventoryTextSupplies").GetComponent<TMP_Text>();
-        inventoryFoodText = GameObject.Find("InventoryTextFood").GetComponent<TMP_Text>();
-        inventoryKeyText = GameObject.Find("InventoryTextKey").GetComponent<TMP_Text>();
+        //inventoryWaterText = GameObject.Find("InventoryTextWater").GetComponent<TMP_Text>();
+        //inventorySuppliesText = GameObject.Find("InventoryTextSupplies").GetComponent<TMP_Text>();
+        //inventoryFoodText = GameObject.Find("InventoryTextFood").GetComponent<TMP_Text>();
+        //inventoryKeyText = GameObject.Find("InventoryTextKey").GetComponent<TMP_Text>();
 
-        waterCostText = GameObject.Find("CostTextWater").GetComponent<TMP_Text>();
-        suppliesCostText = GameObject.Find("CostTextSupplies").GetComponent<TMP_Text>();
-        foodCostText = GameObject.Find("CostTextFood").GetComponent<TMP_Text>();
-        keyWaterCostText = GameObject.Find("CostTextKeyWater").GetComponent<TMP_Text>();
-        keySuppliesCostText = GameObject.Find("CostTextKeySupplies").GetComponent<TMP_Text>();
-        keyFoodCostText = GameObject.Find("CostTextKeyFood").GetComponent<TMP_Text>();
+        //waterCostText = GameObject.Find("CostTextWater").GetComponent<TMP_Text>();
+        //suppliesCostText = GameObject.Find("CostTextSupplies").GetComponent<TMP_Text>();
+        //foodCostText = GameObject.Find("CostTextFood").GetComponent<TMP_Text>();
+        //keyWaterCostText = GameObject.Find("CostTextKeyWater").GetComponent<TMP_Text>();
+        //keySuppliesCostText = GameObject.Find("CostTextKeySupplies").GetComponent<TMP_Text>();
+        //keyFoodCostText = GameObject.Find("CostTextKeyFood").GetComponent<TMP_Text>();
 
-        waterTradeImage = GameObject.Find("ImageWaterTrade").GetComponent<Image>();
-        suppliesTradeImage = GameObject.Find("ImageSuppliesTrade").GetComponent<Image>();
-        foodTradeImage = GameObject.Find("ImageFoodTrade").GetComponent<Image>();
+        //waterTradeImage = GameObject.Find("ImageWaterTrade").GetComponent<Image>();
+        //suppliesTradeImage = GameObject.Find("ImageSuppliesTrade").GetComponent<Image>();
+        //foodTradeImage = GameObject.Find("ImageFoodTrade").GetComponent<Image>();
 
-        waterToggleButton = GameObject.Find("ButtonToggleWater").GetComponent<Button>();
-        suppliesToggleButton = GameObject.Find("ButtonToggleSupplies").GetComponent<Button>();
-        foodToggleButton = GameObject.Find("ButtonToggleFood").GetComponent<Button>();
-        waterTradeButton = GameObject.Find("ButtonTradeWater").GetComponent<Button>();
-        suppliesTradeButton = GameObject.Find("ButtonTradeSupplies").GetComponent<Button>();
-        foodTradeButton = GameObject.Find("ButtonTradeFood").GetComponent<Button>();
-        keyTradeButton = GameObject.Find("ButtonTradeKey").GetComponent<Button>();
+        //waterToggleButton = GameObject.Find("ButtonToggleWater").GetComponent<Button>();
+        //suppliesToggleButton = GameObject.Find("ButtonToggleSupplies").GetComponent<Button>();
+        //foodToggleButton = GameObject.Find("ButtonToggleFood").GetComponent<Button>();
+        //waterTradeButton = GameObject.Find("ButtonTradeWater").GetComponent<Button>();
+        //suppliesTradeButton = GameObject.Find("ButtonTradeSupplies").GetComponent<Button>();
+        //foodTradeButton = GameObject.Find("ButtonTradeFood").GetComponent<Button>();
+        //keyTradeButton = GameObject.Find("ButtonTradeKey").GetComponent<Button>();
+
+        inventoryWaterText = FindInChildren(localPlayer, "InventoryTextWater").GetComponent<TMP_Text>();
+        inventorySuppliesText = FindInChildren(localPlayer, "InventoryTextSupplies").GetComponent<TMP_Text>();
+        inventoryFoodText = FindInChildren(localPlayer, "InventoryTextFood").GetComponent<TMP_Text>();
+        inventoryKeyText = FindInChildren(localPlayer, "InventoryTextKey").GetComponent<TMP_Text>();
+
+        waterCostText = FindInChildren(localPlayer, "CostTextWater").GetComponent<TMP_Text>();
+        suppliesCostText = FindInChildren(localPlayer, "CostTextSupplies").GetComponent<TMP_Text>();
+        foodCostText = FindInChildren(localPlayer, "CostTextFood").GetComponent<TMP_Text>();
+        keyWaterCostText = FindInChildren(localPlayer, "CostTextKeyWater").GetComponent<TMP_Text>();
+        keySuppliesCostText = FindInChildren(localPlayer, "CostTextKeySupplies").GetComponent<TMP_Text>();
+        keyFoodCostText = FindInChildren(localPlayer, "CostTextKeyFood").GetComponent<TMP_Text>();
+
+        waterTradeImage = FindInChildren(localPlayer, "ImageWaterTrade").GetComponent<Image>();
+        suppliesTradeImage = FindInChildren(localPlayer, "ImageSuppliesTrade").GetComponent<Image>();
+        foodTradeImage = FindInChildren(localPlayer, "ImageFoodTrade").GetComponent<Image>();
+
+        waterToggleButton = FindInChildren(localPlayer, "ButtonToggleWater").GetComponent<Button>();
+        suppliesToggleButton = FindInChildren(localPlayer, "ButtonToggleSupplies").GetComponent<Button>();
+        foodToggleButton = FindInChildren(localPlayer, "ButtonToggleFood").GetComponent<Button>();
+        waterTradeButton = FindInChildren(localPlayer, "ButtonTradeWater").GetComponent<Button>();
+        suppliesTradeButton = FindInChildren(localPlayer, "ButtonTradeSupplies").GetComponent<Button>();
+        foodTradeButton = FindInChildren(localPlayer, "ButtonTradeFood").GetComponent<Button>();
+        keyTradeButton = FindInChildren(localPlayer, "ButtonTradeKey").GetComponent<Button>();
 
         waterTradeImage.sprite = suppliesSprite;
         suppliesTradeImage.sprite = foodSprite;
@@ -113,7 +236,7 @@ public class ShopUI : MonoBehaviour
         InventoryActions.OnShopInteract += OnShopOpen;
         InventoryActions.OnShopClose += OnShopClose;
 
-        ui.SetActive(false);
+        uiShop.SetActive(false);
     }
 
     private void OnShopOpen()
@@ -124,7 +247,7 @@ public class ShopUI : MonoBehaviour
         GetPlayerResources();
         CheckResourceRequirments();
         UpdateUI();
-        ui.SetActive(true);
+        uiShop.SetActive(true);
     }
 
     private void OnShopClose()
@@ -132,7 +255,7 @@ public class ShopUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        ui.SetActive(false);
+        uiShop.SetActive(false);
     }
 
     private void GetPlayerResources()
@@ -353,5 +476,16 @@ public class ShopUI : MonoBehaviour
         }
 
         CheckFoodTradeRequirement();    
+    }
+
+    public GameObject FindInChildren(GameObject gameObjectToCheck, string name)
+    {
+        foreach (var currentObject in gameObjectToCheck.GetComponentsInChildren<Transform>())
+        {
+            if (currentObject.name == name)
+                return currentObject.gameObject;
+        }
+
+        return null;
     }
 }

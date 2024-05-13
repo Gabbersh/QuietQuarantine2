@@ -34,6 +34,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool useFlashlight = true;
 
     private bool IsShopOpen = false;
+    private bool IsStashOpen = false;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -255,6 +256,7 @@ public class FirstPersonController : NetworkBehaviour
             quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
 
             InventoryActions.OnShopInteract += OpenShop;
+            InventoryActions.OnStashInteraction += OpenStash;
         }
         else
         {
@@ -274,7 +276,12 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+            //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+            if (closeMenus)
+            {
+                CloseShop();
+                CloseStash();
+            }
 
             if (CanMove)
             {
@@ -298,11 +305,6 @@ public class FirstPersonController : NetworkBehaviour
 
                 if (toggleInventory) 
                     HandleInventoryToggle();
-
-                if (closeMenus)
-                {
-                    CloseShop();
-                }
 
                 if (useFootsteps)
                     HandleFootsteps();
@@ -721,6 +723,12 @@ public class FirstPersonController : NetworkBehaviour
         characterController.Move(moveDirection * Time.deltaTime);
     }
 
+    private void OpenStash()
+    {
+        IsStashOpen = true;
+        CanMove = false;
+    }
+
     private void OpenShop()
     {
         IsShopOpen = true;
@@ -736,7 +744,15 @@ public class FirstPersonController : NetworkBehaviour
             InventoryActions.OnShopClose();
         }
     }
-
+    private void CloseStash()
+    {
+        if (IsStashOpen)
+        {
+            IsStashOpen = false;
+            CanMove = true;
+            InventoryActions.OnStashClose();
+        }
+    }
     private IEnumerator RegenerateHealth()
     {
         yield return new WaitForSeconds(timeBeforeRegenStarts);

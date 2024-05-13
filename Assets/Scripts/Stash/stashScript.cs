@@ -13,10 +13,10 @@ public class stashScript : InteractableObject
 
     }
 
-    void OnTriggerExit(Collider other)
-    {
-        InventoryActions.OnStashExit();
-    }
+    //void OnTriggerExit(Collider other)
+    //{
+    //    InventoryActions.OnStashExit();
+    //}
 
     public override void OnFocus()
     {
