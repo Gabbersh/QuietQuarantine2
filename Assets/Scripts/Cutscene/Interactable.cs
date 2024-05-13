@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEditor.EditorTools;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public abstract class Interactable : MonoBehaviour
 {
@@ -14,14 +17,50 @@ public abstract class Interactable : MonoBehaviour
     private bool doorInteractable = false;
 
     public bool DoorInteractable { get { return doorInteractable; } set { doorInteractable = value; } }
+
+    private List<GameObject> playersInteracted = new();
+
     private void OnTriggerEnter(Collider other)
     {
+        if (playersInteracted.Contains(other.gameObject)) return;
+
         if (other.CompareTag("Player"))
         {
-            interactableUI.gameObject.SetActive(true);
-            LeanTween.cancel(interactableUI.gameObject);
-            LeanTween.alphaCanvas(interactableUI, 1, 1);
-            playerWithInRange = true;
+            var inventory = FindInChildren(other.gameObject, "Inventory").GetComponent<Inventory>();
+            if (inventory.KeyAmount > 0)
+            {
+                interactableUI.gameObject.SetActive(true);
+                LeanTween.cancel(interactableUI.gameObject);
+                LeanTween.alphaCanvas(interactableUI, 1, 1);
+                playerWithInRange = true;
+            }  
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (playersInteracted.Contains(other.gameObject)) return;
+
+        if (playerWithInRange && Input.GetKeyUp(KeyCode.E))
+        {
+            Activate();
+            Debug.Log($"Door is {DoorInteractable}");
+            playersInteracted.Add(other.gameObject);
+            FindInChildren(other.gameObject, "Inventory").GetComponent<Inventory>().KeyAmount--;
+
+            if (DoorInteractable == false)
+            {
+                lockedDoorUI.gameObject.SetActive(true);
+                LeanTween.cancel(lockedDoorUI.gameObject);
+                LeanTween.alphaCanvas(lockedDoorUI, 1, 1);
+            }
+            else
+            {
+                //unlockedDoorUI.gameObject.SetActive(true);
+                //LeanTween.cancel(unlockedDoorUI.gameObject);
+                //LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
+                Environment.Exit(0);
+            }
         }
     }
 
@@ -32,24 +71,7 @@ public abstract class Interactable : MonoBehaviour
 
     private void Update()
     {
-        if (playerWithInRange && Input.GetKeyUp(KeyCode.E))
-        {
-            Activate();
-            Debug.Log($"Door is {DoorInteractable}");
-            //Debug.Log("Is door 0 unlocked? " + isDoor0Unlocked);
-            if (DoorInteractable == false)
-            {
-                lockedDoorUI.gameObject.SetActive(true);
-                LeanTween.cancel(lockedDoorUI.gameObject);
-                LeanTween.alphaCanvas(lockedDoorUI, 1, 1);
-            }
-            else
-            {
-                unlockedDoorUI.gameObject.SetActive(true);
-                LeanTween.cancel(unlockedDoorUI.gameObject);
-                LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
-            }
-        }
+        
     }
     public virtual void Activate()
     {
@@ -79,5 +101,16 @@ public abstract class Interactable : MonoBehaviour
     private void UIHide()
     {
 
+    }
+
+    public GameObject FindInChildren(GameObject gameObjectToCheck, string name)
+    {
+        foreach (var currentObject in gameObjectToCheck.GetComponentsInChildren<Transform>())
+        {
+            if (currentObject.name == name)
+                return currentObject.gameObject;
+        }
+
+        return null;
     }
 }

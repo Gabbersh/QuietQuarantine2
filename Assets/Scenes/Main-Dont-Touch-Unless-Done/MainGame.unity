@@ -27390,7 +27390,7 @@ MonoBehaviour:
     type: 3}
   spawnedCollectables: []
   spawns: {fileID: 811441849}
-  monstersToSpawn: 3
+  monstersToSpawn: 0
   throwablesToSpawn: 3
   collectablesToSpawn: 100
 --- !u!4 &811441851
