@@ -8,6 +8,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using QFSW.QC;
+using UnityEngine.SceneManagement;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -219,7 +220,10 @@ public class FirstPersonController : NetworkBehaviour
         {
             instance = this;
 
-            transform.position = new Vector3(150, 100, 150);
+            transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
+
+
+
             //Debug.Log("Position set to: " + transform.position);
             Physics.SyncTransforms();
 
@@ -272,6 +276,9 @@ public class FirstPersonController : NetworkBehaviour
 
         if (IsOwner)
         {
+            if (SceneManager.GetActiveScene().name != "MainGame") Gravity = 0;
+            else Gravity = 30;
+
             //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
 
             if (CanMove)
