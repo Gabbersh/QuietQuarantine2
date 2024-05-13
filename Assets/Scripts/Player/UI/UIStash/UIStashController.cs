@@ -239,6 +239,7 @@ public class UIStashController : NetworkBehaviour
         GetStashAmounts();
         UpdateInventoryFields();
         UpdateStashFields();
+        UpdateTransactionFields();
     }
 
     private void GetStashAmounts()
@@ -335,6 +336,13 @@ public class UIStashController : NetworkBehaviour
         inventoryKeyText.text = inventoryKey.ToString();
     }
 
+    private void UpdateTransactionFields()
+    {
+        transactionWaterText.text = transactionWater.ToString();
+        transactionSuppliesText.text = transactionSupplies.ToString();
+        transactionFoodText.text = transactionFood.ToString();
+        transactionKeyText.text = transactionKey.ToString();
+    }
     private void Deposit()
     {
         if (transactionWater >= inventoryWater) { transactionWater = inventoryWater; }

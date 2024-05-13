@@ -20,6 +20,7 @@ public class FirstPersonController : NetworkBehaviour
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
     private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
+    private bool CloseMenu => Input.GetKeyDown(EscapeKey);
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -34,6 +35,9 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool useStamina = true;
     [SerializeField] private bool useFlashlight = true;
 
+    private bool isShopOpen = false;
+    private bool isStashOpen = false;
+
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
@@ -45,6 +49,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
+    [SerializeField] private KeyCode EscapeKey = KeyCode.Escape;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -257,6 +262,9 @@ public class FirstPersonController : NetworkBehaviour
 
             quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
             defaultHelmetYPos = characterHelmet.transform.localPosition.y;
+
+            InventoryActions.OnShopInteract += OnShopOpen;
+            InventoryActions.OnStashInteraction += OnStashOpen;
         }
         else
         {
@@ -277,7 +285,13 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+            //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+
+            if(CloseMenu)
+            {
+                OnShopClose();
+                OnStashClose();
+            }
 
             if (CanMove)
             {
@@ -726,6 +740,38 @@ public class FirstPersonController : NetworkBehaviour
             moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
 
         characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void OnShopOpen()
+    {
+        CanMove = false;
+        isShopOpen = true;
+    }
+
+    private void OnShopClose()
+    {
+        if(isShopOpen)
+        {
+            CanMove = true;
+            isShopOpen = false;
+            InventoryActions.OnShopClose();
+        }
+    }
+
+    private void OnStashOpen()
+    {
+        CanMove = false;
+        isStashOpen = true;
+    }
+
+    private void OnStashClose()
+    {
+        if(isStashOpen)
+        {
+            CanMove = true;
+            isStashOpen = false;
+            InventoryActions.OnStashClose();
+        }
     }
 
     private IEnumerator RegenerateHealth()

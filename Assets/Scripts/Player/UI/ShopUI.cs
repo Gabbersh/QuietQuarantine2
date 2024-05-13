@@ -244,7 +244,6 @@ public class ShopUI : NetworkBehaviour
         Cursor.lockState = CursorLockMode.Confined;
         Cursor.visible = true;
 
-        GetPlayerResources();
         CheckResourceRequirments();
         UpdateUI();
         uiShop.SetActive(true);
@@ -270,6 +269,8 @@ public class ShopUI : NetworkBehaviour
 
     private void UpdateUI()
     {
+        GetPlayerResources();
+
         inventoryWaterText.text = waterAmount.ToString();
         inventorySuppliesText.text = suppliesAmount.ToString();
         inventoryFoodText.text = foodAmount.ToString();
@@ -389,6 +390,8 @@ public class ShopUI : NetworkBehaviour
             default:
                 break;
         }
+
+        UpdateUI();
     }
 
     private void WaterTrade()
