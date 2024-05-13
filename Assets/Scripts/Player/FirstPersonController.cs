@@ -290,13 +290,13 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
-            //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
 
             if(CloseMenu)
             {
                 OnShopClose();
                 OnStashClose();
             }
+
             if (SceneManager.GetActiveScene().name != "MainGame") Gravity = 0;
             else Gravity = 30;
 
