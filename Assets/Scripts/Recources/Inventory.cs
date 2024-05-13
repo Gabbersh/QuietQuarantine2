@@ -7,11 +7,10 @@ using Unity.Netcode;
 public class Inventory : NetworkBehaviour 
 {
 
-    [SerializeField] private int waterAmount;
-    [SerializeField] private int medicineAmount;
-    [SerializeField] private int foodAmount;
-    [SerializeField] private int keyAmount;
-
+    private int waterAmount;
+    private int medicineAmount;
+    private int foodAmount;
+    private int keyAmount;
 
     private int stashWater;
     private int stashMedicine;
