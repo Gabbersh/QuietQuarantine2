@@ -28,7 +28,7 @@ public class HuntState : StateMachineBehaviour
         agent.speed = monsterSpeed.ChaseSpeed;
 
         chaseTimer = 10;
-        reachDistance = 10f;
+        reachDistance = 12f;
 
         agent.ResetPath();
     }
@@ -79,6 +79,7 @@ public class HuntState : StateMachineBehaviour
                     if (rayHit.collider.gameObject.name == "Player")
                     {
                         animator.SetBool("isHunting", false);
+
                     }
                 }
             }

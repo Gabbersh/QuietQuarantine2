@@ -45,26 +45,10 @@ public class CrawlState : StateMachineBehaviour
             NavMesh.SamplePosition(agent.transform.position + randomPos, out navHit, 20f, NavMesh.AllAreas);
             agent.SetDestination(navHit.position);
         }
-
-        float distance = Vector3.Distance(player.transform.position, animator.transform.position);
-
-        //if (distance < chaseRange)
-        //{
-        //    animator.SetBool("isCrawling", false);
-        //    animator.SetBool("toCrawl", false);
-        //    animator.SetBool("isChasing", true);
-        //}
-
-        //timer -= Time.deltaTime;
-        //if (timer <= 0)
-        //{
-        //    animator.SetBool("isCrawling", false);
-        //    animator.SetBool("toCrawl", false);
-        //}
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        animator.SetBool("isPatrolling", false);
     }
 }

@@ -42,5 +42,8 @@ public class AttackState : StateMachineBehaviour
         animator.SetBool("isAttacking", false);
         animator.SetBool("isChasing", false);
         animator.SetBool("isHunting", false);
+        animator.SetBool("isPatrolling", true);
+        animator.SetBool("isCrawling", true);
+        animator.SetBool("toCrawl", true);
     }
 }

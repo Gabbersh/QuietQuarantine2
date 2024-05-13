@@ -29,7 +29,7 @@ public class ChaseState : StateMachineBehaviour
 
         agent.speed = monsterSpeed.ChaseSpeed;
 
-        reachDistance = 10f;
+        reachDistance = 12f;
 
         agent.ResetPath();
     }
@@ -47,11 +47,26 @@ public class ChaseState : StateMachineBehaviour
             animator.SetBool("isHunting", true);
             animator.SetBool("isChasing", false);
         }
+
+        IsStationary(animator);
+    }
+
+    public void IsStationary(Animator animator)
+    {
+        if (agent.velocity.magnitude < 0.1f)
+        {
+            animator.SetBool("isPatrolling", true);
+
+            animator.SetBool("isChasing", false);
+            animator.SetBool("isHunting", false);
+            animator.SetBool("isHearing", false);
+            agent.ResetPath();
+        }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-
+        
     }
 
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

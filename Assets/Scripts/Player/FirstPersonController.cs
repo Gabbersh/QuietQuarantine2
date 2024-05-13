@@ -11,6 +11,7 @@ using QFSW.QC;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Collections;
+using UnityEngine.SceneManagement;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -229,7 +230,10 @@ public class FirstPersonController : NetworkBehaviour
         {
             instance = this;
 
-            transform.position = new Vector3(150, 2, 150);
+            transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
+
+
+
             //Debug.Log("Position set to: " + transform.position);
             Physics.SyncTransforms();
 
@@ -260,11 +264,12 @@ public class FirstPersonController : NetworkBehaviour
                 child.enabled = false;
             }
 
-            quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
             defaultHelmetYPos = characterHelmet.transform.localPosition.y;
 
             InventoryActions.OnShopInteract += OnShopOpen;
             InventoryActions.OnStashInteraction += OnStashOpen;
+            //quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
+            
         }
         else
         {
@@ -292,6 +297,10 @@ public class FirstPersonController : NetworkBehaviour
                 OnShopClose();
                 OnStashClose();
             }
+            if (SceneManager.GetActiveScene().name != "MainGame") Gravity = 0;
+            else Gravity = 30;
+
+            //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
 
             if (CanMove)
             {
@@ -715,7 +724,6 @@ public class FirstPersonController : NetworkBehaviour
 
             // Pass the sound to the Sounds manager
             Sounds.MakeSound(sound);
-            Debug.Log($"Sound: with pos {sound.pos} and range {sound.range} created!");
         }
     }
 

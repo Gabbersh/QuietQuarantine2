@@ -17,7 +17,5 @@ public class TestSoundMaker : MonoBehaviour
         sound.Initialize(transform.position, soundRange);
 
         Sounds.MakeSound(sound);
-
-        print($"Sound: with pos {sound.pos} and range {sound.range} created!");
     }
 }
