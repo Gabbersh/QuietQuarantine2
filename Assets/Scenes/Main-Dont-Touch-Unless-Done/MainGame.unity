@@ -39966,6 +39966,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
     - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_IsTrigger
@@ -39979,11 +39994,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1175308744}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1175308741 stripped
 GameObject:
@@ -39997,27 +40008,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1175308740}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1175308743 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1175308740}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1175308744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1175308743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &1175559558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46244,6 +46234,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
     - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_IsTrigger
@@ -46257,11 +46262,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1344124528}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1344124525 stripped
 GameObject:
@@ -46275,27 +46276,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1344124524}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1344124527 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1344124524}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1344124528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1344124527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &1345114609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48618,6 +48598,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
     - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_IsTrigger
@@ -48641,10 +48636,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1402516447}
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1402516446}
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1402516441 stripped
 GameObject:
@@ -48655,12 +48646,6 @@ GameObject:
 --- !u!4 &1402516442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3104198929745507288, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1402516440}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1402516443 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
     type: 3}
   m_PrefabInstance: {fileID: 1402516440}
   m_PrefabAsset: {fileID: 0}
@@ -48676,21 +48661,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1402516440}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1402516446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402516443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!64 &1402516447
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -49240,16 +49210,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 892839223}
     m_Modifications:
-    - target: {fileID: 2388527078784255545, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 107.38
-      objectReference: {fileID: 0}
-    - target: {fileID: 2388527078784255545, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 78.64
-      objectReference: {fileID: 0}
     - target: {fileID: 3104198929745507288, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -49300,21 +49260,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
     - target: {fileID: 8613714558841671272, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_Name
@@ -49323,11 +49283,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1427276673}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1427276670 stripped
 GameObject:
@@ -49341,27 +49297,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1427276669}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1427276672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1427276669}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1427276673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427276672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &1428177605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -50144,6 +50079,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
     - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_IsTrigger
@@ -50157,11 +50107,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1436222727}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1436222724 stripped
 GameObject:
@@ -50175,27 +50121,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1436222723}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1436222726 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1436222723}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1436222727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436222726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1 &1437130543
 GameObject:
   m_ObjectHideFlags: 0
@@ -74321,6 +74246,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
     - target: {fileID: 8006674481848416434, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
       propertyPath: m_IsTrigger
@@ -74334,11 +74274,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2097020474}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &2097020471 stripped
 GameObject:
@@ -74352,27 +74288,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2097020470}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2097020473 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 2097020470}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2097020474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097020473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &2103174938
 PrefabInstance:
   m_ObjectHideFlags: 0

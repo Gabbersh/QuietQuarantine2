@@ -56,10 +56,9 @@ public abstract class Interactable : MonoBehaviour
             }
             else
             {
-                //unlockedDoorUI.gameObject.SetActive(true);
-                //LeanTween.cancel(unlockedDoorUI.gameObject);
-                //LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
-                Environment.Exit(0);
+                unlockedDoorUI.gameObject.SetActive(true);
+                LeanTween.cancel(unlockedDoorUI.gameObject);
+                LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
             }
         }
     }

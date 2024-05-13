@@ -25,7 +25,6 @@ public class RandomizedDoors : MonoBehaviour
         for (int i = 0; i < doors.Count; i++)
         {
             doors[i].gameObject.GetComponentInChildren<WinSceneStart>().DoorInteractable = doorStates[i];
-          
         }
 
     }
