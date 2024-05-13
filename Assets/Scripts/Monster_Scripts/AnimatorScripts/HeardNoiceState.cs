@@ -29,6 +29,7 @@ public class HeardNoiceState : StateMachineBehaviour
 
         if (animator.GetBool("isHearing") && heardSound != null)
         {
+
             GoToSoundPosition();
 
             if (distance < 5)
@@ -37,7 +38,7 @@ public class HeardNoiceState : StateMachineBehaviour
             }
         }
 
-        IsStationary(animator);
+        //IsStationary(animator);
     }
 
     private void GoToSoundPosition()
@@ -55,7 +56,7 @@ public class HeardNoiceState : StateMachineBehaviour
         if (agent.velocity.magnitude < 0.1f)
         {
             animator.SetBool("isPatrolling", true);
-            animator.SetBool("isHearing", false);
+            //animator.SetBool("isHearing", false);
             //animator.SetBool("isCrawling", true);
             //animator.SetBool("toCrawl", true);
         }
@@ -65,6 +66,6 @@ public class HeardNoiceState : StateMachineBehaviour
     {
         ////heardSound = null;
         //animator.SetBool("isHearing", false);
-        //agent.ResetPath();
+        agent.ResetPath();
     }
 }

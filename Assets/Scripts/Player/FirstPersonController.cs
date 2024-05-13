@@ -683,7 +683,6 @@ public class FirstPersonController : NetworkBehaviour
 
             // Pass the sound to the Sounds manager
             Sounds.MakeSound(sound);
-            Debug.Log($"Sound: with pos {sound.pos} and range {sound.range} created!");
         }
     }
 

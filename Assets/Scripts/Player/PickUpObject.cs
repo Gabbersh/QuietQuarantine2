@@ -88,7 +88,6 @@ public class PickUpObject : InteractableObject
 
     public override void OnLoseFocus()
     {
-        Debug.Log("Stopped Looking at throwbject");
         gameObject.GetComponent<OnFocusHighlight>().ToggleHighlight(false);
     }
 

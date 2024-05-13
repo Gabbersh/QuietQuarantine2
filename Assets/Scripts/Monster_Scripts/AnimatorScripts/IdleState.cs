@@ -25,7 +25,7 @@ public class IdleState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         animator.SetBool("isPatrolling", false);
 
-        timer = 6;
+        timer = 10;
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -35,7 +35,7 @@ public class IdleState : StateMachineBehaviour
         {
             animator.SetBool("isPatrolling", true);
             animator.SetBool("isCrawling", true);
-            animator.SetBool("toCrawl", true);
+            //animator.SetBool("toCrawl", true);
         }
     }
 
