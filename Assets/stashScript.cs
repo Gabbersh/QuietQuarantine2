@@ -15,7 +15,7 @@ public class StashScript : InteractableObject
 
     private string focusText = "Press E to Stash";
 
-    public void Awake()
+    private void Start()
     {
         waterAmount = 0;
         medicineAmount = 0;

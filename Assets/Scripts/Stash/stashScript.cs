@@ -7,11 +7,6 @@ public class stashScript : InteractableObject
    
     private string focusText = "Press E to Stash";
 
-    public void Awake()
-    {
-        
-
-    }
 
     //void OnTriggerExit(Collider other)
     //{
