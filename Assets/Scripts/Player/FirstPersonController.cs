@@ -249,7 +249,7 @@ public class FirstPersonController : NetworkBehaviour
                 child.enabled = false;
             }
 
-            quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
+            //quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
             
         }
         else
@@ -272,7 +272,7 @@ public class FirstPersonController : NetworkBehaviour
 
         if (IsOwner)
         {
-            CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+            //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
 
             if (CanMove)
             {
