@@ -27,18 +27,26 @@ public class Hearing : NetworkBehaviour, IHear
 
     [SerializeField] CinemachineVirtualCamera deathCam;
 
+    //Slutför trigger och ta bort ljud inom triggern. Lägg till ljudeffekter på monster.
+    private Collider safezoneCollider;
+
     private Transform respawnPoint;
-    private Transform deathPoint; // Add this line to store reference to deathPoint
+    private Transform deathPoint; 
 
     private void Start()
     {
-        // Find the deathPoint object in the hierarchy
         deathPoint = GameObject.Find("RespawnPoint").transform;
 
-        // If deathPoint is not found, log an error
         if (deathPoint == null)
         {
             Debug.LogError("Death Point object not found in the hierarchy!");
+        }
+
+        safezoneCollider = GameObject.FindGameObjectWithTag("Safezone").GetComponent<Collider>();
+
+        if (safezoneCollider == null)
+        {
+            Debug.LogError("Safezone collider not found!");
         }
     }
 
@@ -87,7 +95,6 @@ public class Hearing : NetworkBehaviour, IHear
     {
         if (hearingCollider == null)
         {
-            Debug.LogError("Hearing collider not found!");
             return;
         }
 
@@ -99,18 +106,15 @@ public class Hearing : NetworkBehaviour, IHear
         RaycastHit rayHit;
         if (Physics.Raycast(centerOfHearing, directionToPlayer, out rayHit))
         {
-            Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
-
             if (rayHit.collider.gameObject.CompareTag("Player"))
             {
-                //Måste kontrolleras om fungerar.
                 if(Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)
                 {
                     animator.SetBool("isAttacking", true);
+
                 }
                 else
                 {
-                    Debug.Log("Player spotted!");
                     animator.SetBool("isCrawling", false);
                     animator.SetBool("toCrawl", false);
                     animator.SetBool("isHearing", false);
@@ -214,9 +218,14 @@ public class Hearing : NetworkBehaviour, IHear
 
     public void RespondToSound(Sound sound)
     {
-        if(animator.GetBool("isChasing") == false)
+        if (animator.GetBool("isChasing") == false)
         {
-            print(name + " responding to sound at " + sound.pos);
+            // Check if the sound position is inside the safezone collider bounds
+            if (safezoneCollider.bounds.Contains(sound.pos))
+            {
+                // Sound was made inside the safezone, don't respond
+                return;
+            }
 
             animator.SetBool("isHearing", true);
 
