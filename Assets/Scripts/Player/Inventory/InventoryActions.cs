@@ -14,4 +14,7 @@ public static class InventoryActions
     public static Action<int[]> OnDeposit;
     public static Action<int[]> OnWithdraw;
     public static Action<bool> OnStashInteraction;
+
+    public static Action OnShopInteract;
+    public static Action OnShopClose;
 }

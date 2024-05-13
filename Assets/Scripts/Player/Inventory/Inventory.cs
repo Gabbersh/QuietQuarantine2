@@ -86,7 +86,7 @@ public class Inventory : NetworkBehaviour
 
     public int[] GetResourceAmounts()
     {
-        return new int[] { waterAmount, medicineAmount, foodAmount };
+        return new int[] { waterAmount, medicineAmount, foodAmount, keyAmount };
     }
     //public void keyInInv()
     //{
@@ -95,6 +95,52 @@ public class Inventory : NetworkBehaviour
 
     //    }
     //}
+
+    public void Trade(Resource[] trade, Resource receieve, int[] prices)
+    {
+        for(int i = 0; i < trade.Length; i++)
+        {
+            switch(trade[i])
+            {
+                case Resource.water:
+                    waterAmount -= prices[i];
+                    break;
+
+                case Resource.supplies:
+                    medicineAmount -= prices[i];
+                    break;
+
+                case Resource.food: 
+                    foodAmount -= prices[i];
+                    break;
+
+                default: 
+                    break;
+            }
+        }
+
+        switch (receieve)
+        {
+            case Resource.water:
+                waterAmount++;
+                break;
+
+            case Resource.supplies:
+                medicineAmount++;
+                break;
+
+            case Resource.food:
+                foodAmount++;
+                break;
+
+            case Resource.key:
+                keyAmount++;
+                break;
+
+            default : 
+                break;
+        }
+    }
 
     private void InventoryChanged()
     {
