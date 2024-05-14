@@ -50,7 +50,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
-    [SerializeField] private KeyCode EscapeKey = KeyCode.Escape;
+    [SerializeField] private KeyCode EscapeKey = KeyCode.R;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
