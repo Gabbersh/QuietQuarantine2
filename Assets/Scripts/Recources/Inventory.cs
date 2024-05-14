@@ -25,12 +25,12 @@ public class Inventory : NetworkBehaviour
     //private bool keyInInventory = false;
 
 
-    public void Awake()
+    public void Start()
     {
         waterAmount = 0;
         medicineAmount = 0;
         foodAmount = 0;
-        keyAmount = 0;
+        keyAmount = 100;
 
         stashWater = 0;
         stashMedicine = 0;
