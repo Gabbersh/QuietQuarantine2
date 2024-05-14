@@ -8,16 +8,19 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Test/Networking/Main-Debug-UI.unity
     guid: 55d1d9c43b1e42c4fae62d9c4eec5eb4
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main-Dont-Touch-Unless-Done/BootStrap.unity
     guid: 2a0cf04e5bb80974a8f012a66fe93169
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main-Dont-Touch-Unless-Done/NetBootStrap.unity
     guid: bc917dfdb00f89744a2660f5a52bb610
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main-Dont-Touch-Unless-Done/Menu.unity
     guid: 7816348857c1e0849ae8727037e2c443
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Main-Dont-Touch-Unless-Done/MainGame.unity
     guid: 264d929053ba7d046a7b1c8a526b39d5
+  - enabled: 1
+    path: Assets/Scenes/Test/InventoryTests/Main_UITest.unity
+    guid: ba84b3f842c468d429faa1571d612ea0
   m_configObjects: {}
