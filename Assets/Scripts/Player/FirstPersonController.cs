@@ -677,8 +677,14 @@ public class FirstPersonController : NetworkBehaviour
             //kollar fr�n under spelaren, inte under kameran
             if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
-
-                footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length)]);
+                if(IsServer)
+                {
+                    SendSoundToClientRpc();
+                }
+                else
+                {
+                    PlaySoundToServerServerRpc();
+                }
 
                 //switch (hit.collider.tag)
                 //{
@@ -725,6 +731,18 @@ public class FirstPersonController : NetworkBehaviour
             // Pass the sound to the Sounds manager
             Sounds.MakeSound(sound);
         }
+    }
+
+    [ClientRpc]
+    private void SendSoundToClientRpc()
+    {
+        footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length)]);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void PlaySoundToServerServerRpc()
+    {
+        SendSoundToClientRpc();
     }
 
     private void ApplyFinalMovements()

@@ -30,7 +30,7 @@ public class Inventory : NetworkBehaviour
         waterAmount = 0;
         medicineAmount = 0;
         foodAmount = 0;
-        keyAmount = 100;
+        keyAmount = 0;
 
         stashWater = 0;
         stashMedicine = 0;
