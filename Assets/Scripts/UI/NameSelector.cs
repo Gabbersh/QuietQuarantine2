@@ -21,6 +21,8 @@ public class NameSelector : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             return;
         }
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         nameField.text = PlayerPrefs.GetString(PlayerNameKey, string.Empty);
         HandleNameChanged();
