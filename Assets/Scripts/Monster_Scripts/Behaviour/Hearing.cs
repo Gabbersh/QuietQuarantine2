@@ -8,10 +8,13 @@ using UnityEngine.SceneManagement;
 using Cinemachine;
 using Unity.Services.Lobbies.Models;
 using Unity.IO.LowLevel.Unsafe;
+using System.Linq;
+using Unity.Multiplayer.Tools.TestData.Definitions;
 
 public class Hearing : NetworkBehaviour, IHear
 {
     public GameObject player;
+    public NetworkVariable<NetworkObjectReference> currentTarget = new();
     private Collider hearingCollider;
     private Animator animator;
     private bool playerInTrigger, hearingSound;
@@ -70,7 +73,7 @@ public class Hearing : NetworkBehaviour, IHear
     // called when monster is spawned in by server
     public override void OnNetworkSpawn()
     {
-        if(NetworkManager.Singleton.IsServer )
+        if(NetworkManager.Singleton.IsServer)
         {
             Transform hearingRadius = transform.Find("HearingRadius");
 
@@ -80,16 +83,17 @@ public class Hearing : NetworkBehaviour, IHear
 
             animator = transform.GetComponent<Animator>();
 
-            foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
-            {
-                players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
-            }
+            //foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+            //{
+            //    players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
+            //}
 
-            connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
-            lastClientsCount = connectedClientsCount;
+            //connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+            //lastClientsCount = connectedClientsCount;
         }
-        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().GameObject();
     }
+
+
 
     public void CheckSight()
     {
@@ -99,16 +103,22 @@ public class Hearing : NetworkBehaviour, IHear
         }
 
         centerOfHearing = hearingCollider.bounds.center;
-        Vector3 centerOfPlayer = player.transform.position;
+        centerOfHearing.y = hearingCollider.bounds.center.y + hearingCollider.bounds.max.y / 4;
+        Vector3 centerOfPlayer = player.GetComponent<Collider>().transform.position;
+        centerOfPlayer.y = player.GetComponent<Collider>().bounds.max.y;
 
         Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
+
+        Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
 
         RaycastHit rayHit;
         if (Physics.Raycast(centerOfHearing, directionToPlayer, out rayHit))
         {
             if (rayHit.collider.gameObject.CompareTag("Player"))
             {
-                if(Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)
+                Debug.Log(Vector3.Distance(centerOfPlayer, centerOfHearing));
+
+                if (Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)
                 {
                     animator.SetBool("isAttacking", true);
 
@@ -130,7 +140,7 @@ public class Hearing : NetworkBehaviour, IHear
         {
             if (animator.GetBool("isAttacking"))
             {
-                player.GetComponent< FirstPersonController > ().enabled = false;
+                //player.GetComponent< FirstPersonController > ().enabled = false;
                 deathCam.enabled = true;
                 deathCam.Priority = 11;
                 StartCoroutine(RespawnAfterDelay(1f)); // Activate death cam for 1 second
@@ -155,25 +165,49 @@ public class Hearing : NetworkBehaviour, IHear
         player.GetComponent<FirstPersonController>().enabled = true;
     }
 
+    [ServerRpc(RequireOwnership = false)]
+    private void SetTargetServerRpc(NetworkObjectReference networkObject)
+    {
+        currentTarget.Value = networkObject;
+        SendTargetToClientRpc(networkObject);
+    }
+
+    [ClientRpc]
+    private void SendTargetToClientRpc(NetworkObjectReference networkObject)
+    {
+        currentTarget.Value = networkObject;
+    }
+
     void Update()
     {
+        players = GameObject.FindGameObjectsWithTag("Player").ToList();
+
+        if (currentTarget.Value.TryGet(out NetworkObject targetNetworkObject))
+        {
+            player = targetNetworkObject.gameObject;
+            Debug.Log($"Set player to {targetNetworkObject.gameObject}");
+        }
+        else
+        {
+            Debug.Log($"player was null");
+        }
+
         if (NetworkManager.Singleton.IsServer)
         {
-            connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+            //connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
 
-            // update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
-            if (connectedClientsCount != lastClientsCount)
-            {
-                lastClientsCount = connectedClientsCount;
+            //// update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
+            //if (connectedClientsCount != lastClientsCount)
+            //{
+            //    lastClientsCount = connectedClientsCount;
 
-                players.Clear();
+            //    players.Clear();
 
-                foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
-                {
-                    players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
-                }
-            }
-
+            //    foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
+            //    {
+            //        players.Add(NetworkManager.Singleton.SpawnManager.GetPlayerNetworkObject(uid).GameObject());
+            //    }
+            //}
 
             double distance = Mathf.Infinity;
 
@@ -184,7 +218,7 @@ public class Hearing : NetworkBehaviour, IHear
 
                 if (currentDistance < distance)
                 {
-                    this.player = player;
+                    SetTargetServerRpc(player.GetComponent<NetworkObject>());
                     distance = currentDistance;
                 }
             }
@@ -212,7 +246,6 @@ public class Hearing : NetworkBehaviour, IHear
             //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
             //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
-            //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
         }
     }
 
