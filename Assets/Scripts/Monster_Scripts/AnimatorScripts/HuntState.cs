@@ -18,7 +18,7 @@ public class HuntState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         //player = GameObject.FindGameObjectWithTag("Player").transform;
         //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
-        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+        player = animator.gameObject.GetComponent<Hearing>().player;
 
         hearingCollider = animator.transform.Find("HearingRadius").GetComponent<Collider>();
 
@@ -36,7 +36,7 @@ public class HuntState : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+        player = animator.gameObject.GetComponent<Hearing>().player;
 
         float distance = Vector3.Distance(agent.transform.position, player.transform.position);
 
@@ -76,7 +76,7 @@ public class HuntState : StateMachineBehaviour
                 {
                     Debug.Log("Raycast hit: " + rayHit.collider.gameObject.name);
 
-                    if (rayHit.collider.gameObject.name == "Player")
+                    if (rayHit.collider.gameObject.CompareTag("Player"))
                     {
                         animator.SetBool("isHunting", false);
 

@@ -6,14 +6,12 @@ using UnityEngine.AI;
 public class HeardNoiceState : StateMachineBehaviour
 {
     private NavMeshAgent agent;
-    private Transform player;
     private Sound heardSound;
     private MonsterSpeed monsterSpeed;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
 
         GameObject monster = animator.gameObject;
         monsterSpeed = monster.GetComponent<MonsterSpeed>();
@@ -37,8 +35,6 @@ public class HeardNoiceState : StateMachineBehaviour
                 animator.SetBool("isHearing", false);
             }
         }
-
-        //IsStationary(animator);
     }
 
     private void GoToSoundPosition()
@@ -56,16 +52,11 @@ public class HeardNoiceState : StateMachineBehaviour
         if (agent.velocity.magnitude < 0.1f)
         {
             animator.SetBool("isPatrolling", true);
-            //animator.SetBool("isHearing", false);
-            //animator.SetBool("isCrawling", true);
-            //animator.SetBool("toCrawl", true);
         }
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        ////heardSound = null;
-        //animator.SetBool("isHearing", false);
         agent.ResetPath();
     }
 }

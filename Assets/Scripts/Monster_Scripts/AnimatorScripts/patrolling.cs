@@ -23,7 +23,7 @@ public class patrolling : StateMachineBehaviour
         timer = 0;
 
         agent = animator.GetComponent<NavMeshAgent>();
-        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
+        player = animator.gameObject.GetComponent<Hearing>().player;
         //player = GameObject.FindGameObjectWithTag("Player").transform;
 
         GameObject monster = animator.gameObject;

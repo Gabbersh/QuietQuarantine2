@@ -8,20 +8,10 @@ public class CrawlState : StateMachineBehaviour
 {
     NavMeshAgent agent;
     private MonsterSpeed monsterSpeed;
-    
-    private GameObject player;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent = animator.GetComponent<NavMeshAgent>();
-
-        //player = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject.GetComponent<Hearing>().player;
-        player = GameObject.Find("Jeff(Clone)").GetComponent<Hearing>().player; // GHETTO FIX
-
-        Debug.Log(player);
-
-        //player = GameObject.FindGameObjectWithTag("Player").transform;
-
 
         GameObject monster = animator.gameObject;
         monsterSpeed = monster.GetComponent<MonsterSpeed>();

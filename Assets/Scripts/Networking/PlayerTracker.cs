@@ -11,6 +11,7 @@ public class PlayerTracker : NetworkBehaviour
     public event PlayerJoinedEventHandler OnPlayerLeft;
 
     public NetworkVariable<int> playerCount = new();
+    public NetworkVariable<NetworkObjectReference> playerObjectReference = new();
 
     public override void OnNetworkSpawn()
     {
