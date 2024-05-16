@@ -8,6 +8,9 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.Experimental.GlobalIllumination;
 using QFSW.QC;
+using TMPro;
+using Unity.Services.Authentication;
+using Unity.Collections;
 using UnityEngine.SceneManagement;
 
 public class FirstPersonController : NetworkBehaviour
@@ -18,6 +21,7 @@ public class FirstPersonController : NetworkBehaviour
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
     private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
+    private bool CloseMenu => Input.GetKeyDown(EscapeKey);
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -32,6 +36,9 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool useStamina = true;
     [SerializeField] private bool useFlashlight = true;
 
+    private bool isShopOpen = false;
+    private bool isStashOpen = false;
+
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
@@ -43,6 +50,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
+    [SerializeField] private KeyCode EscapeKey = KeyCode.R;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -100,8 +108,10 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float sprintBobAmount = 0.05f;
     [SerializeField] private float crouchBobSpeed = 8f;
     [SerializeField] private float crouchBobAmount = 0.01f;
+    [SerializeField] private float helmetBobScale = 0.05f; // hur mycket ska hjälmen boba... bobba..?
     private float defaultYPos = 0;
     private float bobTimer;
+    private float defaultHelmetYPos;
 
     [Header("Zoom Parameters")]
     [SerializeField] private float timeToZoom = 0.3f;
@@ -173,6 +183,7 @@ public class FirstPersonController : NetworkBehaviour
     [Header("Character")]
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject playerCharacter;
+    [SerializeField] private GameObject characterHelmet;
 
     // LOCAL Y of playerCharacter
     // -0.4 y unCrouched
@@ -191,16 +202,17 @@ public class FirstPersonController : NetworkBehaviour
 
     public static FirstPersonController instance;
 
+    // förlåt gabbe att jag fuckat din fina fpc! </3
     [Header("Console")]
     private QuantumConsole quantumConsole;
     private bool isFlying;
+
     public bool IsFlying { get { return isFlying; } set { isFlying = value; } }
     public float Gravity { get { return gravity; } set { gravity = value; } }
     public bool UseStamina { get { return useStamina; } set {  useStamina = value; } }
     public float WalkSpeed { get { return walkSpeed; } set {  walkSpeed = value; } }
     public float SprintSpeed {  get { return sprintSpeed; } set {  sprintSpeed = value; } }
     public float CrouchSpeed { get { return crouchSpeed; } set {  crouchSpeed = value; } }
-
 
     private void OnEnable()
     {
@@ -214,8 +226,6 @@ public class FirstPersonController : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        //if(!IsOwner) return;
-
         if (IsOwner)
         {
             instance = this;
@@ -248,11 +258,16 @@ public class FirstPersonController : NetworkBehaviour
 
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
+
             foreach (var child in characterModel)
             {
                 child.enabled = false;
             }
 
+            defaultHelmetYPos = characterHelmet.transform.localPosition.y;
+
+            InventoryActions.OnShopInteract += OnShopOpen;
+            InventoryActions.OnStashInteraction += OnStashOpen;
             //quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
             
         }
@@ -261,6 +276,7 @@ public class FirstPersonController : NetworkBehaviour
             Flashlight.GetComponent<Light>().intensity = 0;
             vc.Priority = 0;
             HUD.SetActive(false);
+            characterHelmet.SetActive(false);
         }
     }
 
@@ -272,10 +288,15 @@ public class FirstPersonController : NetworkBehaviour
 
     void Update()
     {
-        //if(!IsOwner) return;
-
         if (IsOwner)
         {
+
+            if(CloseMenu)
+            {
+                OnShopClose();
+                OnStashClose();
+            }
+
             if (SceneManager.GetActiveScene().name != "MainGame") Gravity = 0;
             else Gravity = 30;
 
@@ -348,6 +369,15 @@ public class FirstPersonController : NetworkBehaviour
         else
         {
             playerCharacter.transform.localPosition = unCrouched;
+        }
+
+        // bob för hjälmen bara
+        if (Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f)
+        {
+            characterHelmet.transform.localPosition = new Vector3(
+                characterHelmet.transform.localPosition.x,
+                defaultHelmetYPos + Mathf.Sin(bobTimer) * (isCrouching ? crouchBobAmount : isSprinting ? sprintBobAmount : walkBobAmount) * helmetBobScale,
+                characterHelmet.transform.localPosition.z);
         }
     }
 
@@ -647,8 +677,14 @@ public class FirstPersonController : NetworkBehaviour
             //kollar fr�n under spelaren, inte under kameran
             if(Physics.Raycast(characterController.transform.position, Vector3.down, out RaycastHit hit, 3))
             {
-
-                footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length)]);
+                if(IsServer)
+                {
+                    SendSoundToClientRpc();
+                }
+                else
+                {
+                    PlaySoundToServerServerRpc();
+                }
 
                 //switch (hit.collider.tag)
                 //{
@@ -697,6 +733,18 @@ public class FirstPersonController : NetworkBehaviour
         }
     }
 
+    [ClientRpc]
+    private void SendSoundToClientRpc()
+    {
+        footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length)]);
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void PlaySoundToServerServerRpc()
+    {
+        SendSoundToClientRpc();
+    }
+
     private void ApplyFinalMovements()
     {
         if (!characterController.isGrounded)
@@ -718,6 +766,38 @@ public class FirstPersonController : NetworkBehaviour
             moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
 
         characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void OnShopOpen()
+    {
+        CanMove = false;
+        isShopOpen = true;
+    }
+
+    private void OnShopClose()
+    {
+        if(isShopOpen)
+        {
+            CanMove = true;
+            isShopOpen = false;
+            InventoryActions.OnShopClose();
+        }
+    }
+
+    private void OnStashOpen()
+    {
+        CanMove = false;
+        isStashOpen = true;
+    }
+
+    private void OnStashClose()
+    {
+        if(isStashOpen)
+        {
+            CanMove = true;
+            isStashOpen = false;
+            InventoryActions.OnStashClose();
+        }
     }
 
     private IEnumerator RegenerateHealth()
