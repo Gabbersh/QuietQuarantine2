@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEditor.EditorTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -55,9 +56,10 @@ public abstract class Interactable : MonoBehaviour
             }
             else
             {
-                unlockedDoorUI.gameObject.SetActive(true);
-                LeanTween.cancel(unlockedDoorUI.gameObject);
-                LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
+                //unlockedDoorUI.gameObject.SetActive(true);
+                //LeanTween.cancel(unlockedDoorUI.gameObject);
+                //LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
+                Environment.Exit(0);
             }
         }
     }

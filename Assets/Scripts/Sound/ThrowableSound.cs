@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using System;
 
 public class ThrowableSound : NetworkBehaviour
 {
@@ -19,14 +18,9 @@ public class ThrowableSound : NetworkBehaviour
             if (source.isPlaying)
                 return;
 
-            if (IsServer)
-            {
-                PlaySoundToAllClientRpc();
-            }
-            else
-            {
-                PlaySoundToServerServerRpc();
-            }
+            //source.Play();
+            
+            PlaySoundToAllClientRpc();
 
             Sound sound = ScriptableObject.CreateInstance<Sound>();
             sound.Initialize(transform.position, soundRange);
@@ -37,16 +31,9 @@ public class ThrowableSound : NetworkBehaviour
             Invoke(nameof(EnableSound), initialCooldown);
         }
     }
-
     private void EnableSound()
     {
         canPlaySound = true;
-    }
-
-    [ServerRpc(RequireOwnership = false)]
-    private void PlaySoundToServerServerRpc()
-    {
-        PlaySoundToAllClientRpc();
     }
 
     [ClientRpc]
