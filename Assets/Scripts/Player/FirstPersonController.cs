@@ -87,6 +87,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float timeBeforeStaminaRegenStarts = 5;
     [SerializeField] private float staminaValueIncrement = 2;
     [SerializeField] private float staminaTimeIncrement = 0.1f;
+    [SerializeField] private float staminaBarHideTime = 3f;
+    private float staminaBarHideTimer = 0;
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
@@ -245,6 +247,8 @@ public class FirstPersonController : NetworkBehaviour
             currentHealth = maxHealth;
             currentStamina = maxStamina;
 
+            staminaBarHideTimer = staminaBarHideTime;
+
             pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
             Flashlight.GetComponent<Light>().intensity = maxIntensity;
@@ -264,7 +268,9 @@ public class FirstPersonController : NetworkBehaviour
             defaultHelmetYPos = characterHelmet.transform.localPosition.y;
 
             InventoryActions.OnShopInteract += OnShopOpen;
+            InventoryActions.OnShopClose += OnShopClose;
             InventoryActions.OnStashInteraction += OnStashOpen;
+            InventoryActions.OnStashClose += OnStashClose;
         }
         else
         {
@@ -289,8 +295,8 @@ public class FirstPersonController : NetworkBehaviour
 
             if(CloseMenu)
             {
-                OnShopClose();
-                OnStashClose();
+                CloseShop();
+                CloseStash();
             }
 
             if (CanMove)
@@ -505,8 +511,20 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleStamina()
     {
+        if(currentStamina >= maxStamina)
+        {
+            staminaBarHideTimer -= Time.deltaTime;
+            if( staminaBarHideTimer <= 0)
+            {
+                UIActions.OnStaminaClose();
+                staminaBarHideTimer = staminaBarHideTime;
+            }
+        }
+
         if (isSprinting && currentInput != Vector2.zero)
         {
+            UIActions.OnStaminaOpen();
+            staminaBarHideTimer = staminaBarHideTime;
 
             if(regeneratingStamina != null)
             {
@@ -745,35 +763,48 @@ public class FirstPersonController : NetworkBehaviour
     private void OnShopOpen()
     {
         CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         isShopOpen = true;
     }
 
     private void OnShopClose()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isShopOpen = false;
+    }
+    private void CloseShop()
+    {
         if(isShopOpen)
         {
-            CanMove = true;
-            isShopOpen = false;
             InventoryActions.OnShopClose();
         }
     }
-
     private void OnStashOpen()
     {
         CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         isStashOpen = true;
     }
 
     private void OnStashClose()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isStashOpen = false;
+    }
+
+    private void CloseStash()
+    {
         if(isStashOpen)
         {
-            CanMove = true;
-            isStashOpen = false;
             InventoryActions.OnStashClose();
         }
     }
-
     private IEnumerator RegenerateHealth()
     {
         yield return new WaitForSeconds(timeBeforeRegenStarts);
