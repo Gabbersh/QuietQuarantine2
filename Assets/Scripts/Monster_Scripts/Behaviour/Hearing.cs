@@ -10,6 +10,7 @@ using Unity.Services.Lobbies.Models;
 using Unity.IO.LowLevel.Unsafe;
 using System.Linq;
 using Unity.Multiplayer.Tools.TestData.Definitions;
+using System;
 
 public class Hearing : NetworkBehaviour, IHear
 {
@@ -28,11 +29,13 @@ public class Hearing : NetworkBehaviour, IHear
     private int connectedClientsCount;
     private int lastClientsCount;
 
-    private Vector3 centerOfHearing;
+    //private Vector3 centerOfHearing;
 
     [SerializeField] CinemachineVirtualCamera deathCam;
 
-    private Transform deathPoint; 
+    private Transform deathPoint;
+    [SerializeField] private Vector3 centerOfPlayer;
+    [SerializeField] private Vector3 centerOfHearing;
 
     private void Start()
     {
@@ -64,6 +67,14 @@ public class Hearing : NetworkBehaviour, IHear
         if (other.CompareTag("Player"))
         {
             playerInTrigger = true;
+            CheckSight();
+        }
+    }   
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
             CheckSight();
         }
     }
@@ -109,20 +120,20 @@ public class Hearing : NetworkBehaviour, IHear
         }
 
         centerOfHearing = hearingCollider.bounds.center;
-        centerOfHearing.y = hearingCollider.bounds.center.y + hearingCollider.bounds.max.y / 4;
-        Vector3 centerOfPlayer = player.GetComponent<Collider>().transform.position;
-        centerOfPlayer.y = player.GetComponent<Collider>().bounds.max.y;
+        centerOfHearing.y = hearingCollider.bounds.center.y + hearingCollider.bounds.max.y / 4 - 0.5f;
+        centerOfPlayer = player.GetComponent<Collider>().transform.position;
+        centerOfPlayer.y = player.GetComponent<Collider>().bounds.max.y - 0.5f;
 
         Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
-        Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
+        //Debug.DrawRay(centerOfHearing, directionToPlayer, Color.green);
 
         RaycastHit rayHit;
         if (Physics.Raycast(centerOfHearing, directionToPlayer, out rayHit))
         {
             if (rayHit.collider.gameObject.CompareTag("Player"))
             {
-                Debug.Log(Vector3.Distance(centerOfPlayer, centerOfHearing));
+                //Debug.Log(Vector3.Distance(centerOfPlayer, centerOfHearing));
 
                 if (Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)
                 {
@@ -142,33 +153,42 @@ public class Hearing : NetworkBehaviour, IHear
 
     public void KillPlayer()
     {
-        if (NetworkManager.Singleton.IsServer)
+        if (animator.GetBool("isAttacking") && player.GetComponentInChildren<CameraPriorityTracker>().LocalPlayerAlive && playerInTrigger)
         {
-            if (animator.GetBool("isAttacking"))
-            {
-                //player.GetComponent< FirstPersonController > ().enabled = false;
-                deathCam.enabled = true;
-                deathCam.Priority = 11;
-                StartCoroutine(RespawnAfterDelay(1f)); // Activate death cam for 1 second
-            }
+            //player.GetComponent<FirstPersonController>().enabled = false;
+            //deathCam.enabled = true;
+            deathCam.Priority = int.MaxValue;
+            StartCoroutine(PlayCutsceneInSeconds(1f)); // Activate death cam for 5 sec
         }
+
     }
 
-    private IEnumerator RespawnAfterDelay(float delay)
+    private IEnumerator PlayCutsceneInSeconds(float duration)
+    {
+        player.GetComponentInChildren<CameraPriorityTracker>().CutscenePlaying = true;
+        playerInTrigger = false; // force monster to not see player
+        yield return new WaitForSeconds(duration);
+        player.GetComponentInChildren<CameraPriorityTracker>().CutscenePlaying = false;
+        //deathCam.enabled = false;
+        StartCoroutine(RespawnTimer(5f));
+        //RespawnPlayer();
+    }
+
+    private IEnumerator RespawnTimer(float delay) 
     {
         yield return new WaitForSeconds(delay);
-
-        deathCam.enabled = false;
         RespawnPlayer();
     }
 
     private void RespawnPlayer()
     {
-        deathCam.enabled = false;
-        deathCam.Priority = 1;
+        //deathCam.enabled = false;
+        player.GetComponentInChildren<CameraPriorityTracker>().LocalPlayerAlive = true;
+        deathCam.Priority = 0;
         player.transform.position = deathPoint.position;
+        Debug.Log($"{gameObject} with hash {gameObject.GetHashCode()} set players pos");
         Physics.SyncTransforms();
-        player.GetComponent<FirstPersonController>().enabled = true;
+        //player.GetComponent<FirstPersonController>().enabled = true;
     }
 
     [ServerRpc(RequireOwnership = false)]
@@ -191,7 +211,7 @@ public class Hearing : NetworkBehaviour, IHear
         if (currentTarget.Value.TryGet(out NetworkObject targetNetworkObject))
         {
             player = targetNetworkObject.gameObject;
-            Debug.Log($"Set player to {targetNetworkObject.gameObject}");
+            //Debug.Log($"Set player to {targetNetworkObject.gameObject}");
         }
         else
         {
@@ -235,10 +255,10 @@ public class Hearing : NetworkBehaviour, IHear
                 return;
             }
 
-            if (playerInTrigger)
-            {
-                CheckSight();
-            }
+            //if (playerInTrigger)
+            //{
+            //    CheckSight();
+            //}
 
             if (hearingSound && animator.GetBool("isChasing") == false)
             {

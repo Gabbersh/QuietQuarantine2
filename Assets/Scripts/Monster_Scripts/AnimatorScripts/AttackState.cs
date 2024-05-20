@@ -21,12 +21,12 @@ public class AttackState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        float distance = Vector3.Distance(player.transform.position, animator.transform.position);
+        //float distance = Vector3.Distance(player.transform.position, animator.transform.position);
 
-        if (distance > 4.5)
-        {
-            animator.SetBool("isAttacking", false);
-        }
+        //if (distance > 4.5)
+        //{
+        //    animator.SetBool("isAttacking", false);
+        //}
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

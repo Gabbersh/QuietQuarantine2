@@ -12,6 +12,7 @@ using TMPro;
 using Unity.Services.Authentication;
 using Unity.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.Splines;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -164,6 +165,11 @@ public class FirstPersonController : NetworkBehaviour
 
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
+
+    private bool foundRespawnPoint = false;
+    private Transform respawnPoint;
+    private bool playerSpawned = false;
+
     private bool IsSliding
     {
         get
@@ -231,11 +237,9 @@ public class FirstPersonController : NetworkBehaviour
             instance = this;
 
             transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
-
-
+            Physics.SyncTransforms();
 
             //Debug.Log("Position set to: " + transform.position);
-            Physics.SyncTransforms();
 
             listener.enabled = true;
             vc.Priority = 10;
@@ -290,8 +294,20 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            if (GameObject.Find("RespawnPoint") != null && !foundRespawnPoint)
+            {
+                respawnPoint = GameObject.Find("RespawnPoint").transform;
+                foundRespawnPoint = true;
+            }
 
-            if(CloseMenu)
+            if(respawnPoint != null && !playerSpawned)
+            {
+                transform.position = respawnPoint.position;
+                Physics.SyncTransforms();
+                playerSpawned = true;
+            }
+
+            if (CloseMenu)
             {
                 OnShopClose();
                 OnStashClose();

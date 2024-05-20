@@ -6,6 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.Collections;
+using UnityEngine.SceneManagement;
 
 public class CameraPriorityTracker : NetworkBehaviour
 {
@@ -13,6 +14,7 @@ public class CameraPriorityTracker : NetworkBehaviour
     [SerializeField] private bool cutscenePlaying = false;
     public bool LocalPlayerAlive { get { return localPlayerAlive; } set { localPlayerAlive = value; } } // ska sättas från monster skript
     public bool CutscenePlaying { get { return cutscenePlaying; } set { cutscenePlaying = value; } } // ska sättas när cutscene visas snabbt (monster grab animation)
+    private bool foundMapCamera = false;
 
     [SerializeField] private int currentCameraIndex;
 
@@ -90,6 +92,7 @@ public class CameraPriorityTracker : NetworkBehaviour
     private void Update()
     {
         if (localVC == null || !IsOwner) return;
+        //Debug.Log($"Player is alive: {LocalPlayerAlive} and Cutscene is playing: {CutscenePlaying}");
 
         if (LocalPlayerAlive && !CutscenePlaying)
         {
@@ -106,16 +109,28 @@ public class CameraPriorityTracker : NetworkBehaviour
         else
         {
             UnPrioritiseAll();
+            UnAlivePlayer(true);
             ShowViewModel(false);
         }
+
+        if(SceneManager.GetActiveScene().name == "MainGame" && !foundMapCamera) 
+        {
+            playersVC.Add(GameObject.Find("CamOverMap").GetComponent<CinemachineVirtualCamera>());
+            foundMapCamera = true;
+        }
+    }
+
+    private void UnAlivePlayer(bool v)
+    {
+        localPlayerAlive = !v;
     }
 
     // göm eller visa viewmodel och hud element (flashlight och all i canvasUI)
     private void ShowViewModel(bool showViewModel)
     {
         var localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject;
-        FindInChildren(localPlayer, "canvasUI").SetActive(showViewModel);
-        FindInChildren(localPlayer, "Flashlight").SetActive(showViewModel);
+        //FindInChildren(localPlayer, "canvasUI").SetActive(showViewModel);
+        //FindInChildren(localPlayer, "Flashlight").SetActive(showViewModel);
     }
 
     // MONSTER kamera ska prioriteras här. alla andra kameror blir 0
