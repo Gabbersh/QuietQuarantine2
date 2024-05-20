@@ -160,7 +160,6 @@ public class Hearing : NetworkBehaviour, IHear
             deathCam.Priority = int.MaxValue;
             StartCoroutine(PlayCutsceneInSeconds(1f)); // Activate death cam for 5 sec
         }
-
     }
 
     private IEnumerator PlayCutsceneInSeconds(float duration)

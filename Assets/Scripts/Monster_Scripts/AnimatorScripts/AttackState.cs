@@ -6,17 +6,22 @@ using UnityEngine.AI;
 
 public class AttackState : StateMachineBehaviour
 {
-    GameObject player;
+    AudioSource audioSource;
     NavMeshAgent agent;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = animator.gameObject.GetComponent<Hearing>().player;
-
         agent = animator.GetComponent<NavMeshAgent>();
 
         agent.speed = 0f;
         agent.isStopped = true;
+
+        audioSource = animator.GetComponent<AudioSource>();
+
+        if (audioSource != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -32,6 +37,9 @@ public class AttackState : StateMachineBehaviour
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         agent.isStopped = true;
+
+        audioSource.Stop();
+
         animator.SetBool("isAttacking", false);
         animator.SetBool("isChasing", false);
         animator.SetBool("isHunting", false);
