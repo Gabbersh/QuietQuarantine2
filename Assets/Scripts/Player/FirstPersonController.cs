@@ -18,7 +18,7 @@ public class FirstPersonController : NetworkBehaviour
     private bool shouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded && !isCrouching;
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
     private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
-
+    private bool CloseMenu => Input.GetKeyDown(EscapeKey);
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
@@ -32,6 +32,9 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool useStamina = true;
     [SerializeField] private bool useFlashlight = true;
 
+    private bool isShopOpen = false;
+    private bool isStashOpen = false;
+
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
@@ -43,6 +46,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
+    [SerializeField] private KeyCode EscapeKey = KeyCode.Escape;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -80,6 +84,9 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float timeBeforeStaminaRegenStarts = 5;
     [SerializeField] private float staminaValueIncrement = 2;
     [SerializeField] private float staminaTimeIncrement = 0.1f;
+    [SerializeField] private float staminaBarHideTime = 3f;
+    private float staminaBarHideTimer = 0;
+
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
@@ -239,12 +246,19 @@ public class FirstPersonController : NetworkBehaviour
             currentHealth = maxHealth;
             currentStamina = maxStamina;
 
+            staminaBarHideTimer = staminaBarHideTime;
+
             pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
             Flashlight.GetComponent<Light>().intensity = maxIntensity;
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            InventoryActions.OnShopInteract += OnShopOpen;
+            InventoryActions.OnShopClose += OnShopClose;
+            InventoryActions.OnStashInteraction += OnStashOpen;
+            InventoryActions.OnStashClose += OnStashClose;
 
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -280,6 +294,11 @@ public class FirstPersonController : NetworkBehaviour
             else Gravity = 30;
 
             //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+            if (CloseMenu)
+            {
+                CloseShop();
+                CloseStash();
+            }
 
             if (CanMove)
             {
@@ -484,10 +503,22 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleStamina()
     {
+        if (currentStamina >= maxStamina)
+        {
+            staminaBarHideTimer -= Time.deltaTime;
+            if (staminaBarHideTimer <= 0)
+            {
+                UIActions.OnStaminaClose();
+                staminaBarHideTimer = staminaBarHideTime;
+            }
+        }
+
         if (isSprinting && currentInput != Vector2.zero)
         {
+            UIActions.OnStaminaOpen();
+            staminaBarHideTimer = staminaBarHideTime;
 
-            if(regeneratingStamina != null)
+            if (regeneratingStamina != null)
             {
                 StopCoroutine (regeneratingStamina);
                 regeneratingStamina = null;
@@ -718,6 +749,52 @@ public class FirstPersonController : NetworkBehaviour
             moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
 
         characterController.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void OnShopOpen()
+    {
+        CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        isShopOpen = true;
+    }
+
+    private void OnShopClose()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isShopOpen = false;
+    }
+    private void CloseShop()
+    {
+        if (isShopOpen)
+        {
+            InventoryActions.OnShopClose();
+        }
+    }
+    private void OnStashOpen()
+    {
+        CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
+        isStashOpen = true;
+    }
+
+    private void OnStashClose()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isStashOpen = false;
+    }
+
+    private void CloseStash()
+    {
+        if (isStashOpen)
+        {
+            InventoryActions.OnStashClose();
+        }
     }
 
     private IEnumerator RegenerateHealth()
