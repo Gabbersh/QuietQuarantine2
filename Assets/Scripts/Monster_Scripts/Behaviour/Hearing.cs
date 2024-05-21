@@ -256,12 +256,17 @@ public class Hearing : NetworkBehaviour, IHear
 
             KillPlayer();
 
-
+            Balls();
             //Vector3 centerOfHearing = hearingCollider.bounds.center;
             //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
             //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
         }
+    }
+
+    private void Balls()
+    {
+        return;
     }
 
     public void RespondToSound(Sound sound)

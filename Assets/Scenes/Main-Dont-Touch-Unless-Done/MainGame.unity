@@ -2641,7 +2641,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.26666668
+  m_VoxelSize: 0.33333334
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 23800000, guid: a740dd9b507861048bfe384c854ec630, type: 2}
   m_BuildHeightMesh: 0
@@ -4039,7 +4039,7 @@ SpriteRenderer:
   m_Size: {x: 11.37, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1001 &100930260
@@ -34589,7 +34589,7 @@ SpriteRenderer:
   m_Size: {x: 11.37, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1001 &828209010
@@ -35764,7 +35764,7 @@ SpriteRenderer:
   m_Size: {x: 11.37, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &861405545
@@ -50158,11 +50158,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1175308744}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1175308741 stripped
 GameObject:
@@ -50176,27 +50172,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1175308740}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1175308743 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1175308740}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1175308744
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1175308743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &1175559558
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57997,11 +57972,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1344124528}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1344124525 stripped
 GameObject:
@@ -58015,27 +57986,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1344124524}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1344124527 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1344124524}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1344124528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1344124527}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &1345114609
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -61076,10 +61026,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1402516447}
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1402516446}
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1402516441 stripped
 GameObject:
@@ -61090,12 +61036,6 @@ GameObject:
 --- !u!4 &1402516442 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3104198929745507288, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1402516440}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1402516443 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
     type: 3}
   m_PrefabInstance: {fileID: 1402516440}
   m_PrefabAsset: {fileID: 0}
@@ -61111,21 +61051,6 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 1402516440}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1402516446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1402516443}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!64 &1402516447
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -61861,11 +61786,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1427276673}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1427276670 stripped
 GameObject:
@@ -61879,27 +61800,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1427276669}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1427276672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1427276669}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1427276673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1427276672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &1428177605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62775,11 +62675,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1436222727}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &1436222724 stripped
 GameObject:
@@ -62793,27 +62689,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1436222723}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1436222726 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 1436222723}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1436222727
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1436222726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1 &1437130543
 GameObject:
   m_ObjectHideFlags: 0
@@ -72398,7 +72273,7 @@ SpriteRenderer:
   m_Size: {x: 11.37, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1001 &1646388539
@@ -75972,7 +75847,7 @@ SpriteRenderer:
   m_Size: {x: 11.37, y: 10.8}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1001 &1725185262
@@ -94223,11 +94098,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2097020474}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d5651322684a31f49a083c677b6b12da, type: 3}
 --- !u!1 &2097020471 stripped
 GameObject:
@@ -94241,27 +94112,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2097020470}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2097020473 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5926279345546811941, guid: d5651322684a31f49a083c677b6b12da,
-    type: 3}
-  m_PrefabInstance: {fileID: 2097020470}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2097020474
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2097020473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a4400f50c68629419288eadd589c235, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactableUI: {fileID: 211585354}
-  lockedDoorUI: {fileID: 1297408758}
-  unlockedDoorUI: {fileID: 1698645120}
 --- !u!1001 &2100052761
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -96245,3 +96095,5 @@ SceneRoots:
   - {fileID: 1458212600}
   - {fileID: 1809732914}
   - {fileID: 884395921}
+  - {fileID: 1918602449}
+  - {fileID: 1588156461}
