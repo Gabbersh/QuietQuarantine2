@@ -24,8 +24,6 @@ public class UIStashController : NetworkBehaviour
     private Button buttonDeposit;
     private Button buttonWithdraw;
 
-    private Button buttonClose;
-
     private TMP_Text inventoryWaterText;
     private TMP_Text inventorySuppliesText;
     private TMP_Text inventoryFoodText;
@@ -217,8 +215,6 @@ public class UIStashController : NetworkBehaviour
         buttonDeposit = FindInChildren(localPlayer, "ButtonDeposit").GetComponent<Button>();
         buttonWithdraw = FindInChildren(localPlayer, "ButtonWithdraw").GetComponent<Button>();
 
-        buttonClose = FindInChildren(localPlayer, "ButtonCloseStash").GetComponent<Button>();
-
         buttonWaterSub.onClick.AddListener(SubWaterOnClick);
         buttonWaterAdd.onClick.AddListener(AddWaterOnClick);
         buttonSuppliesSub.onClick.AddListener(SubSuppliesOnClick);
@@ -228,13 +224,12 @@ public class UIStashController : NetworkBehaviour
         buttonKeysSub.onClick.AddListener(SubKeyOnClick);
         buttonKeysAdd.onClick.AddListener(AddKeyOnClick);
 
-        buttonClose.onClick.AddListener(CloseStash);
 
         buttonDeposit.onClick.AddListener(Deposit);
         buttonWithdraw.onClick.AddListener(Withdraw);
 
-        InventoryActions.OnStashInteraction += OnStashOpen;
-        InventoryActions.OnStashClose += OnStashClose;
+        InventoryActions.OnStashInteraction += OpenStash;
+        InventoryActions.OnStashClose += ExitStash;
         stashUI.SetActive(false);
     }
 
@@ -392,18 +387,19 @@ public class UIStashController : NetworkBehaviour
         }
     }
 
-    private void OnStashClose()
+    private void ExitStash()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         stashUI.SetActive(false);
     }
 
-    private void CloseStash()
+    private void OpenStash()
     {
-        InventoryActions.OnStashClose();
-    }
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
 
-    private void OnStashOpen()
-    {
         stashUI.SetActive(true);
         GetAmounts();
     }

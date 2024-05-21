@@ -18,6 +18,5 @@ public static class InventoryActions
 
     public static Action OnShopInteract;
     public static Action OnShopClose;
-    public static Action OnDeath;
     
 }

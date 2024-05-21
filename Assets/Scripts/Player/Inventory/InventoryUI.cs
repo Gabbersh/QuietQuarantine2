@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour
         InventoryActions.OnInventoryToggle += ToggleUI;
 
         inventoryUI = gameObject;
-        inventoryUI.SetActive(true);
+        inventoryUI.SetActive(false);
     }
 
     // Update is called once per frame
