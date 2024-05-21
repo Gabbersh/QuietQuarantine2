@@ -20,6 +20,12 @@ public class PlayerTracker : NetworkBehaviour
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectedCallback;
         }
+        balls();
+    }
+
+    private void balls()
+    {
+        return;
     }
 
     private void OnClientDisconnectedCallback(ulong obj)

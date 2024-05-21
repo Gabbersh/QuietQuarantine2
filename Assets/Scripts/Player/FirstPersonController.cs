@@ -294,8 +294,20 @@ public class FirstPersonController : NetworkBehaviour
     {
         if (IsOwner)
         {
+            if (GameObject.Find("RespawnPoint") != null && !foundRespawnPoint)
+            {
+                respawnPoint = GameObject.Find("RespawnPoint").transform;
+                foundRespawnPoint = true;
+            }
 
-            if(CloseMenu)
+            if(respawnPoint != null && !playerSpawned)
+            {
+                transform.position = respawnPoint.position;
+                Physics.SyncTransforms();
+                playerSpawned = true;
+            }
+
+            if (CloseMenu)
             {
                 OnShopClose();
                 OnStashClose();
