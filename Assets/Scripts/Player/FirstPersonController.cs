@@ -89,6 +89,9 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float timeBeforeStaminaRegenStarts = 5;
     [SerializeField] private float staminaValueIncrement = 2;
     [SerializeField] private float staminaTimeIncrement = 0.1f;
+    [SerializeField] private float staminaBarHideTime = 3f;
+    private float staminaBarHideTimer = 0;
+
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
@@ -220,6 +223,7 @@ public class FirstPersonController : NetworkBehaviour
     public float SprintSpeed {  get { return sprintSpeed; } set {  sprintSpeed = value; } }
     public float CrouchSpeed { get { return crouchSpeed; } set {  crouchSpeed = value; } }
 
+
     private void OnEnable()
     {
         OnTakeDamage += ApplyDamage;
@@ -253,6 +257,8 @@ public class FirstPersonController : NetworkBehaviour
             currentHealth = maxHealth;
             currentStamina = maxStamina;
 
+            staminaBarHideTimer = staminaBarHideTime;
+
             pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
             Flashlight.GetComponent<Light>().intensity = maxIntensity;
@@ -260,9 +266,13 @@ public class FirstPersonController : NetworkBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
 
+            InventoryActions.OnShopInteract += OnShopOpen;
+            InventoryActions.OnShopClose += OnShopClose;
+            InventoryActions.OnStashInteraction += OnStashOpen;
+            InventoryActions.OnStashClose += OnStashClose;
+
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
-
             foreach (var child in characterModel)
             {
                 child.enabled = false;
@@ -307,16 +317,15 @@ public class FirstPersonController : NetworkBehaviour
                 playerSpawned = true;
             }
 
-            if (CloseMenu)
-            {
-                OnShopClose();
-                OnStashClose();
-            }
-
             if (SceneManager.GetActiveScene().name != "MainGame") Gravity = 0;
             else Gravity = 30;
 
             //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+            if (CloseMenu)
+            {
+                CloseShop();
+                CloseStash();
+            }
 
             if (CanMove)
             {
@@ -530,10 +539,22 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleStamina()
     {
+        if (currentStamina >= maxStamina)
+        {
+            staminaBarHideTimer -= Time.deltaTime;
+            if (staminaBarHideTimer <= 0)
+            {
+                UIActions.OnStaminaClose();
+                staminaBarHideTimer = staminaBarHideTime;
+            }
+        }
+
         if (isSprinting && currentInput != Vector2.zero)
         {
+            UIActions.OnStaminaOpen();
+            staminaBarHideTimer = staminaBarHideTime;
 
-            if(regeneratingStamina != null)
+            if (regeneratingStamina != null)
             {
                 StopCoroutine (regeneratingStamina);
                 regeneratingStamina = null;
@@ -787,31 +808,45 @@ public class FirstPersonController : NetworkBehaviour
     private void OnShopOpen()
     {
         CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         isShopOpen = true;
     }
 
     private void OnShopClose()
     {
-        if(isShopOpen)
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isShopOpen = false;
+    }
+    private void CloseShop()
+    {
+        if (isShopOpen)
         {
-            CanMove = true;
-            isShopOpen = false;
             InventoryActions.OnShopClose();
         }
     }
-
     private void OnStashOpen()
     {
         CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         isStashOpen = true;
     }
 
     private void OnStashClose()
     {
-        if(isStashOpen)
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isStashOpen = false;
+    }
+
+    private void CloseStash()
+    {
+        if (isStashOpen)
         {
-            CanMove = true;
-            isStashOpen = false;
             InventoryActions.OnStashClose();
         }
     }

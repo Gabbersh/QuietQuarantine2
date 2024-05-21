@@ -14,6 +14,7 @@ public class ShopUI : NetworkBehaviour
 
     private GameObject localPlayer;
 
+    //Not in use - maybe future?
     private TMP_Text inventoryWaterText;
     private TMP_Text inventorySuppliesText;
     private TMP_Text inventoryFoodText;
@@ -37,6 +38,7 @@ public class ShopUI : NetworkBehaviour
     private Button suppliesTradeButton;
     private Button foodTradeButton;
     private Button keyTradeButton;
+    private Button closeButton;
 
     [SerializeField]private Sprite waterSprite;
     [SerializeField]private Sprite suppliesSprite;
@@ -189,10 +191,10 @@ public class ShopUI : NetworkBehaviour
         //foodTradeButton = GameObject.Find("ButtonTradeFood").GetComponent<Button>();
         //keyTradeButton = GameObject.Find("ButtonTradeKey").GetComponent<Button>();
 
-        inventoryWaterText = FindInChildren(localPlayer, "InventoryTextWater").GetComponent<TMP_Text>();
-        inventorySuppliesText = FindInChildren(localPlayer, "InventoryTextSupplies").GetComponent<TMP_Text>();
-        inventoryFoodText = FindInChildren(localPlayer, "InventoryTextFood").GetComponent<TMP_Text>();
-        inventoryKeyText = FindInChildren(localPlayer, "InventoryTextKey").GetComponent<TMP_Text>();
+        //inventoryWaterText = FindInChildren(localPlayer, "InventoryTextWater").GetComponent<TMP_Text>();
+        //inventorySuppliesText = FindInChildren(localPlayer, "InventoryTextSupplies").GetComponent<TMP_Text>();
+        //inventoryFoodText = FindInChildren(localPlayer, "InventoryTextFood").GetComponent<TMP_Text>();
+        //inventoryKeyText = FindInChildren(localPlayer, "InventoryTextKey").GetComponent<TMP_Text>();
 
         waterCostText = FindInChildren(localPlayer, "CostTextWater").GetComponent<TMP_Text>();
         suppliesCostText = FindInChildren(localPlayer, "CostTextSupplies").GetComponent<TMP_Text>();
@@ -213,6 +215,8 @@ public class ShopUI : NetworkBehaviour
         foodTradeButton = FindInChildren(localPlayer, "ButtonTradeFood").GetComponent<Button>();
         keyTradeButton = FindInChildren(localPlayer, "ButtonTradeKey").GetComponent<Button>();
 
+        closeButton = FindInChildren(localPlayer, "ButtonCloseShop").GetComponent<Button>();
+
         waterTradeImage.sprite = suppliesSprite;
         suppliesTradeImage.sprite = foodSprite;
         foodTradeImage.sprite = waterSprite;
@@ -232,6 +236,7 @@ public class ShopUI : NetworkBehaviour
         suppliesTradeButton.onClick.AddListener(SuppliesTrade);
         foodTradeButton.onClick.AddListener(FoodTrade);
         keyTradeButton.onClick.AddListener(KeyTrade);
+        closeButton.onClick.AddListener(CloseShop);
 
         InventoryActions.OnShopInteract += OnShopOpen;
         InventoryActions.OnShopClose += OnShopClose;
@@ -241,22 +246,19 @@ public class ShopUI : NetworkBehaviour
 
     private void OnShopOpen()
     {
-        Cursor.lockState = CursorLockMode.Confined;
-        Cursor.visible = true;
-
         CheckResourceRequirments();
-        UpdateUI();
         uiShop.SetActive(true);
     }
 
     private void OnShopClose()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         uiShop.SetActive(false);
     }
 
+    private void CloseShop()
+    {
+        InventoryActions.OnShopClose();
+    }
     private void GetPlayerResources()
     {
         int[] resources = inventory.GetResourceAmounts();
@@ -267,16 +269,16 @@ public class ShopUI : NetworkBehaviour
         keyAmount = resources[3];
     }
 
-    private void UpdateUI()
-    {
-        GetPlayerResources();
+    //private void UpdateUI()
+    //{
+    //    GetPlayerResources();
 
-        inventoryWaterText.text = waterAmount.ToString();
-        inventorySuppliesText.text = suppliesAmount.ToString();
-        inventoryFoodText.text = foodAmount.ToString();
-        inventoryKeyText.text = keyAmount.ToString();
-    }
-    
+    //    inventoryWaterText.text = waterAmount.ToString();
+    //    inventorySuppliesText.text = suppliesAmount.ToString();
+    //    inventoryFoodText.text = foodAmount.ToString();
+    //    inventoryKeyText.text = keyAmount.ToString();
+    //}
+
     private void CheckResourceRequirments()
     {
         GetPlayerResources();
@@ -391,7 +393,7 @@ public class ShopUI : NetworkBehaviour
                 break;
         }
 
-        UpdateUI();
+        GetPlayerResources();
     }
 
     private void WaterTrade()

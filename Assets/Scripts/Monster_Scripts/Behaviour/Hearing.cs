@@ -24,8 +24,6 @@ public class Hearing : NetworkBehaviour, IHear
 
     public List<GameObject> players = new List<GameObject>();
 
-    private List<Collider> safezoneColliders = new List<Collider>();
-
     private int connectedClientsCount;
     private int lastClientsCount;
 
@@ -46,19 +44,11 @@ public class Hearing : NetworkBehaviour, IHear
             Debug.LogError("Death Point object not found in the hierarchy!");
         }
 
-        GameObject[] safezoneObjects = GameObject.FindGameObjectsWithTag("Safezone");
-        foreach (GameObject safezoneObj in safezoneObjects)
-        {
-            Collider safezoneCollider = safezoneObj.GetComponent<Collider>();
-            if (safezoneCollider != null)
-            {
-                safezoneColliders.Add(safezoneCollider);
-            }
-        }
+        safezoneCollider = GameObject.FindGameObjectWithTag("Safezone").GetComponent<Collider>();
 
-        if (safezoneColliders.Count == 0)
+        if (safezoneCollider == null)
         {
-            Debug.LogError("No safezone colliders found!");
+            Debug.LogError("Safezone collider not found!");
         }
     }
 
@@ -221,7 +211,7 @@ public class Hearing : NetworkBehaviour, IHear
         {
             //connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
 
-            //// update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
+            //// update player list on new player join, KANSKE FINNS Bï¿½TTRE Sï¿½TT VEM VET!?!?
             //if (connectedClientsCount != lastClientsCount)
             //{
             //    lastClientsCount = connectedClientsCount;
@@ -278,15 +268,11 @@ public class Hearing : NetworkBehaviour, IHear
     {
         if (animator.GetBool("isChasing") == false)
         {
-            // Iterate through all safezone colliders
-            foreach (Collider safezoneCollider in safezoneColliders)
+            // Check if the sound position is inside the safezone collider bounds
+            if (safezoneCollider.bounds.Contains(sound.pos))
             {
-                // Check if the sound position is inside the safezone collider bounds
-                if (safezoneCollider.bounds.Contains(sound.pos))
-                {
-                    // Sound was made inside the safezone, don't respond
-                    return;
-                }
+                // Sound was made inside the safezone, don't respond
+                return;
             }
 
             animator.SetBool("isHearing", true);

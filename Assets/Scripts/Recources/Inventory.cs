@@ -25,7 +25,7 @@ public class Inventory : NetworkBehaviour
     //private bool keyInInventory = false;
 
 
-    public void Start()
+    public void Awake()
     {
         waterAmount = 0;
         medicineAmount = 0;
@@ -37,6 +37,7 @@ public class Inventory : NetworkBehaviour
         stashFood = 0;
         stashKey = 0;
 
+        InventoryActions.OnDeath += ClearInventory;
         //InventoryActions.OnDeposit += DepositTransaction;
         //InventoryActions.OnWithdraw += WithdrawTransaction;
     }
@@ -169,6 +170,14 @@ public class Inventory : NetworkBehaviour
         }
 
         InventoryChanged();
+    }
+
+    private void ClearInventory()
+    {
+        waterAmount = 0;
+        medicineAmount = 0;
+        foodAmount = 0;
+        keyAmount = 0;
     }
 
     private void InventoryChanged()

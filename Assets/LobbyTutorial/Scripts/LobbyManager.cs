@@ -48,7 +48,6 @@ public class LobbyManager : MonoBehaviour {
     private float lobbyPollTimer;
     private Lobby joinedLobby;
     private string playerName;
-
     public string PlayerName { get { return playerName; } } // RÖR INTE OLLE DU VET VAD JAG GÖR, mr skelly man
 
     private void Awake() {

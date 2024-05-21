@@ -11,7 +11,6 @@ public class InventoryItem : InteractableObject
     private string focusText = "Press 'E' to pick up ";
     private NetworkVariable<bool> isObjectEnabled = new NetworkVariable<bool>(true);
     public event Action<InventoryItem> OnCollect;
-    private bool alreadyCollected;
 
     public override void Awake()
     {
@@ -44,7 +43,8 @@ public class InventoryItem : InteractableObject
     public override void OnInteract()
     {
 
-        //if (!IsServer) { Show(false); }
+        if (!IsServer) { Show(false); }
+
         if (alreadyCollected) { return; }
         else { alreadyCollected = true; }
 
@@ -53,7 +53,6 @@ public class InventoryItem : InteractableObject
         NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.GetComponentInChildren<Inventory>().AddItem(itemType);
         InventoryActions.OnInteractableLostFocus(false);
 
-        ToggleEnableServerRpc();
        
     }
 

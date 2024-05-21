@@ -150,12 +150,4 @@ public class Debugging : NetworkBehaviour
                                                         localPlayerInventory.FoodAmount, 
                                                         localPlayerInventory.KeyAmount });
     }
-
-    [Command("qq-kill-local-player", "kills local player")]
-    private void KillLocalPlayer(bool playerAlive)
-    {
-        if (!IsOwner) return;
-        GameObject.Find("SpectateManager").GetComponent<CameraPriorityTracker>().LocalPlayerAlive = !playerAlive;
-    }
-
 }
