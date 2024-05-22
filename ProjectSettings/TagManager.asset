@@ -6,6 +6,11 @@ TagManager:
   tags:
   - SpawnPoint
   - Safezone
+  - SpectateCamera
+  - CinemachineTarget
+  - Interact
+  - Locked
+  - Unlocked
   layers:
   - Default
   - TransparentFX

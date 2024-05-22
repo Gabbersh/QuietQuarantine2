@@ -20,15 +20,6 @@ public class PlayerTracker : NetworkBehaviour
             NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnectedCallback;
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnectedCallback;
         }
-<<<<<<< HEAD
-        balls();
-    }
-
-    private void balls()
-    {
-        return;
-=======
->>>>>>> parent of ea8b838 (Merge branch 'UIRestore' into VerticalSlice3)
     }
 
     private void OnClientDisconnectedCallback(ulong obj)

@@ -65,6 +65,13 @@ public abstract class Interactable : MonoBehaviour
     private void Start()
     {
         randomizedDoors = GameObject.FindObjectOfType<RandomizedDoors>();
+        interactableUI = GameObject.FindGameObjectWithTag("Interact").GetComponent<CanvasGroup>();
+        lockedDoorUI = GameObject.FindGameObjectWithTag("Locked").GetComponent<CanvasGroup>();
+        unlockedDoorUI = GameObject.FindGameObjectWithTag("Unlocked").GetComponent<CanvasGroup>();
+
+        interactableUI.gameObject.SetActive(false);
+        lockedDoorUI.gameObject.SetActive(false);
+        unlockedDoorUI.gameObject.SetActive(false);
     }
 
     private void Update()
