@@ -7,8 +7,20 @@ public class RandomizedDoors : MonoBehaviour
     [SerializeField] private List<GameObject> doors;
     private List<bool> doorStates;
 
+
     private void Start()
     {
+        //var interact = GameObject.Find("Interact").GetComponent<CanvasGroup>();
+        //var unlocked = GameObject.Find("Unlocked").GetComponent<CanvasGroup>();
+        //var locked = GameObject.Find("Locked").GetComponent<CanvasGroup>();
+
+        //foreach (var door in GameObject.Find("Doors").GetComponentsInChildren())
+        //{
+        //    door.Interact = interact;
+        //    door.Unlocked = unlocked;
+        //    door.Locked = locked;
+        //}
+
         doorStates = new List<bool>();
 
         for (int i = 0; i < 2; i++)
