@@ -10,16 +10,20 @@ public class RandomizedDoors : MonoBehaviour
 
     private void Start()
     {
-        //var interact = GameObject.Find("Interact").GetComponent<CanvasGroup>();
-        //var unlocked = GameObject.Find("Unlocked").GetComponent<CanvasGroup>();
-        //var locked = GameObject.Find("Locked").GetComponent<CanvasGroup>();
+        var interact = GameObject.Find("Interact").GetComponent<CanvasGroup>();
+        var unlocked = GameObject.Find("Unlocked").GetComponent<CanvasGroup>();
+        var locked = GameObject.Find("Locked").GetComponent<CanvasGroup>();
 
-        //foreach (var door in GameObject.Find("Doors").GetComponentsInChildren())
-        //{
-        //    door.Interact = interact;
-        //    door.Unlocked = unlocked;
-        //    door.Locked = locked;
-        //}
+        foreach (var door in GameObject.Find("Doors").GetComponentsInChildren<WinSceneStart>())
+        {
+            door.InteractableUI = interact;
+            door.UnlockedDoorUI = unlocked;
+            door.LockedDoorUI = locked;
+        }
+
+        interact.gameObject.SetActive(false);
+        unlocked.gameObject.SetActive(false);
+        locked.gameObject.SetActive(false);
 
         doorStates = new List<bool>();
 

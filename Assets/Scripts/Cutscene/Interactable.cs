@@ -17,6 +17,11 @@ public abstract class Interactable : MonoBehaviour
 
     public bool DoorInteractable { get { return doorInteractable; } set { doorInteractable = value; } }
 
+    public CanvasGroup InteractableUI { get { return interactableUI; } set { interactableUI = value; } }
+    public CanvasGroup LockedDoorUI { get { return lockedDoorUI; } set { lockedDoorUI = value; } }
+    public CanvasGroup UnlockedDoorUI { get { return unlockedDoorUI; } set { unlockedDoorUI = value; } }
+
+
     private List<GameObject> playersInteracted = new();
 
     private void OnTriggerEnter(Collider other)
