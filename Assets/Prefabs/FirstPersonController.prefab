@@ -233,7 +233,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2985188393582231630}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.025017787, y: 0.88588494, z: -0.048104312, w: -0.4607255}
+  m_LocalRotation: {x: -0.025755705, y: 0.87868404, z: -0.04771331, w: -0.47431475}
   m_LocalPosition: {x: 0.77, y: 0.168, z: 0.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -658,6 +658,7 @@ GameObject:
   - component: {fileID: 8643092617271328985}
   - component: {fileID: 6551648185259443647}
   - component: {fileID: 6987455384644589047}
+  - component: {fileID: 7868029058417322232}
   - component: {fileID: 3090704951996563358}
   - component: {fileID: 3815487837390520626}
   m_Layer: 0
@@ -766,7 +767,7 @@ MonoBehaviour:
   zoomKey: 324
   flashlightKey: 102
   EscapeKey: 114
-  walkSpeed: 6
+  walkSpeed: 5
   sprintSpeed: 8
   crouchSpeed: 1.5
   slopeSpeed: 6
@@ -786,6 +787,8 @@ MonoBehaviour:
   timeBeforeStaminaRegenStarts: 5
   staminaValueIncrement: 2
   staminaTimeIncrement: 0.1
+  breathingAudioSource: {fileID: 7868029058417322232}
+  heavyBreathing: {fileID: 8300000, guid: d2b59e9416dfbe94c8a5a03e77f53951, type: 3}
   lookSpeedX: 2
   lookSpeedY: 2
   upperLookLimit: 80
@@ -804,7 +807,6 @@ MonoBehaviour:
   sprintStepMultiplier: 0.6
   footstepAudioSource: {fileID: 6987455384644589047}
   defaultStep:
-  - {fileID: 8300000, guid: a30335d96ce065b4fb64850be89e53bb, type: 3}
   - {fileID: 8300000, guid: 908ed373241abf74a9c22b3491e2bd55, type: 3}
   interactionRayPoint: {x: 0.5, y: 0.5, z: 0}
   interactionDistance: 2
@@ -827,10 +829,11 @@ AudioSource:
   m_GameObject: {fileID: 8482955890711509516}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: 99b1f5d2c414f7a43984860f54916a7e,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.8
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -838,10 +841,107 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 0
+  MaxDistance: 30
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.65
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!82 &7868029058417322232
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8482955890711509516}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 24300002, guid: c7a3d8435fe511547a00ee3935ef317c,
+    type: 2}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 0
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
