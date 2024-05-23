@@ -50517,15 +50517,40 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.57
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 106.942
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 77.868
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4698348551938516479, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
@@ -50577,42 +50602,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.x
+      value: 106.942
       objectReference: {fileID: 0}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: lockedDoorUI
-      value: 
-      objectReference: {fileID: 1297408758}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: interactableUI
-      value: 
-      objectReference: {fileID: 211585354}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: unlockedDoorUI
-      value: 
-      objectReference: {fileID: 1698645120}
-    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.z
+      value: 77.868
       objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_Name
-      value: Gate (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3725137232040775074, guid: 45a240363016b0d4e93318fc6df6f0be, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -58420,15 +58421,40 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.61
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 106.913
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 77.816
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4698348551938516479, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
@@ -58480,42 +58506,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.x
+      value: 106.913
       objectReference: {fileID: 0}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: lockedDoorUI
-      value: 
-      objectReference: {fileID: 1297408758}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: interactableUI
-      value: 
-      objectReference: {fileID: 211585354}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: unlockedDoorUI
-      value: 
-      objectReference: {fileID: 1698645120}
-    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.z
+      value: 77.816
       objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_Name
-      value: Gate (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3725137232040775074, guid: 45a240363016b0d4e93318fc6df6f0be, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -61469,15 +61471,40 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 892839223}
     m_Modifications:
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 107.428
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 78.718
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4698348551938516479, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
@@ -61529,40 +61556,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.x
+      value: 107.428
       objectReference: {fileID: 0}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: lockedDoorUI
-      value: 
-      objectReference: {fileID: 1297408758}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: interactableUI
-      value: 
-      objectReference: {fileID: 211585354}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: unlockedDoorUI
-      value: 
-      objectReference: {fileID: 1698645120}
-    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_Name
-      value: Gate (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_LocalPosition.z
+      value: 78.718
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3725137232040775074, guid: 45a240363016b0d4e93318fc6df6f0be, type: 3}
@@ -63201,15 +63203,40 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -0.55
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 106.9
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 77.794
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4698348551938516479, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
@@ -63261,42 +63288,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.x
+      value: 106.9
       objectReference: {fileID: 0}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: lockedDoorUI
-      value: 
-      objectReference: {fileID: 1297408758}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: interactableUI
-      value: 
-      objectReference: {fileID: 211585354}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: unlockedDoorUI
-      value: 
-      objectReference: {fileID: 1698645120}
-    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.z
+      value: 77.794
       objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_Name
-      value: Gate (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3725137232040775074, guid: 45a240363016b0d4e93318fc6df6f0be, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -94877,30 +94880,40 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 892839223}
     m_Modifications:
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 107.37
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 78.587
+      propertyPath: lockedDoorUI
+      value: 
+      objectReference: {fileID: 1297408758}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: interactableUI
+      value: 
+      objectReference: {fileID: 211585354}
+    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+        type: 3}
+      propertyPath: unlockedDoorUI
+      value: 
+      objectReference: {fileID: 1698645120}
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_Name
+      value: Gate (4)
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.2661126
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0.963942
-      objectReference: {fileID: 0}
-    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -149.134
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4698348551938516479, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
@@ -94952,42 +94965,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3817536640218547513, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.x
+      value: 107.37
       objectReference: {fileID: 0}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: lockedDoorUI
-      value: 
-      objectReference: {fileID: 1297408758}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: interactableUI
-      value: 
-      objectReference: {fileID: 211585354}
-    - target: {fileID: 6308881649727094209, guid: d5651322684a31f49a083c677b6b12da,
-        type: 3}
-      propertyPath: unlockedDoorUI
-      value: 
-      objectReference: {fileID: 1698645120}
-    - target: {fileID: 3679564483814443805, guid: 45a240363016b0d4e93318fc6df6f0be,
-        type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
+      propertyPath: m_LocalPosition.z
+      value: 78.587
       objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_Name
-      value: Gate (4)
+      propertyPath: m_LocalRotation.w
+      value: 0.2661126
       objectReference: {fileID: 0}
-    - target: {fileID: 101607000859118309, guid: 45a240363016b0d4e93318fc6df6f0be,
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_LocalRotation.y
+      value: -0.963942
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8632361740487386379, guid: 45a240363016b0d4e93318fc6df6f0be,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -149.134
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 3725137232040775074, guid: 45a240363016b0d4e93318fc6df6f0be, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
