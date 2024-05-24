@@ -8,8 +8,6 @@ public class Player_hearing : MonoBehaviour
 
     private AudioClip heartbeat;
 
-    private Hearing hearing;
-
     private bool playerInTrigger;
 
     private void Start()
@@ -27,11 +25,6 @@ public class Player_hearing : MonoBehaviour
             playerInTrigger = true;
         }
     }
-
-    //private void OnTriggerStay(Collider other)
-    //{
-    //    PlayClip(audioSource, heartbeat);
-    //}
 
     private void OnTriggerExit(Collider other)
     {
