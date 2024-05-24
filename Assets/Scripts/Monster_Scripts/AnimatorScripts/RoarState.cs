@@ -15,12 +15,12 @@ public class RoarState : StateMachineBehaviour
         agent = animator.GetComponent<NavMeshAgent>();
         agent.isStopped = true;
 
-        audioSource = animator.GetComponent<AudioSource>();
+        //audioSource = animator.GetComponent<AudioSource>();
 
-        if (audioSource != null && !audioSource.isPlaying)
-        {
-            audioSource.Play();
-        }
+        //if (audioSource != null && !audioSource.isPlaying)
+        //{
+        //    audioSource.Play();
+        //}
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -35,6 +35,6 @@ public class RoarState : StateMachineBehaviour
 
         agent.isStopped = false;
 
-        audioSource.Stop();
+        //audioSource.Stop();
     }
 }

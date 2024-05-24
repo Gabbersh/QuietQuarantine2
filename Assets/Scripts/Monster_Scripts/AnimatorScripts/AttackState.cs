@@ -16,12 +16,12 @@ public class AttackState : StateMachineBehaviour
         agent.speed = 0f;
         agent.isStopped = true;
 
-        audioSource = animator.GetComponent<AudioSource>();
+        //audioSource = animator.GetComponent<AudioSource>();
 
-        if (audioSource != null && !audioSource.isPlaying)
-        {
-            audioSource.Play();
-        }
+        //if (audioSource != null && !audioSource.isPlaying)
+        //{
+        //    audioSource.Play();
+        //}
     }
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -38,7 +38,7 @@ public class AttackState : StateMachineBehaviour
     {
         agent.isStopped = true;
 
-        audioSource.Stop();
+        //audioSource.Stop();
 
         animator.SetBool("isAttacking", false);
         animator.SetBool("isChasing", false);
