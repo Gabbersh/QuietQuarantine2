@@ -4,33 +4,61 @@ using UnityEngine;
 
 public class Player_hearing : MonoBehaviour
 {
-    //private bool playerInTrigger = false;
-    //private Hearing hearing;
+    private AudioSource audioSource;
 
-    //private void OnTriggerEnter(Collider other)
+    private AudioClip heartbeat;
+
+    private Hearing hearing;
+
+    private bool playerInTrigger;
+
+    private void Start()
+    {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        audioSource = audioSources[2];
+
+        heartbeat = Resources.Load<AudioClip>("Audio/heartbeat");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "HearingRadius")
+        {
+            playerInTrigger = true;
+        }
+    }
+
+    //private void OnTriggerStay(Collider other)
     //{
-    //    if (other.gameObject.name == "HearingRadius")
-    //    {
-    //        playerInTrigger = true;
-    //        hearing = other.transform.parent.GetComponent<Hearing>();
-
-    //        hearing.CheckSight();
-    //    }
+    //    PlayClip(audioSource, heartbeat);
     //}
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.name == "HearingRadius")
-    //    {
-    //        playerInTrigger = false;
-    //    }
-    //}
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name == "HearingRadius")
+        {
+            playerInTrigger = false;
+            audioSource.Stop();
+        }
+    }
 
-    //void Update()
-    //{
-    //    if (playerInTrigger && hearing != null)
-    //    {
-    //        hearing.CheckSight();
-    //    }
-    //}
+    private void Update()
+    {
+        if (playerInTrigger)
+        {
+            if (!audioSource.isPlaying)
+            {
+                PlayClip(audioSource, heartbeat);
+            }
+        }
+    }
+
+    private void PlayClip(AudioSource audioSource, AudioClip clip)
+    {
+        if (audioSource.clip != clip || !audioSource.isPlaying)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
 }
