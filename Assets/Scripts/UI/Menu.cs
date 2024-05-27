@@ -18,7 +18,7 @@ public class Menu : MonoBehaviour
         await ClientSingleton.Instance.GameManager.StartClientAsync(joinCodeField.text);
     }
 
-    public void ExitGame()
+    public void Quit()
     {
         Application.Quit();
     }
