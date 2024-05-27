@@ -182,6 +182,7 @@ public class Hearing : NetworkBehaviour, IHear
     private void RespawnPlayer()
     {
         //deathCam.enabled = false;
+        InventoryActions.OnDeath();
         player.GetComponentInChildren<CameraPriorityTracker>().LocalPlayerAlive = true;
         deathCam.Priority = 0;
         player.transform.position = deathPoint.position;

@@ -12,9 +12,20 @@ public class InventoryItem : InteractableObject
     private NetworkVariable<bool> isObjectEnabled = new NetworkVariable<bool>(true);
     public event Action<InventoryItem> OnCollect;
     private bool alreadyCollected;
+    private List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
+    private Collider collider;
+    private Rigidbody rb;
+
+    private float respawnTimer = 120;
+    private float respawnTime;
 
     public override void Awake()
     {
+        meshRenderers.Add(GetComponent<MeshRenderer>());
+        meshRenderers.AddRange(GetComponentsInChildren<MeshRenderer>());
+        collider = GetComponent<Collider>();
+        rb = GetComponent<Rigidbody>();
+        respawnTime = respawnTimer;
         base.Awake();
     }
 
@@ -31,7 +42,30 @@ public class InventoryItem : InteractableObject
     {
         if (!isObjectEnabled.Value)
         {
-            gameObject.SetActive(false);
+            rb.isKinematic = true;
+            collider.enabled = false;
+            foreach(MeshRenderer renderer in meshRenderers)
+            {
+                renderer.enabled = false;
+            }
+        }
+
+        if(alreadyCollected)
+        {
+            respawnTime -= Time.deltaTime;
+            if(respawnTime <= 0)
+            {
+                isObjectEnabled.Value = true;
+                alreadyCollected = false;
+                respawnTime = respawnTimer;
+
+                rb.isKinematic = false;
+                collider.enabled = true;
+                foreach (MeshRenderer renderer in meshRenderers)
+                {
+                    renderer.enabled = true;
+                }
+            }
         }
     }
 

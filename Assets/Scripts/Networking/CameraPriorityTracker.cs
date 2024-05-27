@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 
 public class CameraPriorityTracker : NetworkBehaviour
 {
+    private GameObject uiObject;
+    private GameObject flashObject;
     [SerializeField] private bool localPlayerAlive = true;
     [SerializeField] private bool cutscenePlaying = false;
     public bool LocalPlayerAlive { get { return localPlayerAlive; } set { localPlayerAlive = value; } } // ska sättas från monster skript
@@ -129,8 +131,17 @@ public class CameraPriorityTracker : NetworkBehaviour
     private void ShowViewModel(bool showViewModel)
     {
         var localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject;
-        //FindInChildren(localPlayer, "canvasUI").SetActive(showViewModel);
-        //FindInChildren(localPlayer, "Flashlight").SetActive(showViewModel);
+
+
+        if(uiObject == null)
+        uiObject = FindInChildren(localPlayer, "canvasUI");
+
+        uiObject.SetActive(showViewModel);
+
+        if(flashObject == null)
+        flashObject = FindInChildren(localPlayer, "Flashlight");
+
+        flashObject.SetActive(showViewModel);
     }
 
     // MONSTER kamera ska prioriteras här. alla andra kameror blir 0
