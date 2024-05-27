@@ -15,8 +15,9 @@ public class FirstPersonController : NetworkBehaviour
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
     private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
     private bool CloseMenu => Input.GetKeyDown(EscapeKey);
+    private bool PauseGame => Input.GetKeyDown(PauseKey);
 
-    private bool pause => Input.GetKeyDown(KeyCode.P);
+
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -45,6 +46,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
     [SerializeField] private KeyCode EscapeKey = KeyCode.R;
+    [SerializeField] private KeyCode PauseKey = KeyCode.P;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -157,6 +159,12 @@ public class FirstPersonController : NetworkBehaviour
 
     [Header("HUD")]
     [SerializeField] private GameObject HUD;
+    [SerializeField] private GameObject PausePanel;
+
+    [SerializeField] private Pause pause;
+    [SerializeField] private bool isPaused;
+
+
 
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
@@ -233,6 +241,7 @@ public class FirstPersonController : NetworkBehaviour
 
             transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
             Physics.SyncTransforms();
+
 
             //Debug.Log("Position set to: " + transform.position);
 
@@ -322,6 +331,18 @@ public class FirstPersonController : NetworkBehaviour
             //{
             //    CanMove = false;
             //}
+
+            if (PauseGame)
+            {
+                pause.TogglePause();
+                CanMove = false;
+            }
+            //else
+            //{
+            //    CanMove = true;
+            //}
+
+
 
             if (CanMove)
             {
