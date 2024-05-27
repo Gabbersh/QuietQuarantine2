@@ -16,6 +16,8 @@ public class FirstPersonController : NetworkBehaviour
     private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
     private bool CloseMenu => Input.GetKeyDown(EscapeKey);
 
+    private bool pause => Input.GetKeyDown(KeyCode.P);
+
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
@@ -283,6 +285,7 @@ public class FirstPersonController : NetworkBehaviour
         pickUpLayer = LayerMask.NameToLayer("PickUp");
     }
 
+
     void Update()
     {
         if (IsOwner)
@@ -310,6 +313,15 @@ public class FirstPersonController : NetworkBehaviour
             else Gravity = 30;
 
             //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+
+            //if (pause)
+            //{
+            //    GameObject.Find("PauseMenu").GetComponent<Pause>().TogglePause();
+            //}
+            //if (Pause.paused)
+            //{
+            //    CanMove = false;
+            //}
 
             if (CanMove)
             {
