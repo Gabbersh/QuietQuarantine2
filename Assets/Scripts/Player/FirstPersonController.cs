@@ -225,13 +225,19 @@ public class FirstPersonController : NetworkBehaviour
 
     private void OnEnable()
     {
+        InventoryActions.TogglePause += TogglePause;
         OnTakeDamage += ApplyDamage;
+        
     }
 
     private void OnDisable()
     {
+
         OnTakeDamage -= ApplyDamage;
+        InventoryActions.TogglePause -= TogglePause;
     }
+
+
 
     public override void OnNetworkSpawn()
     {
@@ -244,6 +250,7 @@ public class FirstPersonController : NetworkBehaviour
 
             PausePanel.SetActive(false);
             //Debug.Log("Position set to: " + transform.position);
+            
 
             listener.enabled = true;
             vc.Priority = 10;
@@ -273,8 +280,8 @@ public class FirstPersonController : NetworkBehaviour
             }
 
             defaultHelmetYPos = characterHelmet.transform.localPosition.y;
-            InventoryActions.TogglePause += TogglePause;
 
+            InventoryActions.TogglePause += TogglePause;
             InventoryActions.OnShopInteract += OnShopOpen;
             InventoryActions.OnStashInteraction += OnStashOpen;
             //quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
@@ -286,6 +293,7 @@ public class FirstPersonController : NetworkBehaviour
             vc.Priority = 0;
             HUD.SetActive(false);
             characterHelmet.SetActive(false);
+            PausePanel.SetActive(false);
         }
     }
 
