@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class MonsterAudioManager : MonoBehaviour
+public class MonsterAudioManager : NetworkBehaviour
 {
     private AudioSource audioSource1;
-    private AudioSource audioSource2; 
+    private AudioSource audioSource2;
     private Animator animator;
 
     private AudioClip biteClip;
@@ -41,6 +42,8 @@ public class MonsterAudioManager : MonoBehaviour
 
     void Update()
     {
+        if (!IsServer) return;
+
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         AudioLevel(stateInfo);
@@ -49,45 +52,39 @@ public class MonsterAudioManager : MonoBehaviour
         {
             audioSource1.loop = true;
             audioSource2.Stop();
-
-            PlayClip(audioSource1, slowPantClip);
+            PlaySoundServerRpc(audioSource1.loop, slowPantClip.name, false);
         }
         else if (stateInfo.IsName("AttackState"))
         {
             audioSource2.loop = false;
             audioSource1.Stop();
-
-            PlayClip(audioSource2, biteClip);
+            PlaySoundServerRpc(audioSource2.loop, biteClip.name, true);
         }
         else if (stateInfo.IsName("ChaseState") || stateInfo.IsName("HeardNoiseState"))
         {
             audioSource1.loop = true;
             audioSource2.loop = true;
-
-            PlayClip(audioSource1, fastPantClip);
-            PlayClip(audioSource2, chasingRunningClip);
+            PlaySoundServerRpc(audioSource1.loop, fastPantClip.name, false);
+            PlaySoundServerRpc(audioSource2.loop, chasingRunningClip.name, false);
         }
         else if (stateInfo.IsName("CrawlState"))
         {
             audioSource1.loop = true;
             audioSource2.loop = true;
-
-            PlayClip(audioSource1, slowPantClip);
-            PlayClip(audioSource2, crawlingClip);
+            PlaySoundServerRpc(audioSource1.loop, slowPantClip.name, false);
+            PlaySoundServerRpc(audioSource2.loop, crawlingClip.name, false);
         }
         else if (stateInfo.IsName("Cooldown"))
         {
             audioSource1.loop = true;
             audioSource2.Stop();
-
-            PlayClip(audioSource1, eatingClip);
+            PlaySoundServerRpc(audioSource1.loop, eatingClip.name, false);
         }
         else if (stateInfo.IsName("RoarState"))
         {
             audioSource2.loop = false;
             audioSource1.Stop();
-
-            PlayClip(audioSource2, roarClip);
+            PlaySoundServerRpc(audioSource2.loop, roarClip.name, true);
         }
     }
 
@@ -103,11 +100,26 @@ public class MonsterAudioManager : MonoBehaviour
         }
     }
 
-    private void PlayClip(AudioSource audioSource, AudioClip clip)
+    [ServerRpc(RequireOwnership = false)]
+    private void PlaySoundServerRpc(bool loop, string clipName, bool stopOtherSource)
     {
+        PlaySoundToAllClientRpc(loop, clipName, stopOtherSource);
+    }
+
+    [ClientRpc]
+    private void PlaySoundToAllClientRpc(bool loop, string clipName, bool stopOtherSource)
+    {
+        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+        if (stopOtherSource)
+        {
+            audioSource1.Stop();
+        }
+
+        AudioSource audioSource = stopOtherSource ? audioSource2 : audioSource1;
         if (audioSource.clip != clip || !audioSource.isPlaying)
         {
             audioSource.clip = clip;
+            audioSource.loop = loop;
             audioSource.Play();
         }
     }
