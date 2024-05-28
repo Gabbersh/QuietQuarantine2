@@ -80,5 +80,7 @@ ProjectSettings/Packages/com.unity.probuilder/*
 
 .vsconfig
 
+BuildVersions
+
 Assets/MapAssets
 BuildVersions/

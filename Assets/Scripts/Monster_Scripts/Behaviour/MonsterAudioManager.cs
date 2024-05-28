@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
+using Unity.Netcode;
 
 public class MonsterAudioManager : NetworkBehaviour
 {
@@ -42,8 +40,6 @@ public class MonsterAudioManager : NetworkBehaviour
 
     void Update()
     {
-        if (!IsServer) return;
-
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         AudioLevel(stateInfo);
@@ -52,39 +48,45 @@ public class MonsterAudioManager : NetworkBehaviour
         {
             audioSource1.loop = true;
             audioSource2.Stop();
-            PlaySoundServerRpc(audioSource1.loop, slowPantClip.name, false);
+
+            PlayClip(audioSource1, slowPantClip);
         }
         else if (stateInfo.IsName("AttackState"))
         {
             audioSource2.loop = false;
             audioSource1.Stop();
-            PlaySoundServerRpc(audioSource2.loop, biteClip.name, true);
+
+            PlayClip(audioSource2, biteClip);
         }
         else if (stateInfo.IsName("ChaseState") || stateInfo.IsName("HeardNoiseState"))
         {
             audioSource1.loop = true;
             audioSource2.loop = true;
-            PlaySoundServerRpc(audioSource1.loop, fastPantClip.name, false);
-            PlaySoundServerRpc(audioSource2.loop, chasingRunningClip.name, false);
+
+            PlayClip(audioSource1, fastPantClip);
+            PlayClip(audioSource2, chasingRunningClip);
         }
         else if (stateInfo.IsName("CrawlState"))
         {
             audioSource1.loop = true;
             audioSource2.loop = true;
-            PlaySoundServerRpc(audioSource1.loop, slowPantClip.name, false);
-            PlaySoundServerRpc(audioSource2.loop, crawlingClip.name, false);
+
+            PlayClip(audioSource1, slowPantClip);
+            PlayClip(audioSource2, crawlingClip);
         }
         else if (stateInfo.IsName("Cooldown"))
         {
             audioSource1.loop = true;
             audioSource2.Stop();
-            PlaySoundServerRpc(audioSource1.loop, eatingClip.name, false);
+
+            PlayClip(audioSource1, eatingClip);
         }
         else if (stateInfo.IsName("RoarState"))
         {
             audioSource2.loop = false;
             audioSource1.Stop();
-            PlaySoundServerRpc(audioSource2.loop, roarClip.name, true);
+
+            PlayClip(audioSource2, roarClip);
         }
     }
 
@@ -100,26 +102,38 @@ public class MonsterAudioManager : NetworkBehaviour
         }
     }
 
-    [ServerRpc(RequireOwnership = false)]
-    private void PlaySoundServerRpc(bool loop, string clipName, bool stopOtherSource)
+    private void PlayClip(AudioSource audioSource, AudioClip clip)
     {
-        PlaySoundToAllClientRpc(loop, clipName, stopOtherSource);
-    }
-
-    [ClientRpc]
-    private void PlaySoundToAllClientRpc(bool loop, string clipName, bool stopOtherSource)
-    {
-        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
-        if (stopOtherSource)
-        {
-            audioSource1.Stop();
-        }
-
-        AudioSource audioSource = stopOtherSource ? audioSource2 : audioSource1;
         if (audioSource.clip != clip || !audioSource.isPlaying)
         {
             audioSource.clip = clip;
-            audioSource.loop = loop;
+
+            if (IsServer)
+            {
+                PlayClipClientRpc(audioSource == audioSource1 ? 1 : 2, clip.name);
+            }
+            else
+            {
+                PlayClipServerRpc(audioSource == audioSource1 ? 1 : 2, clip.name);
+            }
+        }
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayClipServerRpc(int audioSourceIndex, string clipName)
+    {
+        PlayClipClientRpc(audioSourceIndex, clipName);
+    }
+
+    [ClientRpc]
+    private void PlayClipClientRpc(int audioSourceIndex, string clipName)
+    {
+        AudioSource audioSource = audioSourceIndex == 1 ? audioSource1 : audioSource2;
+        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+
+        if (audioSource.clip != clip || !audioSource.isPlaying)
+        {
+            audioSource.clip = clip;
             audioSource.Play();
         }
     }

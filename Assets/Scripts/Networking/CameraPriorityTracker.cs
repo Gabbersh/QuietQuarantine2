@@ -10,10 +10,12 @@ using UnityEngine.SceneManagement;
 
 public class CameraPriorityTracker : NetworkBehaviour
 {
+    private GameObject uiObject;
+    private GameObject flashObject;
     [SerializeField] private bool localPlayerAlive = true;
     [SerializeField] private bool cutscenePlaying = false;
-    public bool LocalPlayerAlive { get { return localPlayerAlive; } set { localPlayerAlive = value; } } // ska sättas från monster skript
-    public bool CutscenePlaying { get { return cutscenePlaying; } set { cutscenePlaying = value; } } // ska sättas när cutscene visas snabbt (monster grab animation)
+    public bool LocalPlayerAlive { get { return localPlayerAlive; } set { localPlayerAlive = value; } } // ska sï¿½ttas frï¿½n monster skript
+    public bool CutscenePlaying { get { return cutscenePlaying; } set { cutscenePlaying = value; } } // ska sï¿½ttas nï¿½r cutscene visas snabbt (monster grab animation)
     private bool foundMapCamera = false;
 
     [SerializeField] private int currentCameraIndex;
@@ -25,8 +27,8 @@ public class CameraPriorityTracker : NetworkBehaviour
     [SerializeField] private List<CinemachineVirtualCamera> playersVC = new(); // andra spelares view
 
     [Header("Controls")]
-    [SerializeField] private const KeyCode PreviousPlayerKey = KeyCode.Mouse0; // vänster klick
-    [SerializeField] private const KeyCode NextPlayerKey = KeyCode.Mouse1; // höger klick
+    [SerializeField] private const KeyCode PreviousPlayerKey = KeyCode.Mouse0; // vï¿½nster klick
+    [SerializeField] private const KeyCode NextPlayerKey = KeyCode.Mouse1; // hï¿½ger klick
 
     //[SerializeField] private Text currentPlayerName;
 
@@ -52,18 +54,18 @@ public class CameraPriorityTracker : NetworkBehaviour
 
     private void GetAllCameras()
     {
-        localVC = FindInChildren(NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject, "FpsVcam").GetComponent<CinemachineVirtualCamera>(); // hämta local camera
+        localVC = FindInChildren(NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject, "FpsVcam").GetComponent<CinemachineVirtualCamera>(); // hï¿½mta local camera
 
         Debug.Log($"Found local camera!");
         var localPlayersUid = NetworkManager.Singleton.LocalClientId;
 
         playersVC.Clear();
 
-        foreach (var specCamObject in GameObject.FindGameObjectsWithTag("SpectateCamera")) // hämta allas kameror även lokala!
+        foreach (var specCamObject in GameObject.FindGameObjectsWithTag("SpectateCamera")) // hï¿½mta allas kameror ï¿½ven lokala!
         {
             var cam = specCamObject.GetComponent<CinemachineVirtualCamera>();
 
-            // exkludera lokala kameran för vi har redan den!
+            // exkludera lokala kameran fï¿½r vi har redan den!
             if (FindInParents(specCamObject, "Player").GetComponent<NetworkObject>().OwnerClientId != localPlayersUid)
             {
                 playersVC.Add(cam);
@@ -77,7 +79,7 @@ public class CameraPriorityTracker : NetworkBehaviour
         Debug.Log($"Found {playersVC.Count} cameras!");
     }
 
-    // kommer skapa problem tror bara vi skiter i det här, man får gissa vem man kollar på
+    // kommer skapa problem tror bara vi skiter i det hï¿½r, man fï¿½r gissa vem man kollar pï¿½
     private void GetFocusedPlayersName()
     {
         // TODO FIX NAMES MAYBE
@@ -126,15 +128,24 @@ public class CameraPriorityTracker : NetworkBehaviour
         localPlayerAlive = !v;
     }
 
-    // göm eller visa viewmodel och hud element (flashlight och all i canvasUI)
+    // gï¿½m eller visa viewmodel och hud element (flashlight och all i canvasUI)
     private void ShowViewModel(bool showViewModel)
     {
         var localPlayer = NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject;
-        //FindInChildren(localPlayer, "canvasUI").SetActive(showViewModel);
-        //FindInChildren(localPlayer, "Flashlight").SetActive(showViewModel);
+
+
+        if(uiObject == null)
+        uiObject = FindInChildren(localPlayer, "canvasUI");
+
+        uiObject.SetActive(showViewModel);
+
+        if(flashObject == null)
+        flashObject = FindInChildren(localPlayer, "Flashlight");
+
+        flashObject.SetActive(showViewModel);
     }
 
-    // MONSTER kamera ska prioriteras här. alla andra kameror blir 0
+    // MONSTER kamera ska prioriteras hï¿½r. alla andra kameror blir 0
     private void UnPrioritiseAll()
     {
         UnPrioritiseLocalCamera();
@@ -144,7 +155,7 @@ public class CameraPriorityTracker : NetworkBehaviour
         }
     }
 
-    // knapptryck för att välja spelare att visa
+    // knapptryck fï¿½r att vï¿½lja spelare att visa
     private void HandleInput()
     {
         if (Input.GetKeyDown(PreviousPlayerKey))
@@ -156,12 +167,12 @@ public class CameraPriorityTracker : NetworkBehaviour
             currentCameraIndex++;
         }
 
-        currentCameraIndex = Mathf.Abs(currentCameraIndex %= playersVC.Count); // vid 3 spelare kan index bli 0 , 1 , 2 och den loopar automatiskt om man går utanför index
+        currentCameraIndex = Mathf.Abs(currentCameraIndex %= playersVC.Count); // vid 3 spelare kan index bli 0 , 1 , 2 och den loopar automatiskt om man gï¿½r utanfï¿½r index
 
         GetFocusedPlayersName();
     }
 
-    // sätter prioritering baserat på index. Går bara igenom alla andra spelares kameror inte lokala
+    // sï¿½tter prioritering baserat pï¿½ index. Gï¿½r bara igenom alla andra spelares kameror inte lokala
     private void PrioritiseByIndex()
     {
         for (int i = 0; i < playersVC.Count; i++)
@@ -170,7 +181,7 @@ public class CameraPriorityTracker : NetworkBehaviour
         }
     }
 
-    // visar lokala för alla andra
+    // visar lokala fï¿½r alla andra
     private void PrioritiseLocalCamera()
     {
         localVC.Priority = int.MaxValue;
@@ -180,13 +191,13 @@ public class CameraPriorityTracker : NetworkBehaviour
         }
     }
 
-    // gör så lokala kamera vyn inte visas.
+    // gï¿½r sï¿½ lokala kamera vyn inte visas.
     private void UnPrioritiseLocalCamera()
     {
         localVC.Priority = 0;
     }
 
-    // hitta första objektet som har ett visst namn. vet att det finns Find() men den utgår från hierarchin
+    // hitta fï¿½rsta objektet som har ett visst namn. vet att det finns Find() men den utgï¿½r frï¿½n hierarchin
     public GameObject FindInChildren(GameObject gameObjectToCheck, string name)
     {
         foreach (var currentObject in gameObjectToCheck.GetComponentsInChildren<Transform>())
@@ -198,7 +209,7 @@ public class CameraPriorityTracker : NetworkBehaviour
         return null;
     }
 
-    // går igenom alla parents upp till när den hittar ett object med en specifik tag
+    // gï¿½r igenom alla parents upp till nï¿½r den hittar ett object med en specifik tag
     public GameObject FindInParents(GameObject gameObjectToCheck, string tagName)
     {
         var currentObject = gameObjectToCheck.transform;

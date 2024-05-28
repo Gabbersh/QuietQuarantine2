@@ -37,6 +37,7 @@ public class Inventory : NetworkBehaviour
         stashFood = 0;
         stashKey = 0;
 
+        InventoryActions.OnDeath += EmptyInventory;
         //InventoryActions.OnDeposit += DepositTransaction;
         //InventoryActions.OnWithdraw += WithdrawTransaction;
     }
@@ -171,6 +172,15 @@ public class Inventory : NetworkBehaviour
         InventoryChanged();
     }
 
+    private void EmptyInventory()
+    {
+        waterAmount = 0;
+        medicineAmount = 0;
+        foodAmount = 0;
+        keyAmount = 0;
+
+        InventoryChanged();
+    }
     private void InventoryChanged()
     {
         InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, foodAmount, KeyAmount });

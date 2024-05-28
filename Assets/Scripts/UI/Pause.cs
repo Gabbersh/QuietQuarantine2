@@ -1,36 +1,37 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Lobbies.Models;
+using Unity.Services.Lobbies;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using UnityEngine.Rendering.UI;
 
-public class Pause : MonoBehaviour
+public class Pause : NetworkBehaviour
 {
-   public static bool paused = false;
-    private bool disconnected = false;
+    [SerializeField] GameObject PausePanel;
+    public bool isPaused;
 
-    public void TogglePause()
+    private void Start()
     {
-        if(disconnected) return;
-
-        paused = !paused;
-
-        transform.GetChild(0).gameObject.SetActive(paused);
-        Cursor.lockState = (paused) ? CursorLockMode.None : CursorLockMode.Confined;
-        Cursor.visible = paused;
+        PausePanel = gameObject;
+        isPaused = false;
+        PausePanel.SetActive(isPaused);
+    }
+    public void Resume()
+    {
+        isPaused = false;
+        InventoryActions.TogglePause(false);
     }
 
-    public void Quit()
+    
+
+    public void Exit()
     {
-        if (disconnected) return;
-
-        disconnected = true;
-
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.IsClient)
-        {
-            NetworkManager.Singleton.Shutdown();
-        }
-
-        SceneManager.LoadScene("Menu");
+        Application.Quit();
     }
+
+   
 }
