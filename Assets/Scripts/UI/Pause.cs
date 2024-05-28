@@ -6,34 +6,25 @@ using Unity.Services.Lobbies.Models;
 using Unity.Services.Lobbies;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class Pause : MonoBehaviour
 {
-    public static bool paused = false;
-    private bool disconnected = false;
-    public GameObject PausePanel;
+    GameObject PausePanel;
+    public bool isPaused;
 
-
-   
-
-    public void Start()
+    private void Start()
     {
-        PausePanel.SetActive(false);
+        PausePanel = gameObject;
+        isPaused = false;
+        PausePanel.SetActive(isPaused);
+
     }
-    public void TogglePause()
+    public void Resume()
     {
-        if(disconnected) return;
-
-        paused = !paused;
-
-        PausePanel.SetActive(paused);
-        Cursor.lockState = (paused) ? CursorLockMode.None : CursorLockMode.Confined;
-        Cursor.visible = paused;
-
-        Debug.Log("Game Is Paused!");
+        isPaused = false;
+        InventoryActions.TogglePause(false);
     }
-
-   
 
     
 

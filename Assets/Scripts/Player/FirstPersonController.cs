@@ -162,7 +162,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private GameObject PausePanel;
 
     [SerializeField] private Pause pause;
-    [SerializeField] private bool isPaused;
+    //[SerializeField] private bool isPaused;
 
 
 
@@ -242,7 +242,7 @@ public class FirstPersonController : NetworkBehaviour
             transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
             Physics.SyncTransforms();
 
-
+            PausePanel.SetActive(false);
             //Debug.Log("Position set to: " + transform.position);
 
             listener.enabled = true;
@@ -273,6 +273,7 @@ public class FirstPersonController : NetworkBehaviour
             }
 
             defaultHelmetYPos = characterHelmet.transform.localPosition.y;
+            InventoryActions.TogglePause += TogglePause;
 
             InventoryActions.OnShopInteract += OnShopOpen;
             InventoryActions.OnStashInteraction += OnStashOpen;
@@ -332,17 +333,11 @@ public class FirstPersonController : NetworkBehaviour
             //    CanMove = false;
             //}
 
-            if (PauseGame)
+           if(PauseGame)
             {
-                pause.TogglePause();
-                CanMove = false;
+                pause.isPaused = !pause.isPaused;
+                TogglePause(pause.isPaused);
             }
-            //else
-            //{
-            //    CanMove = true;
-            //}
-
-
 
             if (CanMove)
             {
@@ -833,6 +828,25 @@ public class FirstPersonController : NetworkBehaviour
             isStashOpen = false;
             InventoryActions.OnStashClose();
         }
+    }
+
+    private void TogglePause(bool value)
+    {
+        if (value)
+        {
+            PausePanel.SetActive(true);
+            CanMove = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else 
+        {
+            PausePanel.SetActive(false);
+            CanMove = true;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
     }
 
     private IEnumerator RegenerateHealth()
