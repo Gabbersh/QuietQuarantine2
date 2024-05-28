@@ -22,7 +22,8 @@ public class GameManager : NetworkBehaviour
     [SerializeField] private List<GameObject> jeffs;
 
     [Header("Throwables")]
-    [SerializeField] private GameObject throwable;
+    [SerializeField] private GameObject throwableBottle;
+    [SerializeField] private GameObject throwableBrick;
     [SerializeField] private List<GameObject> spawnedThrowables;
 
     [Header("Collectables")]
@@ -90,7 +91,7 @@ public class GameManager : NetworkBehaviour
         {
             if (spawns.GetThrowableSpawnPoints().Count <= 0) break;
 
-            spawnedThrowables.Add(Instantiate(throwable, GetRandomSpawn(spawns.GetThrowableSpawnPoints(), true), Quaternion.identity));
+            spawnedThrowables.Add(Instantiate(GetRandomItem(), GetRandomSpawn(spawns.GetThrowableSpawnPoints(), true), Quaternion.identity));
         }
 
         foreach(var networkInstance in spawnedThrowables)
@@ -125,6 +126,11 @@ public class GameManager : NetworkBehaviour
         }
 
         return chosenSpawn;
+    }
+
+    private GameObject GetRandomItem()
+    {
+        return Random.Range(0, 2) == 1 ? throwableBottle : throwableBrick;
     }
 
     private bool HasPlayerJoined()
