@@ -22,11 +22,8 @@ public class Pause : NetworkBehaviour
     }
     public void Resume()
     {
-        if(IsOwner)
-        {
-            isPaused = false;
-            InventoryActions.TogglePause(false);
-        }
+        isPaused = false;
+        InventoryActions.TogglePause(false);
     }
 
     
