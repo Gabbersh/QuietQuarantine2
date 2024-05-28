@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5134b924c5746e7eb06404f924ebf59, type: 3}
+  m_Name: Box Fog Volume Profile
+  m_EditorClassIdentifier: 
+  ambientColor: {r: 1, g: 1, b: 1, a: 1}
+  ambientOpacity: 1
+  albedo: {r: 1, g: 1, b: 1, a: 1}
+  minMaxStepLength: {x: 0.5, y: 3}
+  stepIncrementFactor: 1.638
+  maxRayLength: 50
+  maxSampleCount: 237
+  jitterStrength: 42.89
+  lightingMode: 1
+  lightIntensityModifier: 1
+  scattering: 0.54
+  extinction: 0.04
+  mieG: 0.55
+  brightnessClamp: 78.7
+  noiseTexture: {fileID: 11700000, guid: efd48ce14b8950988b9f642e7c37df02, type: 2}
+  scale: 0
+  noiseScroll: {x: -16.63, y: 0.27, z: 0.79}
+  noiseIntensity: 1
+  intensityOffset: 0.514
