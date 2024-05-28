@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -69,12 +70,18 @@ public abstract class Interactable : MonoBehaviour
             }
             else
             {
+                SwitchSceneServerRpc();
                 unlockedDoorUI.gameObject.SetActive(true);
                 LeanTween.cancel(unlockedDoorUI.gameObject);
                 LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
             }
         }
-        
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SwitchSceneServerRpc()
+    {
+        NetworkManager.Singleton.SceneManager.LoadScene("TestWinScreen", LoadSceneMode.Single);
     }
 
     private void Start()
