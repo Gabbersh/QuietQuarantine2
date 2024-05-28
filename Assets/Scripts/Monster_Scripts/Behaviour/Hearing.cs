@@ -177,6 +177,7 @@ public class Hearing : NetworkBehaviour, IHear
     private void RespawnPlayer()
     {
         //deathCam.enabled = false;
+        InventoryActions.OnDeath();
         player.GetComponentInChildren<CameraPriorityTracker>().LocalPlayerAlive = true;
         deathCam.Priority = 0;
         player.transform.position = deathPoint.position;
@@ -216,7 +217,7 @@ public class Hearing : NetworkBehaviour, IHear
         {
             //connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
 
-            //// update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
+            //// update player list on new player join, KANSKE FINNS Bï¿½TTRE Sï¿½TT VEM VET!?!?
             //if (connectedClientsCount != lastClientsCount)
             //{
             //    lastClientsCount = connectedClientsCount;

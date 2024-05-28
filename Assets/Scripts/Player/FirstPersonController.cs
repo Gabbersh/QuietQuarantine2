@@ -45,7 +45,7 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
-    [SerializeField] private KeyCode EscapeKey = KeyCode.R;
+    [SerializeField] private KeyCode EscapeKey = KeyCode.Escape;
     [SerializeField] private KeyCode PauseKey = KeyCode.P;
 
     [Header("Movement Parameters")]
@@ -86,6 +86,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float staminaTimeIncrement = 0.1f;
     [SerializeField] private AudioSource breathingAudioSource = default;
     [SerializeField] private AudioClip heavyBreathing = default;
+    [SerializeField] private float staminaBarHideTime = 3f;
+    private float staminaBarHideTimer = 0;
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
@@ -263,6 +265,7 @@ public class FirstPersonController : NetworkBehaviour
 
             currentHealth = maxHealth;
             currentStamina = maxStamina;
+            staminaBarHideTimer = staminaBarHideTime;
 
             pickUpPoint = GetComponentInChildren<Camera>().transform.Find("PickUpPoint");
 
@@ -283,9 +286,11 @@ public class FirstPersonController : NetworkBehaviour
 
             InventoryActions.TogglePause += TogglePause;
             InventoryActions.OnShopInteract += OnShopOpen;
+            InventoryActions.OnShopClose += OnShopClose;
             InventoryActions.OnStashInteraction += OnStashOpen;
+            InventoryActions.OnStashClose += OnStashClose;
             //quantumConsole = GameObject.Find("Quantum Console").GetComponent<QuantumConsole>();
-            
+
         }
         else
         {
@@ -323,8 +328,8 @@ public class FirstPersonController : NetworkBehaviour
 
             if (CloseMenu)
             {
-                OnShopClose();
-                OnStashClose();
+                CloseShop();
+                CloseStash();
             }
 
             if (SceneManager.GetActiveScene().name != "MainGame") Gravity = 0;
@@ -575,10 +580,23 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleStamina()
     {
+        if (currentStamina >= maxStamina)
+        {
+            staminaBarHideTimer -= Time.deltaTime;
+            if (staminaBarHideTimer <= 0)
+            {
+                UIActions.OnStaminaClose();
+                staminaBarHideTimer = staminaBarHideTime;
+            }
+        }
+
         if (isSprinting && currentInput != Vector2.zero)
         {
 
-            if(regeneratingStamina != null)
+            UIActions.OnStaminaOpen();
+            staminaBarHideTimer = staminaBarHideTime;
+
+            if (regeneratingStamina != null)
             {
                 StopCoroutine (regeneratingStamina);
                 regeneratingStamina = null;
@@ -820,31 +838,45 @@ public class FirstPersonController : NetworkBehaviour
     private void OnShopOpen()
     {
         CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         isShopOpen = true;
     }
 
     private void OnShopClose()
     {
-        if(isShopOpen)
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isShopOpen = false;
+    }
+    private void CloseShop()
+    {
+        if (isShopOpen)
         {
-            CanMove = true;
-            isShopOpen = false;
             InventoryActions.OnShopClose();
         }
     }
-
     private void OnStashOpen()
     {
         CanMove = false;
+        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.visible = true;
         isStashOpen = true;
     }
 
     private void OnStashClose()
     {
-        if(isStashOpen)
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        CanMove = true;
+        isStashOpen = false;
+    }
+
+    private void CloseStash()
+    {
+        if (isStashOpen)
         {
-            CanMove = true;
-            isStashOpen = false;
             InventoryActions.OnStashClose();
         }
     }
