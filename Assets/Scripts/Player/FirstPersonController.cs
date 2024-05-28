@@ -248,9 +248,9 @@ public class FirstPersonController : NetworkBehaviour
             transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
             Physics.SyncTransforms();
 
-            //PausePanel.SetActive(false);
+            PausePanel.SetActive(false);
             //Debug.Log("Position set to: " + transform.position);
-            
+
 
             listener.enabled = true;
             vc.Priority = 10;
@@ -352,11 +352,11 @@ public class FirstPersonController : NetworkBehaviour
                 Cursor.visible = false;
             }
 
-           //if(PauseGame)
-           // {
-           //     pause.isPaused = !pause.isPaused;
-           //     TogglePause(pause.isPaused);
-           // }
+            if (PauseGame)
+            {
+                pause.isPaused = !pause.isPaused;
+                TogglePause(pause.isPaused);
+            }
 
             if (CanMove)
             {
