@@ -809,7 +809,11 @@ MonoBehaviour:
   sprintStepMultiplier: 0.6
   footstepAudioSource: {fileID: 6987455384644589047}
   defaultStep:
-  - {fileID: 8300000, guid: 908ed373241abf74a9c22b3491e2bd55, type: 3}
+  - {fileID: 8300000, guid: 91d5f729e825ca043a8c7e01e2d80e33, type: 3}
+  - {fileID: 8300000, guid: 43603171d0628c7498a84a73074dbff0, type: 3}
+  - {fileID: 8300000, guid: 1d29a93f9df86da4e8cd5af5840b4f15, type: 3}
+  - {fileID: 8300000, guid: d2c739cfe7b5ed8418d6841dcc3c7fc0, type: 3}
+  - {fileID: 8300000, guid: 712074c6a7a10e3428766790efeb88e7, type: 3}
   interactionRayPoint: {x: 0.5, y: 0.5, z: 0}
   interactionDistance: 2
   Flashlight: {fileID: 4628795769111411383}
