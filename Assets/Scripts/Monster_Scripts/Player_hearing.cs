@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Player_hearing : MonoBehaviour
+public class Player_hearing : NetworkBehaviour
 {
     private AudioSource audioSource;
 
@@ -20,6 +21,9 @@ public class Player_hearing : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!IsOwner)
+            return;
+
         if (other.gameObject.name == "HearingRadius")
         {
             playerInTrigger = true;
@@ -28,6 +32,9 @@ public class Player_hearing : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
+        if (!IsOwner)
+            return;
+
         if (other.gameObject.name == "HearingRadius")
         {
             playerInTrigger = false;
@@ -37,11 +44,14 @@ public class Player_hearing : MonoBehaviour
 
     private void Update()
     {
-        if (playerInTrigger)
+        if (IsOwner)
         {
-            if (!audioSource.isPlaying)
+            if (playerInTrigger)
             {
-                PlayClip(audioSource, heartbeat);
+                if (!audioSource.isPlaying)
+                {
+                    PlayClip(audioSource, heartbeat);
+                }
             }
         }
     }

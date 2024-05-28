@@ -16,7 +16,7 @@ public class InventoryItem : InteractableObject
     private Collider collider;
     private Rigidbody rb;
 
-    private float respawnTimer = 120;
+    private float respawnTimer = 100;
     private float respawnTime;
 
     public override void Awake()
@@ -55,7 +55,7 @@ public class InventoryItem : InteractableObject
             respawnTime -= Time.deltaTime;
             if(respawnTime <= 0)
             {
-                isObjectEnabled.Value = true;
+                ToggleEnableServerRpc(true);
                 alreadyCollected = false;
                 respawnTime = respawnTimer;
 
@@ -87,14 +87,14 @@ public class InventoryItem : InteractableObject
         NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.GetComponentInChildren<Inventory>().AddItem(itemType);
         InventoryActions.OnInteractableLostFocus(false);
 
-        ToggleEnableServerRpc();
+        ToggleEnableServerRpc(false);
        
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ToggleEnableServerRpc()
+    private void ToggleEnableServerRpc(bool enabled)
     {
-        isObjectEnabled.Value = false;
+        isObjectEnabled.Value = enabled;
     }
 
     public override void OnLoseFocus()

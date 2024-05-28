@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using QFSW.QC;
 using Unity.Netcode;
+using System;
 
 public class Inventory : NetworkBehaviour 
 {
@@ -185,5 +186,10 @@ public class Inventory : NetworkBehaviour
     {
         InventoryActions.OnInventoryChange(new int[] { waterAmount, medicineAmount, foodAmount, KeyAmount });
     }
-    
+
+    public void RemoveKey()
+    {
+        KeyAmount--;
+        InventoryChanged();
+    }
 }

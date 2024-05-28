@@ -727,11 +727,11 @@ public class FirstPersonController : NetworkBehaviour
 
         if (flashOn)
         {
-            Flashlight.GetComponent<Light>().intensity -= Time.deltaTime * 3;
+            Flashlight.GetComponent<Light>().intensity -= Time.deltaTime * 1;
         }
         else
         {
-            Flashlight.GetComponent<Light>().intensity += Time.deltaTime * 2;
+            Flashlight.GetComponent<Light>().intensity += Time.deltaTime * 5;
         }
 
         if (Flashlight.GetComponent<Light>().intensity >= maxIntensity)

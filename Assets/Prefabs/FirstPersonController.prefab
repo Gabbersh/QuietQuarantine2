@@ -279,7 +279,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2985188393582231630}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.02381004, y: 0.8971023, z: -0.048713468, w: -0.4384833}
+  m_LocalRotation: {x: -0.02512551, y: 0.88485044, z: -0.048048127, w: -0.46270925}
   m_LocalPosition: {x: 0.77, y: 0.168, z: 0.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -425,14 +425,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5604456785192594243}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.047, y: -0.6, z: 1.31}
+  m_LocalRotation: {x: -0, y: 0.048417374, z: -0, w: 0.9988272}
+  m_LocalPosition: {x: -1.0473288, y: -0.6, z: 1.309658}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4622976878636135739}
   m_Father: {fileID: 3457082626865508653}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 5.55, z: 0}
 --- !u!1 &5845471909455055864
 GameObject:
   m_ObjectHideFlags: 0
@@ -1351,8 +1351,8 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
-  m_Antialiasing: 0
+  m_RenderPostProcessing: 1
+  m_Antialiasing: 2
   m_AntialiasingQuality: 2
   m_StopNaN: 0
   m_Dithering: 0

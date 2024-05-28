@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Main-Dont-Touch-Unless-Done/MainGame.unity
     guid: 264d929053ba7d046a7b1c8a526b39d5
+  - enabled: 1
+    path: Assets/Scenes/Main-Dont-Touch-Unless-Done/TestWinScreen.unity
+    guid: 45edd154c34806c44a4b5c0b12f9822d
   m_configObjects: {}

@@ -60,7 +60,7 @@ public abstract class Interactable : MonoBehaviour
             Activate();
             Debug.Log($"Door is {DoorInteractable}");
             playersInteracted.Add(other.gameObject);
-            FindInChildren(other.gameObject, "Inventory").GetComponent<Inventory>().KeyAmount--;
+            FindInChildren(other.gameObject, "Inventory").GetComponent<Inventory>().RemoveKey();
 
             if (DoorInteractable == false)
             {
