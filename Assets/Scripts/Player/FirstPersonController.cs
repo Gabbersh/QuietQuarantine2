@@ -333,7 +333,7 @@ public class FirstPersonController : NetworkBehaviour
             //    CanMove = false;
             //}
 
-            if(isShopOpen || isStashOpen)
+            if(isShopOpen || isStashOpen || pause.isPaused)
             {
                 Cursor.lockState = CursorLockMode.Confined;
                 Cursor.visible = true;
