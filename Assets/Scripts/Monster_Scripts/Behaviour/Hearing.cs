@@ -222,7 +222,7 @@ public class Hearing : NetworkBehaviour, IHear
         {
             //connectedClientsCount = NetworkManager.Singleton.ConnectedClientsList.Count;
 
-            //// update player list on new player join, KANSKE FINNS BÄTTRE SÄTT VEM VET!?!?
+            //// update player list on new player join, KANSKE FINNS Bï¿½TTRE Sï¿½TT VEM VET!?!?
             //if (connectedClientsCount != lastClientsCount)
             //{
             //    lastClientsCount = connectedClientsCount;
