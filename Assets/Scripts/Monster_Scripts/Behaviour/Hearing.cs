@@ -189,14 +189,14 @@ public class Hearing : NetworkBehaviour, IHear
     private void SetTargetServerRpc(NetworkObjectReference networkObject)
     {
         currentTarget.Value = networkObject;
-        SendTargetToClientRpc(networkObject);
+        //SendTargetToClientRpc(networkObject);
     }
 
-    [ClientRpc]
-    private void SendTargetToClientRpc(NetworkObjectReference networkObject)
-    {
-        currentTarget.Value = networkObject;
-    }
+    //[ClientRpc]
+    //private void SendTargetToClientRpc(NetworkObjectReference networkObject)
+    //{
+    //    currentTarget.Value = networkObject;
+    //}
 
     void Update()
     {
