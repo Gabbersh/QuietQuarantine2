@@ -31,8 +31,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool useStamina = true;
     [SerializeField] private bool useFlashlight = true;
 
-    private bool isShopOpen = false;
-    private bool isStashOpen = false;
+    [SerializeField] private bool isShopOpen = false;
+    [SerializeField] private bool isStashOpen = false;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -252,8 +252,8 @@ public class FirstPersonController : NetworkBehaviour
 
             Flashlight.GetComponent<Light>().intensity = maxIntensity;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
 
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -322,6 +322,17 @@ public class FirstPersonController : NetworkBehaviour
             //{
             //    CanMove = false;
             //}
+
+            if(isShopOpen || isStashOpen)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
 
             if (CanMove)
             {
