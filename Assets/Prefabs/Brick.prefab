@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 2119989028886222094}
   - component: {fileID: 3000628661158762689}
   - component: {fileID: 6213989051326411010}
+  - component: {fileID: 4693163382762899187}
+  - component: {fileID: -1391595118280011444}
   m_Layer: 0
   m_Name: Brick
   m_TagString: Untagged
@@ -170,9 +172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4198a0569cd18e48b1f39e321bb4e8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waterRenderer: {fileID: 0}
-  foodRenderer: {fileID: 0}
-  medicineRenderer: {fileID: 0}
 --- !u!114 &2119989028886222094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,3 +297,45 @@ MonoBehaviour:
   source: {fileID: 3000628661158762689}
   soundRange: 50
   initialCooldown: 2
+--- !u!114 &4693163382762899187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671209293672464167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 0
+  SyncScaleY: 0
+  SyncScaleZ: 0
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  UseQuaternionSynchronization: 0
+  UseQuaternionCompression: 0
+  UseHalfFloatPrecision: 0
+  InLocalSpace: 0
+  Interpolate: 1
+  SlerpPosition: 0
+--- !u!114 &-1391595118280011444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1671209293672464167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6c0be61502bb534f922ebb746851216, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
