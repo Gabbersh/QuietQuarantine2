@@ -17,17 +17,17 @@ MonoBehaviour:
     Key: 0
     Ctrl: 0
     Alt: 0
-    Shift: 0
+    Shift: 1
   HideConsoleKey:
     Key: 0
     Ctrl: 0
     Alt: 0
     Shift: 0
   ToggleConsoleVisibilityKey:
-    Key: 0
+    Key: 273
     Ctrl: 0
     Alt: 0
-    Shift: 0
+    Shift: 1
   ZoomInKey:
     Key: 61
     Ctrl: 1

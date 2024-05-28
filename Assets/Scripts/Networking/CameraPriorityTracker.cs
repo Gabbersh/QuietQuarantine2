@@ -116,6 +116,7 @@ public class CameraPriorityTracker : NetworkBehaviour
         if(SceneManager.GetActiveScene().name == "MainGame" && !foundMapCamera) 
         {
             playersVC.Add(GameObject.Find("CamOverMap").GetComponent<CinemachineVirtualCamera>());
+            Debug.Log($"Found map camera!!!!");
             foundMapCamera = true;
         }
     }

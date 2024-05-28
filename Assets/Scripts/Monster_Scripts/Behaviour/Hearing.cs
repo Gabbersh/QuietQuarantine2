@@ -1,15 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.VisualScripting;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cinemachine;
-using Unity.Services.Lobbies.Models;
-using Unity.IO.LowLevel.Unsafe;
 using System.Linq;
-using Unity.Multiplayer.Tools.TestData.Definitions;
 using System;
 
 public class Hearing : NetworkBehaviour, IHear
@@ -194,14 +189,14 @@ public class Hearing : NetworkBehaviour, IHear
     private void SetTargetServerRpc(NetworkObjectReference networkObject)
     {
         currentTarget.Value = networkObject;
-        SendTargetToClientRpc(networkObject);
+        //SendTargetToClientRpc(networkObject);
     }
 
-    [ClientRpc]
-    private void SendTargetToClientRpc(NetworkObjectReference networkObject)
-    {
-        currentTarget.Value = networkObject;
-    }
+    //[ClientRpc]
+    //private void SendTargetToClientRpc(NetworkObjectReference networkObject)
+    //{
+    //    currentTarget.Value = networkObject;
+    //}
 
     void Update()
     {

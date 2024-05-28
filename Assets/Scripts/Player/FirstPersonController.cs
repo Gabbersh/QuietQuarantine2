@@ -1,18 +1,10 @@
 using Cinemachine;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
 using QFSW.QC;
-using TMPro;
-using Unity.Services.Authentication;
-using Unity.Collections;
 using UnityEngine.SceneManagement;
-using UnityEngine.Splines;
 
 public class FirstPersonController : NetworkBehaviour
 {
@@ -23,6 +15,9 @@ public class FirstPersonController : NetworkBehaviour
     private bool shouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
     private bool toggleInventory => Input.GetKeyDown(InventoryUIKey);
     private bool CloseMenu => Input.GetKeyDown(EscapeKey);
+    private bool PauseGame => Input.GetKeyDown(PauseKey);
+
+
 
     [Header("Functional Options")]
     [SerializeField] private bool canSprint = true;
@@ -37,8 +32,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private bool useStamina = true;
     [SerializeField] private bool useFlashlight = true;
 
-    private bool isShopOpen = false;
-    private bool isStashOpen = false;
+    [SerializeField] private bool isShopOpen = false;
+    [SerializeField] private bool isStashOpen = false;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -46,12 +41,12 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private KeyCode crouchKey = KeyCode.LeftControl;
     [SerializeField] private KeyCode InteractKey = KeyCode.E;
     [SerializeField] private KeyCode InventoryUIKey = KeyCode.Tab;
-    //[SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode PickUpKey = KeyCode.Mouse0;
     [SerializeField] private KeyCode DropKey = KeyCode.G;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
     [SerializeField] private KeyCode flashlightKey = KeyCode.F;
     [SerializeField] private KeyCode EscapeKey = KeyCode.R;
+    [SerializeField] private KeyCode PauseKey = KeyCode.P;
 
     [Header("Movement Parameters")]
     [SerializeField] private float walkSpeed = 3.0f;
@@ -89,6 +84,8 @@ public class FirstPersonController : NetworkBehaviour
     [SerializeField] private float timeBeforeStaminaRegenStarts = 5;
     [SerializeField] private float staminaValueIncrement = 2;
     [SerializeField] private float staminaTimeIncrement = 0.1f;
+    [SerializeField] private AudioSource breathingAudioSource = default;
+    [SerializeField] private AudioClip heavyBreathing = default;
     private float currentStamina;
     private Coroutine regeneratingStamina;
     public static Action<float> OnStaminaChange;
@@ -162,6 +159,12 @@ public class FirstPersonController : NetworkBehaviour
 
     [Header("HUD")]
     [SerializeField] private GameObject HUD;
+    [SerializeField] private GameObject PausePanel;
+
+    [SerializeField] private Pause pause;
+    //[SerializeField] private bool isPaused;
+
+
 
     /*SLIDING PARAMETERS*/
     private Vector3 hitPointNormal;
@@ -239,6 +242,7 @@ public class FirstPersonController : NetworkBehaviour
             transform.position = new Vector3(150.218002f, 1.69000006f, 145.843002f);
             Physics.SyncTransforms();
 
+            PausePanel.SetActive(false);
             //Debug.Log("Position set to: " + transform.position);
 
             listener.enabled = true;
@@ -257,8 +261,8 @@ public class FirstPersonController : NetworkBehaviour
 
             Flashlight.GetComponent<Light>().intensity = maxIntensity;
 
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            //Cursor.lockState = CursorLockMode.Locked;
+            //Cursor.visible = false;
 
             // hide local players playercharacter, will still show from other players view
             SkinnedMeshRenderer[] characterModel = playerCharacter.GetComponentsInChildren<SkinnedMeshRenderer>();
@@ -269,6 +273,7 @@ public class FirstPersonController : NetworkBehaviour
             }
 
             defaultHelmetYPos = characterHelmet.transform.localPosition.y;
+            InventoryActions.TogglePause += TogglePause;
 
             InventoryActions.OnShopInteract += OnShopOpen;
             InventoryActions.OnStashInteraction += OnStashOpen;
@@ -289,6 +294,7 @@ public class FirstPersonController : NetworkBehaviour
         interactionLayer = LayerMask.NameToLayer("Interactable");
         pickUpLayer = LayerMask.NameToLayer("PickUp");
     }
+
 
     void Update()
     {
@@ -317,6 +323,32 @@ public class FirstPersonController : NetworkBehaviour
             else Gravity = 30;
 
             //CanMove = !ConsoleOpened; // stäng av movement om konsollen är öppen
+
+            //if (pause)
+            //{
+            //    GameObject.Find("PauseMenu").GetComponent<Pause>().TogglePause();
+            //}
+            //if (Pause.paused)
+            //{
+            //    CanMove = false;
+            //}
+
+            if(isShopOpen || isStashOpen || pause.isPaused)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+
+           if(PauseGame)
+            {
+                pause.isPaused = !pause.isPaused;
+                TogglePause(pause.isPaused);
+            }
 
             if (CanMove)
             {
@@ -442,6 +474,11 @@ public class FirstPersonController : NetworkBehaviour
 
     private void HandleCrouch()
     {
+        if (isCrouching && (Input.GetKeyDown(jumpKey) || Input.GetKey(sprintKey)))
+        {
+            StartCoroutine(CrouchStand());
+        }
+
         if (shouldCrouch)
         {
             StartCoroutine(CrouchStand());
@@ -542,7 +579,12 @@ public class FirstPersonController : NetworkBehaviour
             currentStamina -= staminaUseMultiplier * Time.deltaTime; 
 
             if (currentStamina < 0)
+            {
                 currentStamina = 0;
+                if (!breathingAudioSource.isPlaying)
+                    breathingAudioSource.PlayOneShot(heavyBreathing);
+            }
+                
 
             OnStaminaChange?.Invoke(currentStamina);
 
@@ -701,23 +743,6 @@ public class FirstPersonController : NetworkBehaviour
                 {
                     PlaySoundToServerServerRpc();
                 }
-
-                //switch (hit.collider.tag)
-                //{
-                //    //Add different tags for different materials, these are examples:
-                //    case "Footsteps/GRASS":
-                //        footstepAudioSource.PlayOneShot(grassClips[UnityEngine.Random.Range(0, grassClips.Length - 1)]);
-                //        break;
-                //    case "Footsteps/WOOD":
-                //        footstepAudioSource.PlayOneShot(woodClips[UnityEngine.Random.Range(0, woodClips.Length - 1)]);
-                //        break;
-                //    case "Footsteps/METAL":
-                //        footstepAudioSource.PlayOneShot(metalClips[UnityEngine.Random.Range(0, metalClips.Length - 1)]);
-                //        break;
-                //    default:
-                //        footstepAudioSource.PlayOneShot(defaultStep[UnityEngine.Random.Range(0, defaultStep.Length - 1)]);
-                //        break;
-                //}
             }
 
             footStepTimer = GetCurrentOffset;
@@ -814,6 +839,25 @@ public class FirstPersonController : NetworkBehaviour
             isStashOpen = false;
             InventoryActions.OnStashClose();
         }
+    }
+
+    private void TogglePause(bool value)
+    {
+        if (value)
+        {
+            PausePanel.SetActive(true);
+            CanMove = false;
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.Confined;
+        }
+        else 
+        {
+            PausePanel.SetActive(false);
+            CanMove = true;
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
     }
 
     private IEnumerator RegenerateHealth()

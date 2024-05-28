@@ -4,33 +4,54 @@ using UnityEngine;
 
 public class Player_hearing : MonoBehaviour
 {
-    //private bool playerInTrigger = false;
-    //private Hearing hearing;
+    private AudioSource audioSource;
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.name == "HearingRadius")
-    //    {
-    //        playerInTrigger = true;
-    //        hearing = other.transform.parent.GetComponent<Hearing>();
+    private AudioClip heartbeat;
 
-    //        hearing.CheckSight();
-    //    }
-    //}
+    private bool playerInTrigger;
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.name == "HearingRadius")
-    //    {
-    //        playerInTrigger = false;
-    //    }
-    //}
+    private void Start()
+    {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        audioSource = audioSources[2];
 
-    //void Update()
-    //{
-    //    if (playerInTrigger && hearing != null)
-    //    {
-    //        hearing.CheckSight();
-    //    }
-    //}
+        heartbeat = Resources.Load<AudioClip>("Audio/heartbeat");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name == "HearingRadius")
+        {
+            playerInTrigger = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.name == "HearingRadius")
+        {
+            playerInTrigger = false;
+            audioSource.Stop();
+        }
+    }
+
+    private void Update()
+    {
+        if (playerInTrigger)
+        {
+            if (!audioSource.isPlaying)
+            {
+                PlayClip(audioSource, heartbeat);
+            }
+        }
+    }
+
+    private void PlayClip(AudioSource audioSource, AudioClip clip)
+    {
+        if (audioSource.clip != clip || !audioSource.isPlaying)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
 }
