@@ -36,6 +36,8 @@ public class Hearing : NetworkBehaviour, IHear
     {
         deathPoint = GameObject.Find("RespawnPoint").transform;
 
+        animator = transform.GetComponent<Animator>();
+
         if (deathPoint == null)
         {
             Debug.LogError("Death Point object not found in the hierarchy!");
@@ -89,11 +91,9 @@ public class Hearing : NetworkBehaviour, IHear
         {
             Transform hearingRadius = transform.Find("HearingRadius");
 
-            deathCam.Priority = 0;
-
             hearingCollider = hearingRadius.GetComponent<Collider>();
 
-            animator = transform.GetComponent<Animator>();
+            //animator = transform.GetComponent<Animator>();
 
             //foreach (var uid in NetworkManager.Singleton.ConnectedClientsIds)
             //{
@@ -259,19 +259,16 @@ public class Hearing : NetworkBehaviour, IHear
                 animator.SetBool("isHearing", true);
             }
 
-            KillPlayer();
-
-            Balls();
             //Vector3 centerOfHearing = hearingCollider.bounds.center;
             //Vector3 centerOfPlayer = player.transform.position + Vector3.up * (player.GetComponent<Collider>().bounds.size.y / 2);
             //Vector3 directionToPlayer = centerOfPlayer - centerOfHearing;
 
         }
-    }
 
-    private void Balls()
-    {
-        return;
+        if(NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject == player)
+        {
+            KillPlayer();
+        }
     }
 
     public void RespondToSound(Sound sound)

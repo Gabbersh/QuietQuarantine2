@@ -7,10 +7,11 @@ using Unity.Services.Lobbies;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using UnityEngine.Rendering.UI;
 
-public class Pause : MonoBehaviour
+public class Pause : NetworkBehaviour
 {
-    GameObject PausePanel;
+    [SerializeField] GameObject PausePanel;
     public bool isPaused;
 
     private void Start()
@@ -18,12 +19,14 @@ public class Pause : MonoBehaviour
         PausePanel = gameObject;
         isPaused = false;
         PausePanel.SetActive(isPaused);
-
     }
     public void Resume()
     {
-        isPaused = false;
-        InventoryActions.TogglePause(false);
+        if(IsOwner)
+        {
+            isPaused = false;
+            InventoryActions.TogglePause(false);
+        }
     }
 
     

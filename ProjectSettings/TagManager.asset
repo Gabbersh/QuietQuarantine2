@@ -11,6 +11,7 @@ TagManager:
   - Interact
   - Locked
   - Unlocked
+  - CamOverMap
   layers:
   - Default
   - TransparentFX
