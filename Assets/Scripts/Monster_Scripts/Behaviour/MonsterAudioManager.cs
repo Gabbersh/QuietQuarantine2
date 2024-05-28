@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
-using static Unity.VisualScripting.Member;
+using Unity.Netcode;
 
 public class MonsterAudioManager : NetworkBehaviour
 {
     private AudioSource audioSource1;
-    private AudioSource audioSource2; 
+    private AudioSource audioSource2;
     private Animator animator;
 
     private AudioClip biteClip;
@@ -111,23 +108,33 @@ public class MonsterAudioManager : NetworkBehaviour
         {
             audioSource.clip = clip;
 
-            //if (IsServer)
-            //{
-                audioSource.Play();
-            //}
-            
+            if (IsServer)
+            {
+                PlayClipClientRpc(audioSource == audioSource1 ? 1 : 2, clip.name);
+            }
+            else
+            {
+                PlayClipServerRpc(audioSource == audioSource1 ? 1 : 2, clip.name);
+            }
         }
     }
 
-    //[ServerRpc(RequireOwnership = false)]
-    //private void PlaySoundToServerServerRpc()
-    //{
-    //    PlaySoundToAllClientRpc();
-    //}
+    [ServerRpc(RequireOwnership = false)]
+    private void PlayClipServerRpc(int audioSourceIndex, string clipName)
+    {
+        PlayClipClientRpc(audioSourceIndex, clipName);
+    }
 
-    //[ClientRpc]
-    //private void PlaySoundToAllClientRpc()
-    //{
-    //    source.Play();
-    //}
+    [ClientRpc]
+    private void PlayClipClientRpc(int audioSourceIndex, string clipName)
+    {
+        AudioSource audioSource = audioSourceIndex == 1 ? audioSource1 : audioSource2;
+        AudioClip clip = Resources.Load<AudioClip>($"Audio/{clipName}");
+
+        if (audioSource.clip != clip || !audioSource.isPlaying)
+        {
+            audioSource.clip = clip;
+            audioSource.Play();
+        }
+    }
 }

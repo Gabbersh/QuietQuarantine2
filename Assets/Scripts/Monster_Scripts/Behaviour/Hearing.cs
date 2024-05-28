@@ -265,6 +265,9 @@ public class Hearing : NetworkBehaviour, IHear
 
         }
 
+
+        if (!(Vector3.Distance(centerOfPlayer, centerOfHearing) < attackDistance)) return;
+
         if(NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject == player)
         {
             KillPlayer();
