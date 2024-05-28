@@ -12,6 +12,7 @@ public abstract class Interactable : MonoBehaviour
     [SerializeField] private CanvasGroup interactableUI;
     [SerializeField] private CanvasGroup lockedDoorUI;
     [SerializeField] private CanvasGroup unlockedDoorUI;
+    [SerializeField] private CanvasGroup noKeyDoorUI;
     private bool playerWithInRange;
     private bool doorInteractable = false;
 
@@ -20,6 +21,8 @@ public abstract class Interactable : MonoBehaviour
     public CanvasGroup InteractableUI { get { return interactableUI; } set { interactableUI = value; } }
     public CanvasGroup LockedDoorUI { get { return lockedDoorUI; } set { lockedDoorUI = value; } }
     public CanvasGroup UnlockedDoorUI { get { return unlockedDoorUI; } set { unlockedDoorUI = value; } }
+
+    public CanvasGroup NoKeyDoorUI { get { return noKeyDoorUI; } set { noKeyDoorUI = value; } }
 
 
     private List<GameObject> playersInteracted = new();
@@ -37,7 +40,13 @@ public abstract class Interactable : MonoBehaviour
                 LeanTween.cancel(interactableUI.gameObject);
                 LeanTween.alphaCanvas(interactableUI, 1, 1);
                 playerWithInRange = true;
-            }  
+            }
+            else 
+            {
+                noKeyDoorUI.gameObject.SetActive(true);
+                LeanTween.cancel(noKeyDoorUI.gameObject);
+                LeanTween.alphaCanvas(noKeyDoorUI, 1, 1);
+            }
         }
     }
 
@@ -65,6 +74,7 @@ public abstract class Interactable : MonoBehaviour
                 LeanTween.alphaCanvas(unlockedDoorUI, 1, 1);
             }
         }
+        
     }
 
     private void Start()
@@ -104,6 +114,8 @@ public abstract class Interactable : MonoBehaviour
             LeanTween.alphaCanvas(lockedDoorUI, 0, 0.5f)
                 .setOnComplete(UIHide);
             LeanTween.alphaCanvas(unlockedDoorUI, 0, 0.5f)
+                .setOnComplete(UIHide);
+            LeanTween.alphaCanvas(noKeyDoorUI, 0, 0.5f)
                 .setOnComplete(UIHide);
         }
     }
