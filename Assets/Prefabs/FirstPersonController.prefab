@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2606996586
+  GlobalObjectIdHash: 3714527307
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 1
@@ -820,8 +820,8 @@ MonoBehaviour:
   flashlightKey: 102
   EscapeKey: 114
   PauseKey: 112
-  walkSpeed: 5
-  sprintSpeed: 8
+  walkSpeed: 3
+  sprintSpeed: 6
   crouchSpeed: 1.5
   slopeSpeed: 6
   jumpForce: 8
@@ -831,7 +831,7 @@ MonoBehaviour:
   timeToCrouch: 0.25
   crouchingCenter: {x: 0, y: 0.5, z: 0}
   standingCenter: {x: 0, y: 0, z: 0}
-  maxHealth: 100
+  maxHealth: 69
   timeBeforeRegenStarts: 3
   healthValueIncrement: 1
   healthTimeIncrement: 0.1

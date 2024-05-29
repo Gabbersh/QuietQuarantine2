@@ -23,10 +23,11 @@ public class HeardNoiceState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        float distance = Vector3.Distance(agent.transform.position, heardSound.pos);
+        agent = animator.GetComponent<NavMeshAgent>();
 
         if (animator.GetBool("isHearing") && heardSound != null)
         {
+            float distance = Vector3.Distance(agent.transform.position, heardSound.pos);
 
             GoToSoundPosition();
 

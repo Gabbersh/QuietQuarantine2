@@ -10,13 +10,13 @@ public class InventoryItem : InteractableObject
     [SerializeField] private InventoryItemType itemType;
     private string focusText = "Press 'E' to pick up ";
     private NetworkVariable<bool> isObjectEnabled = new NetworkVariable<bool>(true);
-    public event Action<InventoryItem> OnCollect;
+    //public event Action<InventoryItem> OnCollect;
     private bool alreadyCollected;
     private List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
     private Collider collider;
     private Rigidbody rb;
 
-    private float respawnTimer = 100;
+    private float respawnTimer = 40;
     private float respawnTime;
 
     public override void Awake()
@@ -27,6 +27,36 @@ public class InventoryItem : InteractableObject
         rb = GetComponent<Rigidbody>();
         respawnTime = respawnTimer;
         base.Awake();
+    }
+
+    public override void OnNetworkSpawn()
+    {
+        isObjectEnabled.OnValueChanged += OnStateChanged;
+    }
+
+    private void OnStateChanged(bool previousValue, bool newValue)
+    {
+        if (!isObjectEnabled.Value)
+        {
+            rb.isKinematic = true;
+            collider.enabled = false;
+            foreach (MeshRenderer renderer in meshRenderers)
+            {
+                renderer.enabled = false;
+            }
+            Debug.Log("Object shouldnt show!");
+        }
+        else
+        {
+            rb.isKinematic = false;
+            collider.enabled = true;
+            foreach (MeshRenderer renderer in meshRenderers)
+            {
+                renderer.enabled = true;
+            }
+            alreadyCollected = false;
+            Debug.Log("Object should show!");
+        }
     }
 
     public InventoryItemType ItemType { get { return itemType; } }
@@ -40,31 +70,32 @@ public class InventoryItem : InteractableObject
 
     public void FixedUpdate()
     {
-        if (!isObjectEnabled.Value)
-        {
-            rb.isKinematic = true;
-            collider.enabled = false;
-            foreach(MeshRenderer renderer in meshRenderers)
-            {
-                renderer.enabled = false;
-            }
-        }
+        //if (!IsServer) return;
+
+        //if (!isObjectEnabled.Value)
+        //{
+        //    rb.isKinematic = true;
+        //    collider.enabled = false;
+        //    foreach(MeshRenderer renderer in meshRenderers)
+        //    {
+        //        renderer.enabled = false;
+        //    }
+        //}
 
         if(alreadyCollected)
         {
             respawnTime -= Time.deltaTime;
             if(respawnTime <= 0)
             {
-                ToggleEnableServerRpc(true);
                 alreadyCollected = false;
                 respawnTime = respawnTimer;
-
-                rb.isKinematic = false;
-                collider.enabled = true;
-                foreach (MeshRenderer renderer in meshRenderers)
-                {
-                    renderer.enabled = true;
-                }
+                ToggleEnableServerRpc(true);
+                //rb.isKinematic = false;
+                //collider.enabled = true;
+                //foreach (MeshRenderer renderer in meshRenderers)
+                //{
+                //    renderer.enabled = true;
+                //}
             }
         }
     }
@@ -82,13 +113,12 @@ public class InventoryItem : InteractableObject
         if (alreadyCollected) { return; }
         else { alreadyCollected = true; }
 
-        OnCollect?.Invoke(this);
+        //OnCollect?.Invoke(this);
 
         NetworkManager.Singleton.LocalClient.PlayerObject.gameObject.GetComponentInChildren<Inventory>().AddItem(itemType);
         InventoryActions.OnInteractableLostFocus(false);
 
         ToggleEnableServerRpc(false);
-       
     }
 
     [ServerRpc(RequireOwnership = false)]

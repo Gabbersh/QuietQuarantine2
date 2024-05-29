@@ -25,12 +25,13 @@ public abstract class Interactable : MonoBehaviour
 
     public CanvasGroup NoKeyDoorUI { get { return noKeyDoorUI; } set { noKeyDoorUI = value; } }
 
-
     private List<GameObject> playersInteracted = new();
 
     private void OnTriggerEnter(Collider other)
     {
         if (playersInteracted.Contains(other.gameObject)) return;
+
+        if (!(other.gameObject == NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject)) return;
 
         if (other.CompareTag("Player"))
         {
@@ -40,7 +41,7 @@ public abstract class Interactable : MonoBehaviour
                 interactableUI.gameObject.SetActive(true);
                 LeanTween.cancel(interactableUI.gameObject);
                 LeanTween.alphaCanvas(interactableUI, 1, 1);
-                playerWithInRange = true;
+                //playerWithInRange = true;
             }
             else 
             {
@@ -55,7 +56,9 @@ public abstract class Interactable : MonoBehaviour
     {
         if (playersInteracted.Contains(other.gameObject)) return;
 
-        if (playerWithInRange && Input.GetKeyUp(KeyCode.E))
+        if (!(other.gameObject == NetworkManager.Singleton.SpawnManager.GetLocalPlayerObject().gameObject)) return;
+
+        if (/*playerWithInRange && */Input.GetKeyDown(KeyCode.E))
         {
             Activate();
             Debug.Log($"Door is {DoorInteractable}");
@@ -114,7 +117,7 @@ public abstract class Interactable : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerWithInRange = false;
+            //playerWithInRange = false;
             //interactableUI.gameObject.SetActive(false);
             LeanTween.alphaCanvas(interactableUI, 0, 0.5f)
                 .setOnComplete(UIHide);
