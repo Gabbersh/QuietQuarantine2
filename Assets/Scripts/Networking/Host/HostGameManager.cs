@@ -126,4 +126,12 @@ public class HostGameManager : IDisposable
 
         networkServer?.Dispose();
     }
+
+    public void OnPlayerWin()
+    {
+        string playerName = PlayerPrefs.GetString(NameSelector.PlayerNameKey, "noname");
+        PlayerPrefs.SetString(NameSelector.PlayerNameKey, playerName);
+
+        SceneManager.LoadScene("WinScreen");
+    }
 }
